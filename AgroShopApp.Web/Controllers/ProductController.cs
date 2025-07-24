@@ -40,5 +40,29 @@ namespace AgroShopApp.Web.Controllers
 
             return View(model);
         }
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var product = await _context.Products
+                .AsNoTracking()
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id && p.IsAvailable);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var model = new AllProductsViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                ImageUrl = product.ImageUrl,
+                Category = product.Category.Name
+            };
+
+            return View(model);
+        }
     }
 }
