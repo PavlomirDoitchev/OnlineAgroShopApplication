@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-AspNetCoreArchTemplate.Web-43fc014e-aaab-4ffa-b5aa-28ebf02721ff</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.15" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.15" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.15" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AgroShopApp.Data\AgroShopApp.Data.csproj" />
+    <ProjectReference Include="..\AgroShopApp.GCommon\AgroShopApp.GCommon.csproj" />
+    <ProjectReference Include="..\AgroShopApp.Services.Core\AgroShopApp.Services.Core.csproj" />
+    <ProjectReference Include="..\AgroShopApp.Web.Infrastructure\AgroShopApp.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\AgroShopApp.Web.ViewModels\AgroShopApp.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
