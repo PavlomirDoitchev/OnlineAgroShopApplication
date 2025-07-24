@@ -150,3 +150,15 @@ h1, .table th {
         border-color: #e0a800 !important;
         transform: scale(1.05);
     }
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Ubuntu:wght@400;700&display=swap');
+
+.agro-title {
+    font-family: 'Playfair Display', serif;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    letter-spacing: 2px;
+}
+
+.agro-subtitle {
+    font-family: 'Ubuntu', sans-serif;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}

@@ -71,3 +71,58 @@ h1, label {
     max-height: 200px;
     object-fit: cover;
 }
+.agro-popular-card {
+    border-radius: 14px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #f8f9fa; /* Matches Bootstrap's 'bg-body-tertiary' */
+}
+
+    .agro-popular-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.08);
+    }
+
+.badge.bg-outline-success {
+    background-color: transparent;
+    color: #6aa84f;
+    border: 1px solid #6aa84f;
+}
+
+.badge.bg-outline-warning {
+    background-color: transparent;
+    color: #ffc107;
+    border: 1px solid #ffc107;
+}
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.agro-title {
+    font-family: 'Playfair Display', serif;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    letter-spacing: 2px;
+    animation: fadeInUp 1s ease-out forwards;
+    opacity: 0; /* Needed for animation to trigger */
+}
+
+.agro-subtitle {
+    font-family: 'Ubuntu', sans-serif;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    animation: fadeInUp 1s ease-out forwards;
+    animation-delay: 0.6s;
+    opacity: 0;
+}
+
+.agro-cta-button {
+    animation: fadeInUp 1s ease-out forwards;
+    animation-delay: 1.2s;
+    opacity: 0;
+}

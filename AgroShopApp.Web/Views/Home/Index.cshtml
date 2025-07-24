@@ -2,23 +2,27 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="container mt-4">
-    <!-- Hero Banner -->
-    <div class="position-relative text-white text-center mb-5"
-         style="background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
-                 url('/images/farm-banner.jpg') center/cover no-repeat;
-                 height: 70vh; width: auto; border-radius: 12px;">
-        <div class="position-absolute top-50 start-50 translate-middle">
-            <h1 class="display-4 fw-bold text-success text-uppercase">Welcome to GreenHarvester</h1>
-            <p class="lead text-light fw-semibold fs-4">Your trusted source for seeds & plant protection solutions.</p>
-            <div class="mt-3">
-                <a asp-controller="Products" asp-action="Index"
-                   class="btn btn-outline-light fw-bold rounded-pill px-4 py-2 shadow">
-                    <i class="bi bi-basket"></i> Browse Products
-                </a>
-            </div>
+<!-- Hero Banner -->
+<div class="position-relative text-white text-center mb-5"
+     style="background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65)),
+             url('/images/farm-banner.jpg') center/cover no-repeat;
+             height: 50vh; width: 100%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <h1 class="display-1 fw-bold text-success text-uppercase agro-title mb-4">
+            Welcome to <span class="text-light">GreenHarvester</span>
+        </h1>
+        <p class="lead text-light fw-semibold fs-3 fst-italic agro-subtitle">
+            Your trusted source for seeds & plant protection.
+        </p>
+        <div class="mt-4">
+            <a asp-controller="Products" asp-action="Index"
+               class="btn btn-outline-light fw-bold rounded-pill px-5 py-3 shadow-lg fs-5 agro-cta-button">
+                <i class="bi bi-basket me-1"></i> Browse Products
+            </a>
         </div>
     </div>
+</div>
+
 
     <!-- Carousel -->
     <div id="agroCarousel" class="carousel slide mb-5 shadow rounded-4 overflow-hidden" data-bs-ride="carousel">
@@ -44,30 +48,36 @@
     </div>
 
     <!-- Popular Section -->
-    <div class="container my-5">
-        <h2 class="text-center fw-bold mb-4 text-light">Popular Picks</h2>
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card shadow-lg border-0 rounded-3 bg-secondary">
+    <!-- Popular Section -->
+    <section class="my-5 py-5 px-3 rounded-4" style="background: linear-gradient(to right, #2f3a2f, #3b4c3a);">
+        <h2 class="text-center fw-bold mb-5 text-light display-6">
+            <i class="bi bi-star-fill text-muted me-2"></i> Popular Picks <i class="bi bi-star-fill text-muted ms-2"></i>
+        </h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow agro-popular-card bg-body-tertiary h-100">
                     <div class="card-body text-center p-4">
-                        <h5 class="card-title fw-bold text-success">🌱 Heirloom Tomato Seeds</h5>
-                        <p class="card-text text-light">Top-seller among home gardeners for its juicy yield.</p>
-                        <small class="text-light">Over 1,500 packets sold this month.</small>
+                        <span class="badge bg-outline-success text-success mb-3 px-3 py-2 rounded-pill border border-success">Top Seller</span>
+                        <h5 class="card-title fw-semibold text-dark fs-5"><i class="bi bi-flower1 me-2 text-success"></i>Heirloom Tomato Seeds</h5>
+                        <p class="card-text text-muted">Organic seeds known for rich flavor and reliable growth.</p>
+                        <small class="text-muted fst-italic">1,500+ sold this season</small>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 mb-4">
-                @* TODO: Go To specific product *@
-                <div class="card shadow-lg border-0 rounded-3 bg-secondary">
+            <div class="col-md-6">
+                <div class="card border-0 shadow agro-popular-card bg-body-tertiary h-100">
                     <div class="card-body text-center p-4">
-                        <h5 class="card-title fw-bold text-warning">🧪 Organic Insect Repellent</h5>
-                        <p class="card-text text-light">Safe, eco-friendly protection for all crops.</p>
-                        <small class="text-light">Rated ★★★★★ by 200+ farmers.</small>
+                        <span class="badge bg-outline-warning text-warning mb-3 px-3 py-2 rounded-pill border border-warning">Farmer Favorite</span>
+                        <h5 class="card-title fw-semibold text-dark fs-5"><i class="bi bi-bug me-2 text-warning"></i>Eco Insect Repellent</h5>
+                        <p class="card-text text-muted">Protect plants naturally — no harsh chemicals involved.</p>
+                        <small class="text-muted fst-italic">★★★★★ by 200+ farmers</small>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+
 </div>
 
 @section Scripts {
