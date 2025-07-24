@@ -16,7 +16,7 @@ namespace AspNetCoreArchTemplate.Web
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             
             builder.Services
-                .AddDbContext<ApplicationDbContext>(options =>
+                .AddDbContext<AgroShopDbContext>(options =>
                 {
                     options.UseSqlServer(connectionString);
                 });
@@ -26,7 +26,7 @@ namespace AspNetCoreArchTemplate.Web
                 {
                     options.SignIn.RequireConfirmedAccount = true;
                 })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<AgroShopDbContext>();
             builder.Services.AddControllersWithViews();
 
             WebApplication? app = builder.Build();
