@@ -1,5 +1,14 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<AgroShopApp.Web.ViewModels.AllProductsViewModel>
+
 @{
+    ViewData["Title"] = "All Products";
 }
+
+<h2 class="text-white text-center my-4">All Products</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var product in Model)
+    {
+        <partial name="_ProductCard" model="product" />
+    }
+</div>
