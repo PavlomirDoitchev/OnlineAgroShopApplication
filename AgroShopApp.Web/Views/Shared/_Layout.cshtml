@@ -41,8 +41,13 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Orders" asp-action="MyOrders">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Orders" asp-action="Index">
                                     <i class="bi bi-bag-check"></i> My Orders
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Favorites" asp-action="Index">
+                                    <i class="bi bi-heart"></i> Favorites
                                 </a>
                             </li>
                             @if (User.IsInRole("Administrator"))

@@ -3,10 +3,11 @@
 }
 
 <!-- Hero Banner -->
+
 <div class="position-relative text-white text-center mb-5"
      style="background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65)),
              url('/images/farm-banner.jpg') center/cover no-repeat;
-             height: 50vh; width: 100%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+             height: 70vh; width: 100%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
     <div class="position-absolute top-50 start-50 translate-middle">
         <h1 class="display-1 fw-bold text-success text-uppercase agro-title mb-4">
             Welcome to <span class="text-light">GreenHarvester</span>
@@ -20,35 +21,69 @@
                 <i class="bi bi-basket me-1"></i> Browse Products
             </a>
         </div>
+        <!-- Scroll Button -->
+        <a href="#popular-section"
+           class="btn btn-outline-success rounded-pill px-4 py-3 fs-6 fw-semibold agro-scroll-button" style="gap: 1.25rem;">
+            <i class="bi bi-chevron-double-down me-1"></i> View this month’s popular
+        </a>
     </div>
 </div>
 
 
-    <!-- Carousel -->
-    <div id="agroCarousel" class="carousel slide mb-5 shadow rounded-4 overflow-hidden" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active"> 
-                <img src="~/images/carousel-seeds.jpg" class="d-block w-100"alt="Seeds">
-            </div>
-            <div class="carousel-item">
-                <img src="~/images/fertilizer.jpg class="d-block w-100" alt="Fertilizers">
-            </div>
-            <div class="carousel-item">
-                <img src="~/images/carousel-pesticide.jpg" class="d-block w-100" alt="Pesticides">
+<div id="agroCarousel" class="carousel slide mb-5 shadow" data-bs-ride="carousel">
+    <div class="carousel-inner rounded-4 overflow-hidden">
+        <!-- Slide 1: Seeds -->
+        <div class="carousel-item active position-relative">
+            <img src="~/images/carousel-seeds.jpg" class="d-block w-100" alt="Seeds">
+            <div class="carousel-caption d-none d-md-block agro-carousel-overlay">
+                <h5 class="display-6 fw-bold text-white text-uppercase">Seeds</h5>
+                <p class="fst-italic">Grow your garden with top-quality heirloom seeds.</p>
+                <a asp-controller="Products" asp-action="Index" asp-route-category="Seeds"
+                   class="btn btn-outline-light btn-sm rounded-pill px-4 py-2 mt-2">
+                    Explore Seeds
+                </a>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#agroCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#agroCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+
+        <!-- Slide 2: Fertilizers -->
+        <div class="carousel-item position-relative">
+            <img src="~/images/fertilizer.jpg" class="d-block w-100" alt="Fertilizers">
+            <div class="carousel-caption d-none d-md-block agro-carousel-overlay">
+                <h5 class="display-6 fw-bold text-white text-uppercase">Fertilizers</h5>
+                <p class="fst-italic">Boost plant health with eco-friendly nutrients.</p>
+                <a asp-controller="Products" asp-action="Index" asp-route-category="Fertilizers"
+                   class="btn btn-outline-light btn-sm rounded-pill px-4 py-2 mt-2">
+                    Explore Fertilizers
+                </a>
+            </div>
+        </div>
+
+        <!-- Slide 3: Pesticides -->
+        <div class="carousel-item position-relative">
+            <img src="~/images/carousel-pesticide.jpg" class="d-block w-100" alt="Pesticides">
+            <div class="carousel-caption d-none d-md-block agro-carousel-overlay">
+                <h5 class="display-6 fw-bold text-white text-uppercase">Pesticides</h5>
+                <p class="fst-italic">Shield crops with safe and effective solutions.</p>
+                <a asp-controller="Products" asp-action="Index" asp-route-category="Pesticides"
+                   class="btn btn-outline-light btn-sm rounded-pill px-4 py-2 mt-2">
+                    Explore Pesticides
+                </a>
+            </div>
+        </div>
     </div>
 
-    <!-- Popular Section -->
-    <!-- Popular Section -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#agroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#agroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<section id="popular-section" class="my-5 py-5 px-3 rounded-4" style="background: linear-gradient(...);">
+
     <section class="my-5 py-5 px-3 rounded-4" style="background: linear-gradient(to right, #2f3a2f, #3b4c3a);">
         <h2 class="text-center fw-bold mb-5 text-light display-6">
             <i class="bi bi-star-fill text-muted me-2"></i> Popular Picks <i class="bi bi-star-fill text-muted ms-2"></i>
@@ -76,9 +111,8 @@
             </div>
         </div>
     </section>
+    </section>
 
-
-</div>
 
 @section Scripts {
     <script>
