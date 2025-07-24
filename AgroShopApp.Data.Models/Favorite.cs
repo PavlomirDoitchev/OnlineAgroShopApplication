@@ -9,5 +9,6 @@ namespace AgroShopApp.Data.Models
 
         public Guid ProductId { get; set; }
         public virtual Product Product { get; set; } = null!;
+        public DateTime AddedOn { get; set; } = DateTime.UtcNow;
     }
 }
