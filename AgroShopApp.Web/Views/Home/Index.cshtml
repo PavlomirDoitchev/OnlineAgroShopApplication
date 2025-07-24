@@ -1,8 +1,83 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <!-- Hero Banner -->
+    <div class="position-relative text-white text-center mb-5"
+         style="background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.6)),
+                 url('/images/farm-banner.jpg') center/cover no-repeat;
+                 height: 70vh; width: auto; border-radius: 12px;">
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <h1 class="display-4 fw-bold text-success text-uppercase">Welcome to GreenHarvester</h1>
+            <p class="lead text-light fw-semibold fs-4">Your trusted source for seeds & plant protection solutions.</p>
+            <div class="mt-3">
+                <a asp-controller="Products" asp-action="Index"
+                   class="btn btn-outline-light fw-bold rounded-pill px-4 py-2 shadow">
+                    <i class="bi bi-basket"></i> Browse Products
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carousel -->
+    <div id="agroCarousel" class="carousel slide mb-5 shadow rounded-4 overflow-hidden" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active"> 
+                <img src="~/images/carousel-seeds.jpg" class="d-block w-100"alt="Seeds">
+            </div>
+            <div class="carousel-item">
+                <img src="~/images/fertilizer.jpg class="d-block w-100" alt="Fertilizers">
+            </div>
+            <div class="carousel-item">
+                <img src="~/images/carousel-pesticide.jpg" class="d-block w-100" alt="Pesticides">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#agroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#agroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- Popular Section -->
+    <div class="container my-5">
+        <h2 class="text-center fw-bold mb-4 text-light">Popular Picks</h2>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-lg border-0 rounded-3 bg-secondary">
+                    <div class="card-body text-center p-4">
+                        <h5 class="card-title fw-bold text-success">🌱 Heirloom Tomato Seeds</h5>
+                        <p class="card-text text-light">Top-seller among home gardeners for its juicy yield.</p>
+                        <small class="text-light">Over 1,500 packets sold this month.</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                @* TODO: Go To specific product *@
+                <div class="card shadow-lg border-0 rounded-3 bg-secondary">
+                    <div class="card-body text-center p-4">
+                        <h5 class="card-title fw-bold text-warning">🧪 Organic Insect Repellent</h5>
+                        <p class="card-text text-light">Safe, eco-friendly protection for all crops.</p>
+                        <small class="text-light">Rated ★★★★★ by 200+ farmers.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        const carousel = document.getElementById('agroCarousel');
+        if (carousel) {
+            new bootstrap.Carousel(carousel, {
+                interval: 4000,
+                ride: 'carousel'
+            });
+        }
+    </script>
+}
