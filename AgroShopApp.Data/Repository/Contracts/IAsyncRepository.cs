@@ -11,6 +11,7 @@ namespace AgroShopApp.Data.Repository.Contracts
         Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 
         Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<IEnumerable<TEntity>> FindByConditionsAsync(Expression<Func<TEntity, bool>> predicate);
 
         Task<int> CountAsync();
 

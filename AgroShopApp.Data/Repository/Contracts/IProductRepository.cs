@@ -1,10 +1,13 @@
 ﻿using AgroShopApp.Data.Models;
-using AgroShopApp.Data.Repository.Contracts;
+using System.Linq.Expressions;
 
 namespace AgroShopApp.Data.Repository.Contracts
 {
     public interface IProductRepository : IAsyncRepository<Product, Guid>
     {
-        Task<Product?> GetWithCategoryAsync(Guid id);
+        Task<IEnumerable<Product>> GetAllWithCategoryAsync();
+        Task<Product?> GetWithCategoryByIdAsync(Guid id);
+        Task<IEnumerable<Product>> GetDeletedProductsAsync();
+        Task<Product?> GetByIdIncludingDeletedAsync(Guid id);
     }
 }

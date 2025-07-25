@@ -60,7 +60,12 @@ namespace AgroShopApp.Data.Repository
             return this.DbSet
                 .ToArray();
         }
-
+        public async Task<IEnumerable<TEntity>> FindByConditionsAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await DbSet
+                .Where(predicate)
+                .ToListAsync();
+        }
         public int Count()
         {
             return this.DbSet

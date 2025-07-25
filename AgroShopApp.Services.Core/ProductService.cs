@@ -1,93 +1,80 @@
-﻿using AgroShopApp.Data;
-using AgroShopApp.Data.Models;
+﻿using AgroShopApp.Data.Models;
+using AgroShopApp.Data.Repository.Contracts;
 using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.ViewModels.Product;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AgroShopApp.Services.Core
 {
     public class ProductService : IProductService
     {
-        private readonly AgroShopDbContext _context;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IFavoriteRepository _favoriteRepository;
 
-        public ProductService(AgroShopDbContext context)
+        public ProductService(
+            IProductRepository productRepository,
+            ICategoryRepository categoryRepository,
+            IFavoriteRepository favoriteRepository)
         {
-            _context = context;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
+            _favoriteRepository = favoriteRepository;
         }
 
         public async Task<IEnumerable<AllProductsViewModel>> GetAllAsync(int? categoryId = null, string? searchTerm = null, string? userId = null)
         {
-            var productsQuery = _context.Products
-                .AsNoTracking()
-                .Include(p => p.Category)
-                .Where(p => p.IsAvailable);
+            var productsQuery = await _productRepository.GetAllWithCategoryAsync();
+
+            var filtered = productsQuery.Where(p => p.IsAvailable && !p.IsDeleted);
 
             if (categoryId.HasValue)
             {
-                productsQuery = productsQuery.Where(p => p.CategoryId == categoryId);
+                filtered = filtered.Where(p => p.CategoryId == categoryId);
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                productsQuery = productsQuery.Where(p =>
-                    p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm));
+                filtered = filtered.Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm));
             }
 
             var userFavorites = string.IsNullOrEmpty(userId)
                 ? new List<Guid>()
-                : await _context.Favorites
-                    .Where(f => f.UserId == userId)
-                    .Select(f => f.ProductId)
-                    .ToListAsync();
+                : (await _favoriteRepository.GetUserFavoritesAsync(userId)).Select(f => f.ProductId).ToList();
 
-            return await productsQuery
-                .Select(p => new AllProductsViewModel
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    ImageUrl = p.ImageUrl,
-                    Category = p.Category.Name,
-                    IsFavorite = userFavorites.Contains(p.Id)
-                })
-                .ToListAsync();
+            return filtered.Select(p => new AllProductsViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Category = p.Category.Name,
+                IsFavorite = userFavorites.Contains(p.Id)
+            });
         }
+
         public async Task<IEnumerable<ProductCategoryViewModel>> GetCategoriesAsync()
         {
-            return await _context.Categories
-                .AsNoTracking()
-                .Select(c => new ProductCategoryViewModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .ToListAsync();
+            var categories = await _categoryRepository.GetAllSortedAsync();
+
+            return categories.Select(c => new ProductCategoryViewModel
+            {
+                Id = c.Id,
+                Name = c.Name
+            });
         }
+
         public async Task<AllProductsViewModel?> GetDetailsAsync(Guid id, string? userId)
         {
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == id && p.IsAvailable);
+            var product = await _productRepository.GetWithCategoryByIdAsync(id);
 
-            if (product == null)
+            if (product == null || !product.IsAvailable || product.IsDeleted)
             {
                 return null;
             }
 
-            var isFavorite = false;
-
-            if (!string.IsNullOrEmpty(userId))
-            {
-                isFavorite = await _context.Favorites
-                    .AnyAsync(f => f.ProductId == product.Id && f.UserId == userId);
-            }
+            var isFavorite = !string.IsNullOrEmpty(userId) && await _favoriteRepository.ExistsAsync(userId, product.Id);
 
             return new AllProductsViewModel
             {
@@ -100,6 +87,7 @@ namespace AgroShopApp.Services.Core
                 IsFavorite = isFavorite
             };
         }
+
         public async Task CreateAsync(ProductFormViewModel model)
         {
             var product = new Product
@@ -115,26 +103,25 @@ namespace AgroShopApp.Services.Core
                 AddedOn = DateTime.UtcNow
             };
 
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            await _productRepository.AddAsync(product);
         }
+
         public async Task RemoveAsync(Guid id)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
+            var product = await _productRepository.GetByIdAsync(id);
 
-            if (product != null)
+            if (product != null && !product.IsDeleted)
             {
                 product.IsDeleted = true;
                 product.DeletedOn = DateTime.UtcNow;
 
-                await _context.SaveChangesAsync();
+                await _productRepository.UpdateAsync(product);
             }
         }
+
         public async Task<EditProductViewModel?> GetEditAsync(Guid id)
         {
-            var product = await _context.Products
-                .AsNoTracking()
-                .FirstOrDefaultAsync(p => p.Id == id);
+            var product = await _productRepository.GetByIdAsync(id);
 
             if (product == null)
                 return null;
@@ -150,14 +137,13 @@ namespace AgroShopApp.Services.Core
                 ImageUrl = product.ImageUrl,
                 StockQuantity = product.StockQuantity,
                 CategoryId = product.CategoryId,
-                //IsDeleted = product.IsDeleted,
                 Categories = categories
             };
         }
 
         public async Task EditAsync(EditProductViewModel model)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == model.Id);
+            var product = await _productRepository.GetByIdAsync(model.Id!.Value);
 
             if (product == null)
                 return;
@@ -168,41 +154,36 @@ namespace AgroShopApp.Services.Core
             product.ImageUrl = model.ImageUrl;
             product.StockQuantity = model.StockQuantity;
             product.CategoryId = model.CategoryId;
-            //product.IsDeleted = model.IsDeleted;
 
-            await _context.SaveChangesAsync();
+            await _productRepository.UpdateAsync(product);
         }
+
         public async Task<IEnumerable<DeletedProductViewModel>> GetDeletedDetailedAsync()
         {
-            return await _context.Products
-                .IgnoreQueryFilters()
-                .Where(p => p.IsDeleted)
-                .Include(p => p.Category)
-                .AsNoTracking()
-                .Select(p => new DeletedProductViewModel
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    ImageUrl = p.ImageUrl,
-                    Category = p.Category.Name,
-                    DeletedOn = p.DeletedOn
-                })
-                .ToListAsync();
+            var deletedProducts = await _productRepository.GetDeletedProductsAsync();
+
+            return deletedProducts.Select(p => new DeletedProductViewModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                Category = p.Category.Name,
+                DeletedOn = p.DeletedOn
+            });
         }
+
         public async Task RestoreAsync(Guid id)
         {
-            var product = await _context.Products
-                .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(p => p.Id == id && p.IsDeleted);
+            var product = await _productRepository.GetByIdIncludingDeletedAsync(id);
 
-            if (product != null)
+            if (product != null && product.IsDeleted)
             {
                 product.IsDeleted = false;
                 product.DeletedOn = null;
 
-                await _context.SaveChangesAsync();
+                await _productRepository.UpdateAsync(product);
             }
         }
     }
