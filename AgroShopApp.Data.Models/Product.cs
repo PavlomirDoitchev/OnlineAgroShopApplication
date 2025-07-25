@@ -8,6 +8,7 @@
         public decimal Price { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime AddedOn { get; set; }
+        public DateTime? DeletedOn { get; set; } = null;
         public int StockQuantity { get; set; } = 10;
         public bool IsAvailable { get; set; } = true;
         public bool IsDeleted { get; set; } = false;

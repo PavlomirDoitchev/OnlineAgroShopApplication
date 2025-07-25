@@ -112,8 +112,17 @@ namespace AgroShopApp.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Deleted()
         {
-            var model = await _productService.GetDeletedAsync();
+            var model = await _productService.GetDeletedDetailedAsync();
             return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Restore(Guid id)
+        {
+            await _productService.RestoreAsync(id);
+            TempData["Message"] = "Product restored successfully.";
+            return RedirectToAction(nameof(Deleted));
         }
     }
 }

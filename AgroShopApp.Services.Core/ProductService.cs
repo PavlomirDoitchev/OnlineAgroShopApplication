@@ -125,6 +125,8 @@ namespace AgroShopApp.Services.Core
             if (product != null)
             {
                 product.IsDeleted = true;
+                product.DeletedOn = DateTime.UtcNow;
+
                 await _context.SaveChangesAsync();
             }
         }
@@ -148,7 +150,7 @@ namespace AgroShopApp.Services.Core
                 ImageUrl = product.ImageUrl,
                 StockQuantity = product.StockQuantity,
                 CategoryId = product.CategoryId,
-                IsDeleted = product.IsDeleted,
+                //IsDeleted = product.IsDeleted,
                 Categories = categories
             };
         }
@@ -166,27 +168,42 @@ namespace AgroShopApp.Services.Core
             product.ImageUrl = model.ImageUrl;
             product.StockQuantity = model.StockQuantity;
             product.CategoryId = model.CategoryId;
-            product.IsDeleted = model.IsDeleted;
+            //product.IsDeleted = model.IsDeleted;
 
             await _context.SaveChangesAsync();
         }
-        public async Task<IEnumerable<AllProductsViewModel>> GetDeletedAsync()
+        public async Task<IEnumerable<DeletedProductViewModel>> GetDeletedDetailedAsync()
         {
             return await _context.Products
                 .IgnoreQueryFilters()
+                .Where(p => p.IsDeleted)
                 .Include(p => p.Category)
-                .Where(p => p.IsDeleted == true)
                 .AsNoTracking()
-                .Select(p => new AllProductsViewModel
+                .Select(p => new DeletedProductViewModel
                 {
                     Id = p.Id,
                     Name = p.Name,
                     Description = p.Description,
                     Price = p.Price,
                     ImageUrl = p.ImageUrl,
-                    Category = p.Category.Name
+                    Category = p.Category.Name,
+                    DeletedOn = p.DeletedOn
                 })
                 .ToListAsync();
+        }
+        public async Task RestoreAsync(Guid id)
+        {
+            var product = await _context.Products
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(p => p.Id == id && p.IsDeleted);
+
+            if (product != null)
+            {
+                product.IsDeleted = false;
+                product.DeletedOn = null;
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

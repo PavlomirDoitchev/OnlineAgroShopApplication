@@ -28,7 +28,7 @@ namespace AgroShopApp.Web.ViewModels.Product
         public int CategoryId { get; set; }
 
         public IEnumerable<ProductCategoryViewModel> Categories { get; set; } = new List<ProductCategoryViewModel>();
-        [Display(Name = "Deleted")]
-        public bool IsDeleted { get; set; }
+        //[Display(Name = "Deleted")]
+        //public bool IsDeleted { get; set; }
     }
 }

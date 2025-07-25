@@ -1,23 +1,38 @@
-﻿@model IEnumerable<AgroShopApp.Web.ViewModels.Product.AllProductsViewModel>
+﻿@model IEnumerable<AgroShopApp.Web.ViewModels.Product.DeletedProductViewModel>
 
 @{
     ViewData["Title"] = "Deleted Products";
 }
 
-<h2 class="text-center text-light my-4">Deleted Products</h2>
+<h2 class="text-light text-center my-4">Deleted Products</h2>
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info text-center text-light">
-        No deleted products to show.
-    </div>
+    <div class="alert alert-info text-center text-light">No deleted products found.</div>
 }
 else
 {
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach (var product in Model)
         {
-            <partial name="_ProductCard" model="product" />
+            <div class="col">
+                <div class="card agro-popular-card h-100 shadow-sm">
+                    <img src="@product.ImageUrl" class="product-img" alt="@product.Name" />
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">@product.Name</h5>
+                        <p class="card-text text-muted">@product.Description</p>
+                        <p class="fw-bold">@product.Price.ToString("C")</p>
+                        <small class="text-warning">Deleted on: @product.DeletedOn?.ToString("yyyy-MM-dd HH:mm")</small>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <form asp-action="Restore" asp-route-id="@product.Id" method="post">
+                            <button type="submit" class="btn btn-outline-success btn-sm rounded-pill">
+                                <i class="bi bi-arrow-counterclockwise"></i> Restore
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         }
     </div>
 }

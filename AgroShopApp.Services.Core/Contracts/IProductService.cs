@@ -9,8 +9,10 @@ namespace AgroShopApp.Services.Core.Contracts
         Task<AllProductsViewModel?> GetDetailsAsync(Guid id, string? userId);
         Task CreateAsync(ProductFormViewModel model);
         Task RemoveAsync(Guid id);
+        Task RestoreAsync(Guid id);
         Task<EditProductViewModel?> GetEditAsync(Guid id);
         Task EditAsync(EditProductViewModel model);
-        Task<IEnumerable<AllProductsViewModel>> GetDeletedAsync();
+        Task<IEnumerable<DeletedProductViewModel>> GetDeletedDetailedAsync();
+
     }
 }
