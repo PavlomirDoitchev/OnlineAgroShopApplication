@@ -23,7 +23,7 @@
                 {
                     <!-- Favorites -->
                     <form asp-controller="Favorites"
-                          asp-action="@(Model.IsFavorite ? "Remove" : "Add")"
+                          asp-action="@(Model.IsFavorite ? "Add" : "Add")"
                           asp-route-productId="@Model.Id"
                           asp-route-returnUrl="@Url.Action("Index", "Product")"
                           method="post" class="d-inline">

@@ -9,19 +9,18 @@ using System.Runtime.CompilerServices;
 
 namespace AgroShopApp.Web.Controllers
 {
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private readonly IProductService _productService;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public ProductController(IProductService productService, UserManager<IdentityUser> userManager)
+        public ProductController(IProductService productService)
         {
             _productService = productService;
-            _userManager = userManager;
         }
-       public async Task<IActionResult> Index(int? categoryId = null, string? searchTerm = null)
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(int? categoryId = null, string? searchTerm = null)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = this.GetUserId();
 
             var model = await _productService.GetAllAsync(categoryId, searchTerm, userId);
 
@@ -31,9 +30,10 @@ namespace AgroShopApp.Web.Controllers
 
             return View(model);
         }
+        [AllowAnonymous]
         public async Task<IActionResult> Details(Guid id)
         {
-            var userId = _userManager.GetUserId(User);
+            var userId = this.GetUserId();
 
             var model = await _productService.GetDetailsAsync(id, userId);
 
@@ -44,7 +44,7 @@ namespace AgroShopApp.Web.Controllers
 
             return View(model);
         }
-        [Authorize]
+
         public async Task<IActionResult> Create()
         {
             var categories = await _productService.GetCategoriesAsync();
@@ -58,7 +58,6 @@ namespace AgroShopApp.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Create(ProductFormViewModel model)
         {
             if (!ModelState.IsValid)
@@ -67,7 +66,7 @@ namespace AgroShopApp.Web.Controllers
                 return View(model);
             }
 
-            await _productService.CreateAsync(model); 
+            await _productService.CreateAsync(model);
 
             TempData["Message"] = "Product added successfully!";
             return RedirectToAction(nameof(Index));
@@ -81,7 +80,6 @@ namespace AgroShopApp.Web.Controllers
             TempData["Message"] = "Product removed successfully!";
             return RedirectToAction(nameof(Index));
         }
-        [Authorize]
         public async Task<IActionResult> Edit(Guid id)
         {
             var model = await _productService.GetEditAsync(id);
@@ -95,7 +93,6 @@ namespace AgroShopApp.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Edit(EditProductViewModel model)
         {
             if (!ModelState.IsValid)
@@ -109,7 +106,6 @@ namespace AgroShopApp.Web.Controllers
             TempData["Message"] = "Product updated successfully!";
             return RedirectToAction(nameof(Index));
         }
-        [Authorize]
         public async Task<IActionResult> Deleted()
         {
             var model = await _productService.GetDeletedDetailedAsync();
@@ -117,7 +113,6 @@ namespace AgroShopApp.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Restore(Guid id)
         {
             await _productService.RestoreAsync(id);

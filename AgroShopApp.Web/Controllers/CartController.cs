@@ -1,25 +1,23 @@
 ﻿using AgroShopApp.Services.Core.Contracts;
+using AgroShopApp.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Policy;
 
-public class CartController : Controller
+public class CartController : BaseController
 {
     private readonly ICartService _cartService;
-    private readonly UserManager<IdentityUser> _userManager;
 
-    public CartController(ICartService cartService, UserManager<IdentityUser> userManager)
+    public CartController(ICartService cartService)
     {
         _cartService = cartService;
-        _userManager = userManager;
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> Add(Guid productId, string? returnUrl = null)
     {
-        var userId = _userManager.GetUserId(User);
+        var userId = this.GetUserId();
         await _cartService.AddToCartAsync(userId!, productId);
 
         TempData["Message"] = "Product added to cart.";

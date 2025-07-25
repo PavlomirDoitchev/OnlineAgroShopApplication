@@ -1,25 +1,24 @@
 ﻿using AgroShopApp.Services.Core.Contracts;
+using AgroShopApp.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Policy;
 
-public class FavoritesController : Controller
+public class FavoritesController : BaseController
 {
     private readonly IFavoritesService _favoriteService;
-    private readonly UserManager<IdentityUser> _userManager;
 
-    public FavoritesController(IFavoritesService favoriteService, UserManager<IdentityUser> userManager)
+    public FavoritesController(IFavoritesService favoriteService)
     {
         _favoriteService = favoriteService;
-        _userManager = userManager;
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> Add(Guid productId, string? returnUrl = null)
     {
-        var userId = _userManager.GetUserId(User);
+        var userId = this.GetUserId();
+        //var userId = _userManager.GetUserId(User);
         await _favoriteService.AddToFavoritesAsync(userId!, productId);
 
         TempData["Message"] = "Product added to favorites.";
@@ -27,20 +26,19 @@ public class FavoritesController : Controller
     }
 
     [HttpPost]
-    [Authorize]
     public async Task<IActionResult> Remove(Guid productId, string? returnUrl = null)
     {
-        var userId = _userManager.GetUserId(User);
+        var userId = this.GetUserId();
         await _favoriteService.RemoveFromFavoritesAsync(userId!, productId);
 
         TempData["Message"] = "Product removed from favorites.";
-        return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
+        return RedirectToAction("Index", "Favorites");
+        //return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
     }
 
-    [Authorize]
     public async Task<IActionResult> Index()
     {
-        var userId = _userManager.GetUserId(User);
+        var userId = this.GetUserId();
         var model = await _favoriteService.GetUserFavoritesAsync(userId!);
 
         return View(model);
