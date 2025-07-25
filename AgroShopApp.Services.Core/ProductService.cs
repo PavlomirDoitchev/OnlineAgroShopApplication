@@ -128,5 +128,65 @@ namespace AgroShopApp.Services.Core
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<EditProductViewModel?> GetEditAsync(Guid id)
+        {
+            var product = await _context.Products
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+                return null;
+
+            var categories = await GetCategoriesAsync();
+
+            return new EditProductViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                ImageUrl = product.ImageUrl,
+                StockQuantity = product.StockQuantity,
+                CategoryId = product.CategoryId,
+                IsDeleted = product.IsDeleted,
+                Categories = categories
+            };
+        }
+
+        public async Task EditAsync(EditProductViewModel model)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == model.Id);
+
+            if (product == null)
+                return;
+
+            product.Name = model.Name;
+            product.Description = model.Description;
+            product.Price = model.Price;
+            product.ImageUrl = model.ImageUrl;
+            product.StockQuantity = model.StockQuantity;
+            product.CategoryId = model.CategoryId;
+            product.IsDeleted = model.IsDeleted;
+
+            await _context.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<AllProductsViewModel>> GetDeletedAsync()
+        {
+            return await _context.Products
+                .IgnoreQueryFilters()
+                .Include(p => p.Category)
+                .Where(p => p.IsDeleted == true)
+                .AsNoTracking()
+                .Select(p => new AllProductsViewModel
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    ImageUrl = p.ImageUrl,
+                    Category = p.Category.Name
+                })
+                .ToListAsync();
+        }
     }
 }

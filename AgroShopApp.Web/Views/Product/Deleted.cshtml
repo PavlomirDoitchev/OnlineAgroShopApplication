@@ -1,0 +1,23 @@
+﻿@model IEnumerable<AgroShopApp.Web.ViewModels.Product.AllProductsViewModel>
+
+@{
+    ViewData["Title"] = "Deleted Products";
+}
+
+<h2 class="text-center text-light my-4">Deleted Products</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center text-light">
+        No deleted products to show.
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var product in Model)
+        {
+            <partial name="_ProductCard" model="product" />
+        }
+    </div>
+}

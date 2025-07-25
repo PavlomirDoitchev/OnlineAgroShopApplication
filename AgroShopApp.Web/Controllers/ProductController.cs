@@ -81,5 +81,39 @@ namespace AgroShopApp.Web.Controllers
             TempData["Message"] = "Product removed successfully!";
             return RedirectToAction(nameof(Index));
         }
+        [Authorize]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var model = await _productService.GetEditAsync(id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Edit(EditProductViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Categories = await _productService.GetCategoriesAsync();
+                return View(model);
+            }
+
+            await _productService.EditAsync(model);
+
+            TempData["Message"] = "Product updated successfully!";
+            return RedirectToAction(nameof(Index));
+        }
+        [Authorize]
+        public async Task<IActionResult> Deleted()
+        {
+            var model = await _productService.GetDeletedAsync();
+            return View(model);
+        }
     }
 }
