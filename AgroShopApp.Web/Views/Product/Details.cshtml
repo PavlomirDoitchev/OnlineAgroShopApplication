@@ -14,6 +14,26 @@
             <h2 class="text-success">@Model.Name</h2>
             <p class="text-muted">@Model.Description</p>
             <p class="fs-5 fw-bold">Price: @Model.Price.ToString("C")</p>
+            <p class="fw-semibold">
+                @if (Model.StockQuantity == 0)
+                {
+                    <span class="text-danger">
+                        <i class="bi bi-x-circle-fill"></i> Out of stock
+                    </span>
+                }
+                else if (Model.StockQuantity <= 3)
+                {
+                    <span class="text-warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i> Not many left!
+                    </span>
+                }
+                else
+                {
+                    <span class="text-success">
+                        <i class="bi bi-check-circle-fill"></i> In stock
+                    </span>
+                }
+            </p>
             <span class="badge bg-secondary mb-3">@Model.Category</span>
             @if (User?.Identity?.IsAuthenticated ?? false)
             {
@@ -28,11 +48,20 @@
                         </button>
                     </form>
 
-                    <form asp-controller="Cart" asp-action="Add" asp-route-productId="@Model.Id" method="post">
-                        <button type="submit" class="btn btn-outline-success rounded-pill px-4">
-                            <i class="bi bi-cart-plus"></i> Add to Cart
+                    @if (Model.StockQuantity > 0)
+                    {
+                        <form asp-controller="Cart" asp-action="Add" asp-route-productId="@Model.Id" method="post">
+                            <button type="submit" class="btn btn-outline-success rounded-pill px-4">
+                                <i class="bi bi-cart-plus"></i> Add to Cart
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-outline-secondary rounded-pill px-4" disabled title="Out of stock">
+                            <i class="bi bi-cart-x"></i> Out of Stock
                         </button>
-                    </form>
+                    }
                     @* @if (User.IsInRole("Administrator")) { } *@
                     
                     <button type="button" class="btn btn-danger rounded-pill mt-3" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
@@ -47,11 +76,11 @@
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    Are you sure you want to delete <strong>@Model.Name</strong>? This action cannot be undone.
+                                    Are you sure you want to delete <strong>@Model.Name</strong>?
                                 </div>
                                 <div class="modal-footer border-0">
                                     <form asp-action="Remove" asp-route-id="@Model.Id" method="post" class="d-inline">
-                                        <button type="submit" class="btn btn-danger rounded-pill px-4">Yes, Delete</button>
+                                        <button type="submit" class="btn btn-danger rounded-pill px-4">Delete</button>
                                     </form>
                                     <button type="button" class="btn btn-outline-light rounded-pill" data-bs-dismiss="modal">Cancel</button>
                                 </div>
@@ -88,18 +117,3 @@
         }
     </div>
 </div>
-
-@* @section Scripts {
-    @if (TempData["Message"] != null)
-    {
-        <script>
-            window.onload = function () {
-                const toastEl = document.getElementById('feedbackToast');
-                if (toastEl) {
-                    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-                    toast.show();
-                }
-            };
-        </script>
-    }
-} *@

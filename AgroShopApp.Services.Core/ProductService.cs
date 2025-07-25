@@ -50,7 +50,8 @@ namespace AgroShopApp.Services.Core
                 Price = p.Price,
                 ImageUrl = p.ImageUrl,
                 Category = p.Category.Name,
-                IsFavorite = userFavorites.Contains(p.Id)
+                IsFavorite = userFavorites.Contains(p.Id),
+                StockQuantity = p.StockQuantity
             });
         }
 
@@ -84,6 +85,7 @@ namespace AgroShopApp.Services.Core
                 Price = product.Price,
                 ImageUrl = product.ImageUrl,
                 Category = product.Category.Name,
+                StockQuantity = product.StockQuantity,
                 IsFavorite = isFavorite
             };
         }

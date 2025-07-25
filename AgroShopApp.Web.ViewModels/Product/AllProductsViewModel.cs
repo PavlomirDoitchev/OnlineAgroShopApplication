@@ -14,5 +14,6 @@
 
         public string Category { get; set; } = null!;
         public bool IsFavorite { get; set; }
+        public int StockQuantity { get; set; }
     }
 }

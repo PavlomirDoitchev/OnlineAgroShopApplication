@@ -228,3 +228,12 @@ h1, label {
     object-fit: cover;
     border-radius: 10px 10px 0 0;
 }
+ /*   .product-img:hover {
+        filter: brightness(0.95);
+        transition: filter 0.2s ease-in-out;
+    }*/
+
+.out-of-stock-img {
+    filter: grayscale(100%) brightness(70%);
+    transition: filter 0.3s ease;
+}

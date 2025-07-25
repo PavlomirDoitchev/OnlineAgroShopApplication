@@ -21,7 +21,7 @@ namespace AgroShopApp.Web.ViewModels.Product
         public string? ImageUrl { get; set; }
 
         [Display(Name = "Stock Quantity")]
-        [Range(1, 10000)]
+        [Range(0, 10000)]
         public int StockQuantity { get; set; } = 10;
 
         [Display(Name = "Category")]
