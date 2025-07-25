@@ -9,7 +9,7 @@ namespace AgroShopApp.Web.ViewModels.Product
     public class ProductListViewModel
     {
         public IEnumerable<AllProductsViewModel> Products { get; set; } = new List<AllProductsViewModel>();
-        public IEnumerable<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
+        public IEnumerable<ProductCategoryViewModel> Categories { get; set; } = new List<ProductCategoryViewModel>();
         public int? SelectedCategoryId { get; set; }
     }
 }

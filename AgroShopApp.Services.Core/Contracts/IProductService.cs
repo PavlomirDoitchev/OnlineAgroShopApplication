@@ -1,0 +1,11 @@
+﻿using AgroShopApp.Web.ViewModels.Product;
+
+namespace AgroShopApp.Services.Core.Contracts
+{
+    public interface IProductService
+    {
+        Task<IEnumerable<AllProductsViewModel>> GetAllAsync(int? categoryId = null, string? searchTerm = null, string? userId = null);
+        Task<IEnumerable<ProductCategoryViewModel>> GetCategoriesAsync();
+        Task<AllProductsViewModel?> GetDetailsAsync(Guid id, string? userId);
+    }
+}

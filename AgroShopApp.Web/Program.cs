@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using AgroShopApp.Data;
 namespace AspNetCoreArchTemplate.Web
 {
-
+    using AgroShopApp.Services.Core;
+    using AgroShopApp.Services.Core.Contracts;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +37,11 @@ namespace AspNetCoreArchTemplate.Web
                     options.Password.RequiredUniqueChars = 0;
                 })
                 .AddEntityFrameworkStores<AgroShopDbContext>();
+
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+            builder.Services.AddScoped<ICartService, CartService>();
+
             builder.Services.AddControllersWithViews();
 
             WebApplication? app = builder.Build();
