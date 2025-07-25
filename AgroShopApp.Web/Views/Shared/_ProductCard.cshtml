@@ -6,7 +6,7 @@
         <img src="@Model.ImageUrl" class="product-img" alt="@Model.Name" />
         <div class="card-body">
             <h5 class="card-title text-success fw-semibold">@Model.Name</h5>
-            <p class="card-text text-muted">@Model.Description</p>
+            <p class="card-text text-muted">@Model.Description.Truncate(85)</p>
             <p class="fw-bold">@Model.Price.ToString("C")</p>
         </div>
         <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
