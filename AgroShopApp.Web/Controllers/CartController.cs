@@ -10,5 +10,6 @@ namespace AgroShopApp.Web.Controllers
             TempData["Message"] = "Product added to cart (mock).";
             return RedirectToAction("Index", "Product");
         }
+
     }
 }

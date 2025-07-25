@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore;
 namespace AgroShopApp.Web.Controllers
 {
     [Authorize]
-    public class FavoriteController : Controller
+    public class FavoritesController : Controller
     {
         private readonly AgroShopDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public FavoriteController(AgroShopDbContext context, UserManager<IdentityUser> userManager)
+        public FavoritesController(AgroShopDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -35,7 +35,7 @@ namespace AgroShopApp.Web.Controllers
             return RedirectToAction("Index", "Product");
         }
         [Authorize]
-        public async Task<IActionResult> Favorite()
+        public async Task<IActionResult> Index()
         {
             var userId = _userManager.GetUserId(User);
 
