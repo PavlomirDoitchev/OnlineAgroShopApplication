@@ -39,7 +39,7 @@ namespace AspNetCoreArchTemplate.Web
                 .AddEntityFrameworkStores<AgroShopDbContext>();
 
             builder.Services.AddScoped<IProductService, ProductService>();
-            builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+            builder.Services.AddScoped<IFavoritesService, FavoritesService>();
             builder.Services.AddScoped<ICartService, CartService>();
 
             builder.Services.AddControllersWithViews();

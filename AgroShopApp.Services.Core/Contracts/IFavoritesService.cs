@@ -2,7 +2,7 @@
 
 namespace AgroShopApp.Services.Core.Contracts
 {
-    public interface IFavoriteService
+    public interface IFavoritesService
     {
         Task AddToFavoritesAsync(string userId, Guid productId);
         Task RemoveFromFavoritesAsync(string userId, Guid productId);

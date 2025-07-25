@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Policy;
 
-public class FavoriteController : Controller
+public class FavoritesController : Controller
 {
-    private readonly IFavoriteService _favoriteService;
+    private readonly IFavoritesService _favoriteService;
     private readonly UserManager<IdentityUser> _userManager;
 
-    public FavoriteController(IFavoriteService favoriteService, UserManager<IdentityUser> userManager)
+    public FavoritesController(IFavoritesService favoriteService, UserManager<IdentityUser> userManager)
     {
         _favoriteService = favoriteService;
         _userManager = userManager;

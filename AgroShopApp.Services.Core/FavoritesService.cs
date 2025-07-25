@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgroShopApp.Services.Core
 {
-    public class FavoriteService : IFavoriteService
+    public class FavoritesService : IFavoritesService
     {
         private readonly AgroShopDbContext _context;
 
-        public FavoriteService(AgroShopDbContext context)
+        public FavoritesService(AgroShopDbContext context)
         {
             _context = context;
         }
