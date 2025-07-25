@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgroShopApp.Web", "AgroShop
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgroShopApp.GCommon", "AgroShopApp.GCommon\AgroShopApp.GCommon.csproj", "{ECC70A02-DA6C-4D64-86B3-969AE6EB4F60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgroShopApp.Data.Models", "AgroShopApp.Data.Models\AgroShopApp.Data.Models.csproj", "{4782EA7D-8337-4FC1-90DB-BE80AC3760FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AgroShopApp.Data.Models", "AgroShopApp.Data.Models\AgroShopApp.Data.Models.csproj", "{4782EA7D-8337-4FC1-90DB-BE80AC3760FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

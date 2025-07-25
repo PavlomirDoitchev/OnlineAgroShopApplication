@@ -1,5 +1,5 @@
 ﻿using AgroShopApp.Data;
-using AgroShopApp.Web.ViewModels;
+using AgroShopApp.Web.ViewModels.Product;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;

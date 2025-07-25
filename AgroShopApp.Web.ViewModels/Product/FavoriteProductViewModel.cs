@@ -1,10 +1,8 @@
-﻿
-
-namespace AgroShopApp.Web.ViewModels
+﻿namespace AgroShopApp.Web.ViewModels.Product
 {
-    public class AllProductsViewModel
+    public class FavoriteProductViewModel
     {
-        public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
 
         public string Name { get; set; } = null!;
 
