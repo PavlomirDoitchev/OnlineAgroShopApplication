@@ -38,7 +38,7 @@
             <div class="carousel-caption d-none d-md-block agro-carousel-overlay">
                 <h5 class="display-6 fw-bold text-white text-uppercase">Seeds</h5>
                 <p class="fst-italic">Grow your garden with top-quality heirloom seeds.</p>
-                <a asp-controller="Products" asp-action="Index" asp-route-category="Seeds"
+                <a asp-controller="Product" asp-action="Index" asp-route-categoryId="1"
                    class="btn btn-outline-light btn-sm rounded-pill px-4 py-2 mt-2">
                     Explore Seeds
                 </a>
@@ -51,7 +51,7 @@
             <div class="carousel-caption d-none d-md-block agro-carousel-overlay">
                 <h5 class="display-6 fw-bold text-white text-uppercase">Fertilizers</h5>
                 <p class="fst-italic">Boost plant health with eco-friendly nutrients.</p>
-                <a asp-controller="Products" asp-action="Index" asp-route-category="Fertilizers"
+                <a asp-controller="Product" asp-action="Index" asp-route-categoryId="2"
                    class="btn btn-outline-light btn-sm rounded-pill px-4 py-2 mt-2">
                     Explore Fertilizers
                 </a>
@@ -64,7 +64,7 @@
             <div class="carousel-caption d-none d-md-block agro-carousel-overlay">
                 <h5 class="display-6 fw-bold text-white text-uppercase">Pesticides</h5>
                 <p class="fst-italic">Shield crops with safe and effective solutions.</p>
-                <a asp-controller="Products" asp-action="Index" asp-route-category="Pesticides"
+                <a asp-controller="Product" asp-action="Index" asp-route-categoryId="3"
                    class="btn btn-outline-light btn-sm rounded-pill px-4 py-2 mt-2">
                     Explore Pesticides
                 </a>
@@ -82,36 +82,40 @@
     </button>
 </div>
 
-<section id="popular-section" class="my-5 py-5 px-3 rounded-4" style="background: linear-gradient(...);">
 
-    <section class="my-5 py-5 px-3 rounded-4" style="background: linear-gradient(to right, #2f3a2f, #3b4c3a);">
-        <h2 class="text-center fw-bold mb-5 text-light display-6">
-            <i class="bi bi-star-fill text-muted me-2"></i> Popular Picks <i class="bi bi-star-fill text-muted ms-2"></i>
-        </h2>
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="card border-0 shadow agro-popular-card bg-body-tertiary h-100">
-                    <div class="card-body text-center p-4">
-                        <span class="badge bg-outline-success text-success mb-3 px-3 py-2 rounded-pill border border-success">Top Seller</span>
-                        <h5 class="card-title fw-semibold text-dark fs-5"><i class="bi bi-flower1 me-2 text-success"></i>Heirloom Tomato Seeds</h5>
-                        <p class="card-text text-muted">Organic seeds known for rich flavor and reliable growth.</p>
-                        <small class="text-muted fst-italic">1,500+ sold this season</small>
+
+<section class="my-5 py-5 px-3 rounded-4" style="background-color: #2f3a2f;">
+    <h2 class="text-center fw-bold text-light mb-4 display-6">
+        <i class="bi bi-lightning-charge-fill text-warning me-2"></i> Trending Now
+    </h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+        <div class="col-md-4">
+            <a asp-controller="Product" asp-action="Details" asp-route-id="11111111-1111-1111-1111-111111111111"
+               class="text-decoration-none text-reset">
+                <div class="card agro-popular-card h-100 shadow-sm">
+                    <img src="~/images/seeds-tomato.jpg" class="product-img" alt="Tomato Seeds" />
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-success fw-bold">Heirloom Tomato Seeds</h5>
+                        <p class="text-muted small">A top seller this season</p>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card border-0 shadow agro-popular-card bg-body-tertiary h-100">
-                    <div class="card-body text-center p-4">
-                        <span class="badge bg-outline-warning text-warning mb-3 px-3 py-2 rounded-pill border border-warning">Farmer Favorite</span>
-                        <h5 class="card-title fw-semibold text-dark fs-5"><i class="bi bi-bug me-2 text-warning"></i>Eco Insect Repellent</h5>
-                        <p class="card-text text-muted">Protect plants naturally — no harsh chemicals involved.</p>
-                        <small class="text-muted fst-italic">★★★★★ by 200+ farmers</small>
-                    </div>
-                </div>
-            </div>
+            </a>
         </div>
-    </section>
-    </section>
+
+        <div class="col-md-4">
+            <a asp-controller="Product" asp-action="Details" asp-route-id="55555555-5555-5555-5555-555555555555"
+               class="text-decoration-none text-reset">
+                <div class="card agro-popular-card h-100 shadow-sm">
+                    <img src="~/images/pesticide-eco.jpg" class="product-img" alt="Eco Repellent" />
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-success fw-bold">Eco Insect Repellent</h5>
+                        <p class="text-muted small">Trusted by 200+ farmers</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
 
 
 @section Scripts {

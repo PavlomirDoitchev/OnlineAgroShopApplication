@@ -2,10 +2,36 @@
 @model IEnumerable<AllProductsViewModel>
 
 @{
-    ViewData["Title"] = "All Products";
+    var categories = (IEnumerable<dynamic>)ViewBag.Categories;
+    int? selectedCategoryId = ViewBag.SelectedCategoryId as int?;
+    string? currentSearch = ViewBag.SearchTerm as string;
 }
 
-<h2 class="text-white text-center my-4">All Products</h2>
+<!-- Search Form -->
+<form class="d-flex justify-content-center mb-4" method="get" asp-controller="Product" asp-action="Index">
+    <input type="hidden" name="categoryId" value="@selectedCategoryId" />
+    <input type="text" name="searchTerm" value="@currentSearch" placeholder="Search products..."
+           class="form-control w-50 me-2" />
+    <button type="submit" class="btn btn-outline-light">Search</button>
+</form>
+
+<!-- Category Filters -->
+<div class="d-flex flex-wrap justify-content-center mb-4 gap-2">
+    <a asp-action="Index"
+       asp-route-searchTerm="@currentSearch"
+       class="btn btn-outline-light @(selectedCategoryId == null ? "active" : "")">
+        All
+    </a>
+    @foreach (var cat in categories)
+    {
+        <a asp-action="Index"
+           asp-route-categoryId="@cat.Id"
+           asp-route-searchTerm="@currentSearch"
+           class="btn btn-outline-light @(selectedCategoryId == cat.Id ? "active" : "")">
+            @cat.Name
+        </a>
+    }
+</div>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
     @foreach (var product in Model)

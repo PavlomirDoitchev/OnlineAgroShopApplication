@@ -20,20 +20,6 @@ namespace AgroShopApp.Web.Controllers
             _userManager = userManager;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add(Guid productId)
-        {
-            var userId = _userManager.GetUserId(User);
-
-            var exists = _context.Favorites.Any(f => f.UserId == userId && f.ProductId == productId);
-            if (!exists)
-            {
-                _context.Favorites.Add(new Favorite { UserId = userId!, ProductId = productId });
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction("Index", "Product");
-        }
         [Authorize]
         public async Task<IActionResult> Index()
         {
@@ -55,6 +41,45 @@ namespace AgroShopApp.Web.Controllers
                 .ToListAsync();
 
             return View(favorites);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Add(Guid productId, string? returnUrl = null)
+        {
+            var userId = _userManager.GetUserId(User);
+
+            if (!_context.Favorites.Any(f => f.UserId == userId && f.ProductId == productId))
+            {
+                _context.Favorites.Add(new Favorite { UserId = userId!, ProductId = productId });
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Product added to favorites.";
+            }
+
+            return !string.IsNullOrEmpty(returnUrl)
+                ? Redirect(returnUrl)
+                : RedirectToAction("Index", "Product");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Remove(Guid productId, string? returnUrl = null)
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var favorite = await _context.Favorites
+                .FirstOrDefaultAsync(f => f.UserId == userId && f.ProductId == productId);
+
+            if (favorite != null)
+            {
+                _context.Favorites.Remove(favorite);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Product removed from favorites.";
+            }
+
+            return !string.IsNullOrEmpty(returnUrl)
+                ? Redirect(returnUrl)
+                : RedirectToAction("Index", "Product");
         }
     }
 }

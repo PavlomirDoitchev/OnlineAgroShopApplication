@@ -221,3 +221,10 @@ h1, label {
         color: #fff;
         border-color: #6aa84f;
     }
+
+
+.product-img {
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
