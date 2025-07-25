@@ -1,4 +1,5 @@
 ﻿using AgroShopApp.Data;
+using AgroShopApp.Data.Models;
 using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.ViewModels.Product;
 using Microsoft.EntityFrameworkCore;
@@ -98,6 +99,34 @@ namespace AgroShopApp.Services.Core
                 Category = product.Category.Name,
                 IsFavorite = isFavorite
             };
+        }
+        public async Task CreateAsync(ProductFormViewModel model)
+        {
+            var product = new Product
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Price = model.Price,
+                ImageUrl = model.ImageUrl,
+                StockQuantity = model.StockQuantity,
+                CategoryId = model.CategoryId,
+                IsAvailable = true,
+                IsDeleted = false,
+                AddedOn = DateTime.UtcNow
+            };
+
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
+        }
+        public async Task RemoveAsync(Guid id)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
+
+            if (product != null)
+            {
+                product.IsDeleted = true;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

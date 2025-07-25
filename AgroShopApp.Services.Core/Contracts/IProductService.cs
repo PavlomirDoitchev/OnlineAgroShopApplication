@@ -7,5 +7,7 @@ namespace AgroShopApp.Services.Core.Contracts
         Task<IEnumerable<AllProductsViewModel>> GetAllAsync(int? categoryId = null, string? searchTerm = null, string? userId = null);
         Task<IEnumerable<ProductCategoryViewModel>> GetCategoriesAsync();
         Task<AllProductsViewModel?> GetDetailsAsync(Guid id, string? userId);
+        Task CreateAsync(ProductFormViewModel model);
+        Task RemoveAsync(Guid id);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AgroShopApp.Data;
 using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.ViewModels.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace AgroShopApp.Web.Controllers
 
             ViewBag.SelectedCategoryId = categoryId;
             ViewBag.SearchTerm = searchTerm;
-            ViewBag.Categories = await _productService.GetCategoriesAsync(); // optional if you move this too
+            ViewBag.Categories = await _productService.GetCategoriesAsync();
 
             return View(model);
         }
@@ -42,6 +43,43 @@ namespace AgroShopApp.Web.Controllers
             }
 
             return View(model);
+        }
+        [Authorize]
+        public async Task<IActionResult> Create()
+        {
+            var categories = await _productService.GetCategoriesAsync();
+
+            var model = new ProductFormViewModel
+            {
+                Categories = categories
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Create(ProductFormViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Categories = await _productService.GetCategoriesAsync();
+                return View(model);
+            }
+
+            await _productService.CreateAsync(model); 
+
+            TempData["Message"] = "Product added successfully!";
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [Authorize] // TODO: change this to [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Remove(Guid id)
+        {
+            await _productService.RemoveAsync(id);
+
+            TempData["Message"] = "Product removed successfully!";
+            return RedirectToAction(nameof(Index));
         }
     }
 }
