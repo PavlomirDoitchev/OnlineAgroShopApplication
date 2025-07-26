@@ -1,4 +1,5 @@
 ﻿using AgroShopApp.Data.Models;
+using AgroShopApp.Data.Repository;
 using AgroShopApp.Data.Repository.Contracts;
 using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.ViewModels.Product;
@@ -11,36 +12,44 @@ namespace AgroShopApp.Services.Core
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IFavoriteRepository _favoriteRepository;
+        private readonly ICartRepository _cartRepository;
 
         public ProductService(
             IProductRepository productRepository,
             ICategoryRepository categoryRepository,
-            IFavoriteRepository favoriteRepository)
+            IFavoriteRepository favoriteRepository,
+            ICartRepository cartRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _favoriteRepository = favoriteRepository;
+            _cartRepository = cartRepository;
+
         }
 
         public async Task<IEnumerable<AllProductsViewModel>> GetAllAsync(int? categoryId = null, string? searchTerm = null, string? userId = null)
         {
-            var productsQuery = await _productRepository.GetAllWithCategoryAsync();
+            var products = await _productRepository.GetAllWithCategoryAsync();
 
-            var filtered = productsQuery.Where(p => p.IsAvailable && !p.IsDeleted);
+            var filtered = products
+                .Where(p => p.IsAvailable && !p.IsDeleted);
 
             if (categoryId.HasValue)
-            {
                 filtered = filtered.Where(p => p.CategoryId == categoryId);
-            }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
                 filtered = filtered.Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm));
-            }
 
-            var userFavorites = string.IsNullOrEmpty(userId)
+            var favorites = string.IsNullOrEmpty(userId)
                 ? new List<Guid>()
                 : (await _favoriteRepository.GetUserFavoritesAsync(userId)).Select(f => f.ProductId).ToList();
+
+            List<CartItem> cartItems = new();
+            if (!string.IsNullOrEmpty(userId))
+            {
+                var cart = await _cartRepository.GetOrCreateCartAsync(userId);
+                cartItems = cart.Items.ToList();
+            }
 
             return filtered.Select(p => new AllProductsViewModel
             {
@@ -50,8 +59,9 @@ namespace AgroShopApp.Services.Core
                 Price = p.Price,
                 ImageUrl = p.ImageUrl,
                 Category = p.Category.Name,
-                IsFavorite = userFavorites.Contains(p.Id),
-                StockQuantity = p.StockQuantity
+                IsFavorite = favorites.Contains(p.Id),
+                StockQuantity = p.StockQuantity,
+                QuantityInCart = cartItems.FirstOrDefault(ci => ci.ProductId == p.Id)?.Quantity ?? 0
             });
         }
 
@@ -187,6 +197,11 @@ namespace AgroShopApp.Services.Core
 
                 await _productRepository.UpdateAsync(product);
             }
+        }
+        public async Task<bool> IsOutOfStockAsync(Guid productId)
+        {
+            var product = await _productRepository.GetByIdAsync(productId);
+            return product == null || product.StockQuantity == 0 || product.IsDeleted || !product.IsAvailable;
         }
     }
 }

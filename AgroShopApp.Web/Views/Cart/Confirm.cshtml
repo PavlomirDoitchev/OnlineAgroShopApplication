@@ -1,0 +1,36 @@
+﻿@using AgroShopApp.Web.ViewModels.Cart
+@model ConfirmOrderViewModel
+
+<h2 class="text-white text-center my-4">Confirm Your Order</h2>
+
+<table class="table table-dark table-striped">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@item.Total.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="text-end mt-4">
+    <h5 class="text-light">Total: <span class="fw-bold">@Model.TotalAmount.ToString("C")</span></h5>
+</div>
+
+<form asp-action="PlaceOrder" method="post" class="text-end mt-3">
+    <button type="submit" class="btn btn-success px-5 py-2 fw-bold rounded-pill">
+        <i class="bi bi-check-circle"></i> Confirm Order
+    </button>
+</form>

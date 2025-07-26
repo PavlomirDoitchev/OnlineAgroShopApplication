@@ -7,6 +7,6 @@ namespace AgroShopApp.Services.Core.Contracts
         Task AddToCartAsync(string userId, Guid productId);
         Task DecreaseQuantityAsync(string userId, Guid productId);
         Task<IEnumerable<CartItemViewModel>> GetCartItemsAsync(string userId);
-        Task ClearCartAsync(string userId);
+        Task RemoveFromCartAsync(string userId, Guid productId);
     }
 }

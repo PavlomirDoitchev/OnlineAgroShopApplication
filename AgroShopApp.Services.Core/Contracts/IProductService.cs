@@ -13,6 +13,6 @@ namespace AgroShopApp.Services.Core.Contracts
         Task<EditProductViewModel?> GetEditAsync(Guid id);
         Task EditAsync(EditProductViewModel model);
         Task<IEnumerable<DeletedProductViewModel>> GetDeletedDetailedAsync();
-
+        Task<bool> IsOutOfStockAsync(Guid productId);
     }
 }

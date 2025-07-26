@@ -45,7 +45,7 @@
                     </form>
 
                     <!-- Add to Cart -->
-                    @if (Model.StockQuantity > 0)
+                    @if (Model.StockQuantity > Model.QuantityInCart)
                     {
                         <form asp-controller="Cart" asp-action="Add" asp-route-productId="@Model.Id" method="post" class="d-inline">
                             <button type="submit" class="btn btn-outline-success btn-sm rounded-pill px-3">
@@ -55,10 +55,11 @@
                     }
                     else
                     {
-                        <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" disabled title="Out of stock">
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" disabled title="Max quantity in cart">
                             <i class="bi bi-cart-x"></i>
                         </button>
                     }
+                   
                 }
             </div>
         </div>
