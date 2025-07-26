@@ -8,13 +8,13 @@ namespace AgroShopApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<OrderItem> entity)
         {
-            entity.HasKey(oi => oi.Id);
+            entity.HasKey(oi => new { oi.OrderId, oi.ProductId });
 
             entity
                 .HasOne(oi => oi.Order)
                 .WithMany(o => o.Items)
                 .HasForeignKey(oi => oi.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity
                 .HasOne(oi => oi.Product)
