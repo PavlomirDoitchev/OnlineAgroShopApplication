@@ -1,0 +1,30 @@
+﻿@using AgroShopApp.Web.ViewModels.Product
+@model PaginatedProductListViewModel
+
+<div id="productGrid">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+        @foreach (var product in Model.Products)
+        {
+            <partial name="_ProductCard" model="product" />
+        }
+    </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="text-center">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <a href="@Url.Action("Index", new {
+                        page = i,
+                        pageSize = Model.PageSize,
+                        categoryId = Model.SelectedCategoryId,
+                        searchTerm = Model.CurrentSearch
+                    })"
+                   class="btn @(i == Model.CurrentPage ? "btn-primary fw-bold" : "btn-outline-light") mx-1 pagination-link"
+                   data-page="@i">
+                    @i
+                </a>
+            }
+        </nav>
+    }
+</div>

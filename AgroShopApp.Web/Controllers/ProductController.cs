@@ -22,6 +22,12 @@ namespace AgroShopApp.Web.Controllers
         {
             var userId = GetUserId();
             var model = await _productService.GetPaginatedAsync(page, pageSize, categoryId, searchTerm, userId);
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_ProductGridPartial", model);
+            }
+
             return View(model);
         }
         [AllowAnonymous]
@@ -110,6 +116,7 @@ namespace AgroShopApp.Web.Controllers
         public async Task<IActionResult> Restore(Guid id)
         {
             await _productService.RestoreAsync(id);
+
             TempData["Message"] = "Product restored successfully.";
             return RedirectToAction(nameof(Deleted));
         }

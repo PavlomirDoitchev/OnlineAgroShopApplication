@@ -27,11 +27,8 @@ namespace AgroShopApp.Services.Core
 
         }
 
-        public async Task<PaginatedProductListViewModel> GetPaginatedAsync(
-      int page, int pageSize,
-      int? categoryId = null,
-      string? searchTerm = null,
-      string? userId = null)
+        public async Task<PaginatedProductListViewModel> GetPaginatedAsync(int page, int pageSize, int? categoryId = null,
+            string? searchTerm = null, string? userId = null)
         {
             var products = await _productRepository.GetAllWithCategoryAsync();
             var filtered = products.Where(p => p.IsAvailable && !p.IsDeleted);
@@ -62,6 +59,7 @@ namespace AgroShopApp.Services.Core
                 TotalPages = (int)Math.Ceiling(total / (double)pageSize),
                 SelectedCategoryId = categoryId,
                 CurrentSearch = searchTerm,
+                PageSize = pageSize,
                 Categories = (await _categoryRepository.GetAllSortedAsync())
                     .Select(c => new ProductCategoryViewModel
                     {

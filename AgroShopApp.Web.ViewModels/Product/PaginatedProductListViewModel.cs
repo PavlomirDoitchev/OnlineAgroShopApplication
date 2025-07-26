@@ -9,7 +9,7 @@
 
         public int? SelectedCategoryId { get; set; }
         public string? CurrentSearch { get; set; }
-
+        public int PageSize { get; set; }
         public List<ProductCategoryViewModel> Categories { get; set; } = new();
     }
 }

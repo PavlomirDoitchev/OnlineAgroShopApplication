@@ -3,54 +3,38 @@
 @{
     ViewData["Title"] = "Products";
 }
-@{
-    var categories = (IEnumerable<dynamic>)ViewBag.Categories;
-    int? selectedCategoryId = ViewBag.SelectedCategoryId as int?;
-    string? currentSearch = ViewBag.SearchTerm as string;
-}
-
 <!-- Search Form -->
-<form class="d-flex justify-content-center mb-4" method="get">
+<form id="searchForm" class="d-flex justify-content-center mb-4">
     <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
     <input type="text" name="searchTerm" value="@Model.CurrentSearch" placeholder="Search products..."
            class="form-control w-50 me-2" />
     <button type="submit" class="btn btn-outline-light">Search</button>
 </form>
 
+<!-- Category Filters -->
 <div class="d-flex flex-wrap justify-content-center mb-4 gap-2">
-    <a asp-action="Index"
-       asp-route-searchTerm="@Model.CurrentSearch"
-       class="btn btn-outline-light @(Model.SelectedCategoryId == null ? "active" : "")">
+    <a href="#"
+       class="btn @(Model.SelectedCategoryId == null ? "btn-light text-dark fw-semibold" : "btn-outline-light") category-filter"
+       data-category=""
+       data-search="@Model.CurrentSearch">
         All
     </a>
+
     @foreach (var cat in Model.Categories)
     {
-        <a asp-action="Index"
-           asp-route-categoryId="@cat.Id"
-           asp-route-searchTerm="@Model.CurrentSearch"
-           class="btn btn-outline-light @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
+        <a href="#"
+           class="btn @(Model.SelectedCategoryId == cat.Id ? "btn-light text-dark fw-semibold" : "btn-outline-light") category-filter"
+           data-category="@cat.Id"
+           data-search="@Model.CurrentSearch">
             @cat.Name
         </a>
     }
 </div>
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    @foreach (var product in Model.Products)
-    {
-        <partial name="_ProductCard" model="product" />
-    }
+
+<div id="productsContainer">
+    @await Html.PartialAsync("_ProductGridPartial", Model)
 </div>
-@if (Model.TotalPages > 1)
-{
-    <div class="text-center mt-4">
-        @for (int i = 1; i <= Model.TotalPages; i++)
-        {
-            <a asp-action="Index"
-               asp-route-page="@i"
-               asp-route-categoryId="@Model.SelectedCategoryId"
-               asp-route-searchTerm="@Model.CurrentSearch"
-               class="btn @(i == Model.CurrentPage ? "btn-primary" : "btn-outline-light") mx-1">
-                @i
-            </a>
-        }
-    </div>
+
+@section Scripts {
+    <script src="~/js/product-ajax.js" asp-append-version="true"></script>
 }

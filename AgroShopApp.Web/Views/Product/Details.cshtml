@@ -21,10 +21,10 @@
                         <i class="bi bi-x-circle-fill"></i> Out of stock
                     </span>
                 }
-                else if (Model.StockQuantity <= 3)
+                else if (Model.StockQuantity <= 10)
                 {
                     <span class="text-warning">
-                        <i class="bi bi-exclamation-triangle-fill"></i> Not many left!
+                        <i class="bi bi-exclamation-triangle-fill"></i> Only @Model.StockQuantity left in stock!
                     </span>
                 }
                 else
