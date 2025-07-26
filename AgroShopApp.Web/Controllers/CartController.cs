@@ -1,9 +1,6 @@
 ﻿using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.Controllers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Policy;
 
 public class CartController : BaseController
 {
@@ -24,9 +21,35 @@ public class CartController : BaseController
         return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        ViewData["Message"] = "Cart system coming soon!";
-        return View();
+        var userId = GetUserId()!;
+        var cartItems = await _cartService.GetCartItemsAsync(userId);
+        return View(cartItems);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Decrease(Guid productId)
+    {
+        var userId = GetUserId()!;
+        await _cartService.DecreaseQuantityAsync(userId, productId);
+
+        TempData["Message"] = "Product quantity updated.";
+        return RedirectToAction("Index");
+    }
+    [HttpPost]
+    public async Task<IActionResult> Increase(Guid productId)
+    {
+        var userId = GetUserId()!;
+        try
+        {
+            await _cartService.AddToCartAsync(userId, productId);
+            TempData["Message"] = "Product quantity updated.";
+        }
+        catch (InvalidOperationException ex)
+        {
+            TempData["Message"] = ex.Message;
+        }
+
+        return RedirectToAction("Index");
     }
 }

@@ -1,11 +1,66 @@
-﻿@{
-    ViewData["Title"] = "My Cart";
-}
+﻿@model IEnumerable<AgroShopApp.Web.ViewModels.Cart.CartItemViewModel>
 
 <h2 class="text-white text-center my-4">My Cart</h2>
 
-<div class="alert alert-info text-center">
-    @ViewData["Message"]
-</div>
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center">Your cart is empty.</div>
+}
+else
+{
+    <table class="table table-dark table-striped rounded">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th>Product</th>
+                <th>Image</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td><img src="@item.ImageUrl" class="img-thumbnail" style="max-height: 40px;" /></td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@item.Total.ToString("C")</td>
+                    <td>
+                        @if (item.StockQuantity > item.Quantity)
+                        {
+                            <form asp-action="Increase" asp-route-productId="@item.ProductId" method="post" class="d-inline">
+                                <button class="btn btn-sm btn-success" title="Increase quantity">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-secondary" disabled title="Maximum stock reached">
+                                <i class="bi bi-cart-x"></i>
+                            </button>
+                        }
 
-<p class="text-light text-center">When cart is implemented, items will appear here.</p>
+                        <form asp-action="Decrease" asp-route-productId="@item.ProductId" method="post" class="d-inline">
+                            <button class="btn btn-sm btn-warning" title="Decrease quantity">
+                                <i class="bi bi-dash"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+    @{
+        var grandTotal = Model.Sum(i => i.Total);
+    }
+
+    <div class="text-end mt-4">
+        <h5 class="text-light">
+            <i class="bi bi-cash-coin"></i> Total: <span class="fw-bold">@grandTotal.ToString("C")</span>
+        </h5>
+    </div>
