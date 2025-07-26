@@ -4,7 +4,7 @@ namespace AgroShopApp.Services.Core.Contracts
 {
     public interface IProductService
     {
-        Task<IEnumerable<AllProductsViewModel>> GetAllAsync(int? categoryId = null, string? searchTerm = null, string? userId = null);
+        Task<PaginatedProductListViewModel> GetPaginatedAsync(int page, int pageSize, int? categoryId = null, string? searchTerm = null, string? userId = null);
         Task<IEnumerable<ProductCategoryViewModel>> GetCategoriesAsync();
         Task<AllProductsViewModel?> GetDetailsAsync(Guid id, string? userId);
         Task CreateAsync(ProductFormViewModel model);

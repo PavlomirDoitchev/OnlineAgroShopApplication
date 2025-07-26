@@ -1,6 +1,8 @@
 ﻿@using AgroShopApp.Web.ViewModels.Order
 @model PaginatedOrderListViewModel
-
+@{
+    ViewData["Title"] = "My Orders";
+}
 <h2 class="text-white text-center my-4">My Orders</h2>
 
 @if (!Model.Orders.Any())

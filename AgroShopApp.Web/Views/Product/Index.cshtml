@@ -1,6 +1,8 @@
 ﻿@using AgroShopApp.Web.ViewModels.Product
-@model IEnumerable<AllProductsViewModel>
-
+@model PaginatedProductListViewModel
+@{
+    ViewData["Title"] = "Products";
+}
 @{
     var categories = (IEnumerable<dynamic>)ViewBag.Categories;
     int? selectedCategoryId = ViewBag.SelectedCategoryId as int?;
@@ -8,34 +10,47 @@
 }
 
 <!-- Search Form -->
-<form class="d-flex justify-content-center mb-4" method="get" asp-controller="Product" asp-action="Index">
-    <input type="hidden" name="categoryId" value="@selectedCategoryId" />
-    <input type="text" name="searchTerm" value="@currentSearch" placeholder="Search products..."
+<form class="d-flex justify-content-center mb-4" method="get">
+    <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
+    <input type="text" name="searchTerm" value="@Model.CurrentSearch" placeholder="Search products..."
            class="form-control w-50 me-2" />
     <button type="submit" class="btn btn-outline-light">Search</button>
 </form>
 
-<!-- Category Filters -->
 <div class="d-flex flex-wrap justify-content-center mb-4 gap-2">
     <a asp-action="Index"
-       asp-route-searchTerm="@currentSearch"
-       class="btn btn-outline-light @(selectedCategoryId == null ? "active" : "")">
+       asp-route-searchTerm="@Model.CurrentSearch"
+       class="btn btn-outline-light @(Model.SelectedCategoryId == null ? "active" : "")">
         All
     </a>
-    @foreach (var cat in categories)
+    @foreach (var cat in Model.Categories)
     {
         <a asp-action="Index"
            asp-route-categoryId="@cat.Id"
-           asp-route-searchTerm="@currentSearch"
-           class="btn btn-outline-light @(selectedCategoryId == cat.Id ? "active" : "")">
+           asp-route-searchTerm="@Model.CurrentSearch"
+           class="btn btn-outline-light @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
             @cat.Name
         </a>
     }
 </div>
-
 <div class="row row-cols-1 row-cols-md-3 g-4">
-    @foreach (var product in Model)
+    @foreach (var product in Model.Products)
     {
         <partial name="_ProductCard" model="product" />
     }
 </div>
+@if (Model.TotalPages > 1)
+{
+    <div class="text-center mt-4">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <a asp-action="Index"
+               asp-route-page="@i"
+               asp-route-categoryId="@Model.SelectedCategoryId"
+               asp-route-searchTerm="@Model.CurrentSearch"
+               class="btn @(i == Model.CurrentPage ? "btn-primary" : "btn-outline-light") mx-1">
+                @i
+            </a>
+        }
+    </div>
+}

@@ -18,16 +18,10 @@ namespace AgroShopApp.Web.Controllers
             _productService = productService;
         }
         [AllowAnonymous]
-        public async Task<IActionResult> Index(int? categoryId = null, string? searchTerm = null)
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 9, int? categoryId = null, string? searchTerm = null)
         {
-            var userId = this.GetUserId();
-
-            var model = await _productService.GetAllAsync(categoryId, searchTerm, userId);
-
-            ViewBag.SelectedCategoryId = categoryId;
-            ViewBag.SearchTerm = searchTerm;
-            ViewBag.Categories = await _productService.GetCategoriesAsync();
-
+            var userId = GetUserId();
+            var model = await _productService.GetPaginatedAsync(page, pageSize, categoryId, searchTerm, userId);
             return View(model);
         }
         [AllowAnonymous]
