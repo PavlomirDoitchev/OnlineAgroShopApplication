@@ -14,11 +14,11 @@ namespace AgroShopApp.Data.Configuration
                 .HasOne(ci => ci.Cart)
                 .WithMany(c => c.Items)
                 .HasForeignKey(ci => ci.CartId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity
                 .HasOne(ci => ci.Product)
-                .WithMany(p => p.OrderItems)
+                .WithMany(p => p.CartItems)
                 .HasForeignKey(ci => ci.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
