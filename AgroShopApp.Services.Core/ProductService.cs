@@ -47,13 +47,13 @@ namespace AgroShopApp.Services.Core
                 ? null
                 : await _cartRepository.GetOrCreateCartAsync(userId);
 
-            var total = filtered.Count();
+            int total = filtered.Count();
             var paged = filtered
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-            var vm = new PaginatedProductListViewModel
+            PaginatedProductListViewModel? viewModel = new PaginatedProductListViewModel
             {
                 CurrentPage = page,
                 TotalPages = (int)Math.Ceiling(total / (double)pageSize),
@@ -80,12 +80,12 @@ namespace AgroShopApp.Services.Core
                 }).ToList()
             };
 
-            return vm;
+            return viewModel;
         }
 
         public async Task<IEnumerable<ProductCategoryViewModel>> GetCategoriesAsync()
         {
-            var categories = await _categoryRepository.GetAllSortedAsync();
+            IEnumerable<Category> categories = await _categoryRepository.GetAllSortedAsync();
 
             return categories.Select(c => new ProductCategoryViewModel
             {

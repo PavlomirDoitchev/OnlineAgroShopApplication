@@ -43,17 +43,7 @@ namespace AspNetCoreArchTemplate.Web
 
             builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
             builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
-            //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-            //builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            //builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
-            //builder.Services.AddScoped<ICartRepository, CartRepository>();
-            //builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-
-            //builder.Services.AddScoped<IProductService, ProductService>();
-            //builder.Services.AddScoped<IFavoritesService, FavoritesService>();
-            //builder.Services.AddScoped<ICartService, CartService>();
-            //builder.Services.AddScoped<IOrderService, OrderService>();
-
+            
             builder.Services.Configure<CookiePolicyOptions>(options =>
             {
                 options.Secure = CookieSecurePolicy.Always;
@@ -80,6 +70,8 @@ namespace AspNetCoreArchTemplate.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            app.UseStatusCodePagesWithRedirects("Home/Error/{0}");
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -92,6 +84,7 @@ namespace AspNetCoreArchTemplate.Web
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
             app.MapRazorPages();
 
             app.Run();
