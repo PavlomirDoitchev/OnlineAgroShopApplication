@@ -70,7 +70,6 @@ namespace AspNetCoreArchTemplate.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            //app.UseStatusCodePagesWithRedirects("Home/Error/{0}");
             app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
 
             app.UseHttpsRedirection();

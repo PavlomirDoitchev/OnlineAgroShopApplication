@@ -17,6 +17,7 @@ namespace AspNetCoreArchTemplate.Web.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            //return StatusCode(500);
             return View();
         }
 
