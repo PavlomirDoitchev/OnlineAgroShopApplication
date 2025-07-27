@@ -58,28 +58,32 @@ namespace AgroShopApp.Web.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateQuantity(Guid productId, int quantity)
+        public async Task<IActionResult> UpdateQuantity([FromBody] QuantityUpdateViewModel? model)
         {
+            if (model == null)
+                return BadRequest("Invalid input.");
+
             var userId = GetUserId()!;
 
-            if (quantity < 1)
+            if (model.Quantity < 1)
+                model.Quantity = 1;
+
+            var stock = await _cartService.GetStockForProductAsync(model.ProductId);
+            if (model.Quantity > stock)
+                model.Quantity = stock;
+
+            await _cartService.SetQuantityAsync(userId, model.ProductId, model.Quantity);
+
+            var price = await _cartService.GetProductPriceAsync(model.ProductId);
+            var itemTotal = price * model.Quantity;
+            var grandTotal = await _cartService.GetCartTotalAsync(userId);
+
+            return Ok(new
             {
-                TempData["Message"] = "Quantity must be at least 1.";
-                return RedirectToAction(nameof(Index));
-            }
-
-            var stock = await _cartService.GetStockForProductAsync(productId);
-            if (quantity > stock)
-            {
-                TempData["Message"] = $"Only {stock} item(s) in stock.";
-                return RedirectToAction(nameof(Index));
-            }
-
-            await _cartService.SetQuantityAsync(userId, productId, quantity);
-
-            TempData["Message"] = "Quantity updated successfully.";
-            return RedirectToAction(nameof(Index));
+                correctedQuantity = model.Quantity,
+                itemTotal,
+                grandTotal
+            });
         }
         [HttpPost]
         public async Task<IActionResult> Remove(Guid productId)

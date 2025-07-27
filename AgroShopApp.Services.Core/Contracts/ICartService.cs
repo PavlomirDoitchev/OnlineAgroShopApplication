@@ -10,5 +10,7 @@ namespace AgroShopApp.Services.Core.Contracts
         Task RemoveFromCartAsync(string userId, Guid productId);
         Task SetQuantityAsync(string userId, Guid productId, int quantity);
         Task<int> GetStockForProductAsync(Guid productId);
+        Task<decimal> GetCartTotalAsync(string userId);
+        Task<decimal> GetProductPriceAsync(Guid productId);
     }
 }

@@ -45,7 +45,15 @@ namespace AspNetCoreArchTemplate.Web
 
             builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
             builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
-            
+
+            builder.Services.AddHttpContextAccessor();
+
+
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+
             builder.Services.Configure<CookiePolicyOptions>(options =>
             {
                 options.Secure = CookieSecurePolicy.Always;
@@ -56,11 +64,6 @@ namespace AspNetCoreArchTemplate.Web
             {
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Lax;
-            });
-
-            builder.Services.AddControllersWithViews(options =>
-            {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
             WebApplication app = builder.Build();
