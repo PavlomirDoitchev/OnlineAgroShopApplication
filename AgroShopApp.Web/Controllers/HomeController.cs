@@ -32,11 +32,11 @@ namespace AspNetCoreArchTemplate.Web.Controllers
             {
                 case 401:
                 case 403:
-                    return this.View("UnauthorizedError");
+                    return View("UnauthorizedError");
                 case 404:
-                    return this.View("NotFoundError");
+                    return View("NotFoundError");
                 default:
-                    return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
         }
     }

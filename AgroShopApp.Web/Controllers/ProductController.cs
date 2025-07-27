@@ -1,11 +1,7 @@
-﻿using AgroShopApp.Data;
-using AgroShopApp.Services.Core.Contracts;
+﻿using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.ViewModels.Product;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Runtime.CompilerServices;
 
 namespace AgroShopApp.Web.Controllers
 {
@@ -30,6 +26,7 @@ namespace AgroShopApp.Web.Controllers
 
             return View(model);
         }
+        [Route("Product/Details/{id:guid}")]
         [AllowAnonymous]
         public async Task<IActionResult> Details(Guid id)
         {

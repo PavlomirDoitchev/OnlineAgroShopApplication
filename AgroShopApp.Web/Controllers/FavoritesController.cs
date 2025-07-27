@@ -1,9 +1,5 @@
 ﻿using AgroShopApp.Services.Core.Contracts;
-using AgroShopApp.Web.Controllers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Policy;
 namespace AgroShopApp.Web.Controllers
 {
     public class FavoritesController : BaseController
