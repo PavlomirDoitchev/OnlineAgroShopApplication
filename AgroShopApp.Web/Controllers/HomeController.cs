@@ -10,14 +10,23 @@ namespace AspNetCoreArchTemplate.Web.Controllers
 
     public class HomeController : BaseController
     {
+        //TODO: Finish this implementation
+        private readonly Dictionary<int, string> HttpStatusCodeViewMap = new Dictionary<int, string>()
+        {
+            {401, "UnauthorizedError"},
+            {403, "UnauthorizedError"},
+            {404, "NotFoundError"},
+            {500, "ServerError"}
+        };
         public HomeController(ILogger<HomeController> logger)
         {
 
         }
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Index()
         {
-            //return StatusCode(500);
+            //return StatusCode(403);
             return View();
         }
 

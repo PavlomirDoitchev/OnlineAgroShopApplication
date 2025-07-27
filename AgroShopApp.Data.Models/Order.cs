@@ -15,7 +15,7 @@ namespace AgroShopApp.Data.Models
         public virtual IdentityUser User { get; set; } = null!;
 
         [Comment("Date and time when the order was placed")]
-        public DateTime OrderedOn { get; set; } = DateTime.UtcNow;
+        public DateTime OrderedOn { get; set; } = DateTime.Now;
 
         [Comment("Current status of the order")]
         public string Status { get; set; } = "Pending";

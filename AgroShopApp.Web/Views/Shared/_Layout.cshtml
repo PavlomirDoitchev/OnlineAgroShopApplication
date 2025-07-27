@@ -82,7 +82,7 @@
             </div>
         </nav>
     </header>
-
+    @* <partial name="_Toast" /> *@
     <div class="flex-grow-1">
         <main class="pb-3">
             <div class="container agro-bg mt-3">
@@ -103,32 +103,31 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    <div aria-live="polite" aria-atomic="true" class="position-relative">
-        <div class="toast-container position-fixed bottom-0 end-0 p-3 z-3">
-            @if (TempData["Message"] != null)
-            {
-                <div class="toast align-items-center bg-success text-white border-0 show" role="alert" id="feedbackToast" style="min-width: 250px;">
-                    <div class="d-flex">
-                        <div class="toast-body fw-semibold">
-                            @TempData["Message"]
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  <div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container position-fixed top-0 end-0 p-3 z-3" style="margin-top: 4.5rem;">
+        @if (TempData["Message"] != null)
+        {
+            <div class="toast align-items-center bg-success text-white border-0 show" role="alert" id="feedbackToast" style="min-width: 250px;">
+                <div class="d-flex">
+                    <div class="toast-body fw-semibold">
+                        @TempData["Message"]
                     </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
-
+</div>
     @if (TempData["Message"] != null)
     {
         <script>
-            window.onload = function () {
-                const toastEl = document.getElementById('feedbackToast');
-                if (toastEl) {
-                    const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-                    toast.show();
-                }
-            };
+                window.onload = function () {
+                    const toastEl = document.getElementById('feedbackToast');
+                    if (toastEl) {
+            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+            toast.show();
+                    }
+                };
         </script>
     }
 </body>

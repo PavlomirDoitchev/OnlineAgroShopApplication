@@ -13,6 +13,7 @@ namespace AgroShopApp.Web.Controllers
         {
             _productService = productService;
         }
+        [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Index(int page = 1, int pageSize = 9, int? categoryId = null, string? searchTerm = null)
         {
@@ -26,6 +27,7 @@ namespace AgroShopApp.Web.Controllers
 
             return View(model);
         }
+        [HttpGet]
         [Route("Product/Details/{id:guid}")]
         [AllowAnonymous]
         public async Task<IActionResult> Details(Guid id)
@@ -41,7 +43,7 @@ namespace AgroShopApp.Web.Controllers
 
             return View(model);
         }
-
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var categories = await _productService.GetCategoriesAsync();

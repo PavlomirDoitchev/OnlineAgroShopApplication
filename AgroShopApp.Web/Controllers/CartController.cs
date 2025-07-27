@@ -24,7 +24,7 @@ namespace AgroShopApp.Web.Controllers
             TempData["Message"] = "Product added to cart.";
             return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
         }
-
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var userId = GetUserId()!;
@@ -41,6 +41,7 @@ namespace AgroShopApp.Web.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Increase(Guid productId)
         {
             var userId = GetUserId()!;
@@ -55,6 +56,30 @@ namespace AgroShopApp.Web.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateQuantity(Guid productId, int quantity)
+        {
+            var userId = GetUserId()!;
+
+            if (quantity < 1)
+            {
+                TempData["Message"] = "Quantity must be at least 1.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var stock = await _cartService.GetStockForProductAsync(productId);
+            if (quantity > stock)
+            {
+                TempData["Message"] = $"Only {stock} item(s) in stock.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            await _cartService.SetQuantityAsync(userId, productId, quantity);
+
+            TempData["Message"] = "Quantity updated successfully.";
+            return RedirectToAction(nameof(Index));
         }
         [HttpPost]
         public async Task<IActionResult> Remove(Guid productId)

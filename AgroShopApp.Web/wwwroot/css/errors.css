@@ -1,4 +1,5 @@
-﻿.agro-error-container {
+﻿
+.agro-error-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,7 +27,7 @@
     font-family: 'Ubuntu', sans-serif;
     margin-bottom: 15px;
     align-items: center;
-    min-height: 80vh;
+    min-height: 40vh;
     text-align: center;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
     animation: fadeInUp 1s ease-out forwards;

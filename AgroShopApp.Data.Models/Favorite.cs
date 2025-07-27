@@ -15,6 +15,6 @@ namespace AgroShopApp.Data.Models
         public virtual Product Product { get; set; } = null!;
 
         [Comment("Timestamp when product was added to favorites")]
-        public DateTime AddedOn { get; set; } = DateTime.UtcNow;
+        public DateTime AddedOn { get; set; } = DateTime.Now;
     }
 }

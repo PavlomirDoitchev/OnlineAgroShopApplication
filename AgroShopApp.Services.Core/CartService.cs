@@ -98,5 +98,30 @@ namespace AgroShopApp.Services.Core
                     Total = ci.Product.Price * ci.Quantity
                 });
         }
+        public async Task SetQuantityAsync(string userId, Guid productId, int quantity)
+        {
+            var cart = await _cartRepo.GetWithItemsAsync(userId);
+
+            var cartItem = cart.Items.FirstOrDefault(i => i.ProductId == productId);
+            if (cartItem == null)
+            {
+                throw new InvalidOperationException("Product not found in cart.");
+            }
+
+            cartItem.Quantity = quantity;
+
+            await _cartRepo.UpdateAsync(cart);
+        }
+
+        public async Task<int> GetStockForProductAsync(Guid productId)
+        {
+            var product = await _productRepo.GetByIdAsync(productId);
+            if (product == null)
+            {
+                throw new InvalidOperationException("Product not found.");
+            }
+
+            return product.StockQuantity;
+        }
     }
 }

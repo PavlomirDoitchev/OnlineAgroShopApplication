@@ -11,6 +11,7 @@ namespace AgroShopApp.Web.Controllers
         {
             _orderService = orderService;
         }
+        [HttpGet]
         public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
             var userId = GetUserId()!;
@@ -18,6 +19,7 @@ namespace AgroShopApp.Web.Controllers
 
             return View(result);
         }
+        [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
             var userId = GetUserId()!;

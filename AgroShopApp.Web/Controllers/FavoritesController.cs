@@ -32,7 +32,7 @@ namespace AgroShopApp.Web.Controllers
             return RedirectToAction("Index", "Favorites");
             //return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
         }
-
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var userId = this.GetUserId();

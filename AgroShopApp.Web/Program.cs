@@ -10,6 +10,7 @@ namespace AspNetCoreArchTemplate.Web
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using AgroShopApp.Web.Infrastructure.Extensions;
+    using Microsoft.AspNetCore.Mvc;
 
     public class Program
     {
@@ -17,7 +18,8 @@ namespace AspNetCoreArchTemplate.Web
         {
             WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
             
-            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             
             builder.Services
                 .AddDbContext<AgroShopDbContext>(options =>
@@ -56,8 +58,10 @@ namespace AspNetCoreArchTemplate.Web
                 options.Cookie.SameSite = SameSiteMode.Lax;
             });
 
-
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
             WebApplication app = builder.Build();
             

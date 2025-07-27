@@ -1,0 +1,29 @@
+﻿@* Views/Shared/_Toast.cshtml *@
+@{
+    var message = TempData["Message"] as string;
+    var type = TempData["MessageType"] as string ?? "success"; // default to success
+    var toastId = "feedbackToast";
+    var toastColorClass = type switch
+    {
+        "success" => "bg-success text-white",
+        "warning" => "bg-warning text-dark",
+        "danger" => "bg-danger text-white",
+        _ => "bg-secondary text-white"
+    };
+}
+
+@if (!string.IsNullOrEmpty(message))
+{
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div class="toast-container position-fixed top-0 end-0 p-3 z-3" style="margin-top: 4.5rem;">
+                <div class="toast align-items-center @toastColorClass border-0" role="alert" id="@toastId" style="min-width: 250px;">
+                    <div class="d-flex">
+                        <div class="toast-body fw-semibold">
+                        @message
+                        </div>
+                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+}
