@@ -9,6 +9,7 @@ namespace AspNetCoreArchTemplate.Web
     using AgroShopApp.Services.Core.Contracts;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using AgroShopApp.Web.Infrastructure.Extensions;
 
     public class Program
     {
@@ -40,21 +41,35 @@ namespace AspNetCoreArchTemplate.Web
                 })
                 .AddEntityFrameworkStores<AgroShopDbContext>();
 
-            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-            builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
-            builder.Services.AddScoped<ICartRepository, CartRepository>();
-            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
+            builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
+            //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            //builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            //builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+            //builder.Services.AddScoped<ICartRepository, CartRepository>();
+            //builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
-            builder.Services.AddScoped<IProductService, ProductService>();
-            builder.Services.AddScoped<IFavoritesService, FavoritesService>();
-            builder.Services.AddScoped<ICartService, CartService>();
-            builder.Services.AddScoped<IOrderService, OrderService>();
+            //builder.Services.AddScoped<IProductService, ProductService>();
+            //builder.Services.AddScoped<IFavoritesService, FavoritesService>();
+            //builder.Services.AddScoped<ICartService, CartService>();
+            //builder.Services.AddScoped<IOrderService, OrderService>();
+
+            builder.Services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.Secure = CookieSecurePolicy.Always;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
+            });
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+            });
 
 
             builder.Services.AddControllersWithViews();
 
-            WebApplication? app = builder.Build();
+            WebApplication app = builder.Build();
             
             if (app.Environment.IsDevelopment())
             {
