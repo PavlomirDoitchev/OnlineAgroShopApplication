@@ -2,7 +2,6 @@
     ViewData["Title"] = "Home";
 }
 
-<!-- Hero Banner -->
 
 <div class="position-relative text-white text-center mb-5"
      style="background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65)),
@@ -21,7 +20,6 @@
                 <i class="bi bi-basket me-1"></i> Browse Products
             </a>
         </div>
-        <!-- Scroll Button -->
         <a href="#popular-section"
            class="btn btn-outline-success rounded-pill px-4 py-3 fs-6 fw-semibold agro-scroll-button" style="gap: 1.25rem;">
             <i class="bi bi-chevron-double-down me-1"></i> View this month’s popular
@@ -32,7 +30,6 @@
 
 <div id="agroCarousel" class="carousel slide mb-5 shadow" data-bs-ride="carousel">
     <div class="carousel-inner rounded-4 overflow-hidden">
-        <!-- Slide 1: Seeds -->
         <div class="carousel-item active position-relative">
             <img src="~/images/carousel-seeds.jpg" class="d-block w-100" alt="Seeds">
             <div class="carousel-caption d-none d-md-block agro-carousel-overlay">
@@ -44,8 +41,6 @@
                 </a>
             </div>
         </div>
-
-        <!-- Slide 2: Fertilizers -->
         <div class="carousel-item position-relative">
             <img src="~/images/fertilizer.jpg" class="d-block w-100" alt="Fertilizers">
             <div class="carousel-caption d-none d-md-block agro-carousel-overlay">
@@ -58,7 +53,6 @@
             </div>
         </div>
 
-        <!-- Slide 3: Pesticides -->
         <div class="carousel-item position-relative">
             <img src="~/images/carousel-pesticide.jpg" class="d-block w-100" alt="Pesticides">
             <div class="carousel-caption d-none d-md-block agro-carousel-overlay">
@@ -89,7 +83,6 @@
         <i class="bi bi-star-fill text-muted me-2"></i> Popular Picks <i class="bi bi-star-fill text-muted ms-2"></i>
     </h2>
     <div class="row g-4 justify-content-center">
-        <!-- Product 1: Heirloom Tomato Seeds -->
         <a asp-controller="Product" asp-action="Details" asp-route-id="11111111-1111-1111-1111-111111111111"
            class="text-decoration-none text-reset col-md-6 col-lg-4">
             <div class="card border-0 shadow agro-popular-card bg-body-tertiary h-100 hover-scale">
@@ -103,7 +96,6 @@
             </div>
         </a>
 
-        <!-- Product 2: Eco Insect Repellent -->
         <a asp-controller="Product" asp-action="Details" asp-route-id="55555555-5555-5555-5555-555555555555"
            class="text-decoration-none text-reset col-md-6 col-lg-4">
             <div class="card border-0 shadow agro-popular-card bg-body-tertiary h-100 hover-scale">

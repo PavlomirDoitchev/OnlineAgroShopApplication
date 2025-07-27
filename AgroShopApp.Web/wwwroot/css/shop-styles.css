@@ -1,7 +1,7 @@
 ﻿html, body {
     background-color: #3c4d3d;
     color: #f5f5f5;
-    min-height: 100vh;
+    min-height: 40vh;
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', sans-serif;
@@ -13,7 +13,7 @@
 
 .agro-bg {
     background: linear-gradient(to bottom, #2e3c2f, #3c4d3d);
-    min-height: 100vh;
+    min-height: 40vh;
     padding-bottom: 40px;
 }
 
