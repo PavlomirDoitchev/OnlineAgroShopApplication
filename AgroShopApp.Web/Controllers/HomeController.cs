@@ -29,12 +29,17 @@ namespace AspNetCoreArchTemplate.Web.Controllers
             //return StatusCode(403);
             return View();
         }
-
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Contact()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
         }
-
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(int? statusCode)
         {

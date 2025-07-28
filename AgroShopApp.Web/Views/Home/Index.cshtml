@@ -5,9 +5,10 @@
 
 <div class="position-relative text-white text-center mb-5"
      style="background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65)),
-             url('/images/farm-banner.jpg') center/cover no-repeat;
-             height: 70vh; width: 100%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
-    <div class="position-absolute top-50 start-50 translate-middle">
+            url('/images/farm-banner.jpg') center/cover no-repeat;
+            height: 100vh; width: 100vw; margin-left: calc(-50vw + 50%);
+            display: flex; align-items: center; justify-content: center;">
+    <div class="text-center px-3">
         <h1 class="display-1 fw-bold text-success text-uppercase agro-title mb-4">
             Welcome to <span class="text-light">Green Harvester</span>
         </h1>
@@ -21,8 +22,9 @@
             </a>
         </div>
         <a href="#popular-section"
-           class="btn btn-outline-success rounded-pill px-4 py-3 fs-6 fw-semibold agro-scroll-button" style="gap: 1.25rem;">
-            <i class="bi bi-chevron-double-down me-1"></i> View this month’s popular
+           class="btn btn-outline-success rounded-pill px-4 py-3 fs-6 fw-semibold agro-scroll-button mt-3 d-inline-flex align-items-center">
+            <i class="bi bi-chevron-double-down me-2" style="animation: bounceDown 2s infinite;"></i>
+            View this month’s popular
         </a>
     </div>
 </div>
@@ -76,7 +78,19 @@
     </button>
 </div>
 
-
+<section id="about-us" class="my-5 py-5 px-3 rounded-4 text-light" style="background: linear-gradient(to right, #204020, #2c572c);">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4 display-6">About Green Harvester</h2>
+        <p class="lead mb-4">
+            At Green Harvester, we’re committed to helping gardeners, farmers, and enthusiasts grow better — naturally.
+            From heirloom seeds to eco-friendly plant protection, we provide only the best for your soil and soul.
+        </p>
+        <a asp-controller="Home" asp-action="Contact"
+           class="btn btn-outline-light fw-bold rounded-pill px-5 py-3 shadow-lg fs-5 agro-cta-button">
+            <i class="bi bi-envelope me-2"></i> Contact Us
+        </a>
+    </div>
+</section>
 
 <section id="popular-section" class="my-5 py-5 px-3 rounded-4" style="background: linear-gradient(to right, #2f3a2f, #3b4c3a);">
     <h2 class="text-center fw-bold mb-5 text-light display-6">
