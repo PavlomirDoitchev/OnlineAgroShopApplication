@@ -2,13 +2,11 @@
     ViewData["Title"] = "Home";
 }
 
-
 <div class="position-relative text-white text-center mb-5"
      style="background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.65)),
-            url('/images/farm-banner.jpg') center/cover no-repeat;
-            height: 100vh; width: 100vw; margin-left: calc(-50vw + 50%);
-            display: flex; align-items: center; justify-content: center;">
-    <div class="text-center px-3">
+             url('/images/farm-banner.jpg') center/cover no-repeat;
+             height: 70vh; width: 100%; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+    <div class="position-absolute top-50 start-50 translate-middle">
         <h1 class="display-1 fw-bold text-success text-uppercase agro-title mb-4">
             Welcome to <span class="text-light">Green Harvester</span>
         </h1>
@@ -28,6 +26,8 @@
         </a>
     </div>
 </div>
+
+
 
 
 <div id="agroCarousel" class="carousel slide mb-5 shadow" data-bs-ride="carousel">
@@ -78,20 +78,29 @@
     </button>
 </div>
 
-<section id="about-us" class="my-5 py-5 px-3 rounded-4 text-light" style="background: linear-gradient(to right, #204020, #2c572c);">
-    <div class="container text-center">
-        <h2 class="fw-bold mb-4 display-6">About Green Harvester</h2>
-        <p class="lead mb-4">
-            At Green Harvester, we’re committed to helping gardeners, farmers, and enthusiasts grow better — naturally.
-            From heirloom seeds to eco-friendly plant protection, we provide only the best for your soil and soul.
+<section id="about-us" class="my-5 py-5 text-light position-relative"
+         style="background: linear-gradient(to right, rgba(32, 64, 32, 0.85), rgba(44, 87, 44, 0.85)),
+                url('/images/about-banner.jpg') center/cover no-repeat;
+                border-radius: 16px; overflow: hidden;">
+
+    <div class="container text-center px-4 py-5">
+        <h2 class="fw-bold mb-4 display-6 agro-title">Who We Are</h2>
+        <p class="lead mb-4 agro-subtitle">
+            At <strong>Green Harvester</strong>, we believe in sustainable farming and quality growth. Whether you're growing a small garden or managing acres of farmland, we equip you with the right seeds, nutrients, and protection.
         </p>
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-8">
+                <p class="text-white fst-italic">
+                    "Rooted in tradition, driven by innovation — we cultivate more than plants, we grow trust."
+                </p>
+            </div>
+        </div>
         <a asp-controller="Home" asp-action="Contact"
            class="btn btn-outline-light fw-bold rounded-pill px-5 py-3 shadow-lg fs-5 agro-cta-button">
             <i class="bi bi-envelope me-2"></i> Contact Us
         </a>
     </div>
 </section>
-
 <section id="popular-section" class="my-5 py-5 px-3 rounded-4" style="background: linear-gradient(to right, #2f3a2f, #3b4c3a);">
     <h2 class="text-center fw-bold mb-5 text-light display-6">
         <i class="bi bi-star-fill text-muted me-2"></i> Popular Picks <i class="bi bi-star-fill text-muted ms-2"></i>
