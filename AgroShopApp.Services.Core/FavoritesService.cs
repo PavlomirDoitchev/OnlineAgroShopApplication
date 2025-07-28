@@ -15,7 +15,7 @@ namespace AgroShopApp.Services.Core
         {
             _favoriteRepo = favoriteRepo;
         }
-        public async Task AddToFavoritesAsync(string userId, Guid productId)
+        public async Task AddToFavoritesAsync(Guid userId, Guid productId)
         {
             if (!await _favoriteRepo.ExistsAsync(userId, productId))
             {
@@ -30,7 +30,7 @@ namespace AgroShopApp.Services.Core
         }
 
 
-        public async Task RemoveFromFavoritesAsync(string userId, Guid productId)
+        public async Task RemoveFromFavoritesAsync(Guid userId, Guid productId)
         {
             var favorite = await _favoriteRepo.FirstOrDefaultAsync(f => f.UserId == userId && f.ProductId == productId);
 
@@ -40,7 +40,7 @@ namespace AgroShopApp.Services.Core
             }
         }
 
-        public async Task<IEnumerable<FavoriteProductViewModel>> GetUserFavoritesAsync(string userId)
+        public async Task<IEnumerable<FavoriteProductViewModel>> GetUserFavoritesAsync(Guid userId)
         {
             var favorites = await _favoriteRepo.GetUserFavoritesAsync(userId);
 
@@ -55,9 +55,11 @@ namespace AgroShopApp.Services.Core
             });
         }
 
-        public async Task<bool> IsFavoriteAsync(string userId, Guid productId)
+        public async Task<bool> IsFavoriteAsync(Guid userId, Guid productId)
         {
             return await _favoriteRepo.ExistsAsync(userId, productId);
         }
+
+        
     }
 }

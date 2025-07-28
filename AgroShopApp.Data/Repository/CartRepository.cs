@@ -11,7 +11,7 @@ namespace AgroShopApp.Data.Repository
         {
         }
 
-        public async Task<Cart> GetOrCreateCartAsync(string userId)
+        public async Task<Cart> GetOrCreateCartAsync(Guid userId)
         {
             var cart = await DbSet
         .Include(c => c.Items)
@@ -32,7 +32,7 @@ namespace AgroShopApp.Data.Repository
             return cart;
         }
 
-        public async Task<Cart> GetWithItemsAsync(string userId)
+        public async Task<Cart> GetWithItemsAsync(Guid userId)
         {
             return await DbSet
                 .Include(c => c.Items)

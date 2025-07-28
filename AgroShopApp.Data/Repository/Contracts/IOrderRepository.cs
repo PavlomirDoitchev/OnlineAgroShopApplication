@@ -9,7 +9,7 @@ namespace AgroShopApp.Data.Repository.Contracts
 {
     public interface IOrderRepository : IRepository<Order, Guid>, IAsyncRepository<Order, Guid>
     {
-        Task<IEnumerable<Order>> GetAllByUserAsync(string userId);
+        Task<IEnumerable<Order>> GetAllByUserAsync(Guid userId);
         Task<Order?> GetWithItemsAsync(Guid orderId);
     }
 }

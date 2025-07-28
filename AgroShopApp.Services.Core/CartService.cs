@@ -15,7 +15,7 @@ namespace AgroShopApp.Services.Core
             _productRepo = productRepo;
         }
 
-        public async Task AddToCartAsync(string userId, Guid productId)
+        public async Task AddToCartAsync(Guid userId, Guid productId)
         {
             var product = await _productRepo.GetByIdAsync(productId);
             if (product == null || !product.IsAvailable || product.IsDeleted || product.StockQuantity == 0)
@@ -49,7 +49,7 @@ namespace AgroShopApp.Services.Core
             await _cartRepo.SaveChangesAsync();
         }
 
-        public async Task RemoveFromCartAsync(string userId, Guid productId)
+        public async Task RemoveFromCartAsync(Guid userId, Guid productId)
         {
             var cart = await _cartRepo.GetOrCreateCartAsync(userId);
             var item = cart.Items.FirstOrDefault(i => i.ProductId == productId);
@@ -61,7 +61,7 @@ namespace AgroShopApp.Services.Core
             }
         }
 
-        public async Task DecreaseQuantityAsync(string userId, Guid productId)
+        public async Task DecreaseQuantityAsync(Guid userId, Guid productId)
         {
             var cart = await _cartRepo.GetOrCreateCartAsync(userId);
             var item = cart.Items.FirstOrDefault(i => i.ProductId == productId);
@@ -81,7 +81,7 @@ namespace AgroShopApp.Services.Core
             }
         }
 
-        public async Task<IEnumerable<CartItemViewModel>> GetCartItemsAsync(string userId)
+        public async Task<IEnumerable<CartItemViewModel>> GetCartItemsAsync(Guid userId)
         {
             var cart = await _cartRepo.GetOrCreateCartAsync(userId);
 
@@ -98,7 +98,7 @@ namespace AgroShopApp.Services.Core
                     Total = ci.Product.Price * ci.Quantity
                 });
         }
-        public async Task SetQuantityAsync(string userId, Guid productId, int quantity)
+        public async Task SetQuantityAsync(Guid userId, Guid productId, int quantity)
         {
             var cart = await _cartRepo.GetWithItemsAsync(userId);
 
@@ -123,7 +123,7 @@ namespace AgroShopApp.Services.Core
 
             return product.StockQuantity;
         }
-        public async Task<decimal> GetCartTotalAsync(string userId)
+        public async Task<decimal> GetCartTotalAsync(Guid userId)
         {
             var cart = await _cartRepo.GetWithItemsAsync(userId);
 

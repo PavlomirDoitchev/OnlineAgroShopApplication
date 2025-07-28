@@ -9,25 +9,22 @@ namespace AgroShopApp.Web.Controllers
     {
         protected bool IsUserAuthenticated()
         {
-            bool retRes = false;
-            if (this.User.Identity != null)
-            {
-                retRes = this.User.Identity.IsAuthenticated;
-            }
-
-            return retRes;
+            return this.User.Identity?.IsAuthenticated ?? false;
         }
 
-        protected string? GetUserId()
+        protected Guid? GetUserId()
         {
-            string? userId = null;
-            if (this.IsUserAuthenticated())
+            if (!IsUserAuthenticated())
+                return null;
+
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (Guid.TryParse(userIdClaim, out Guid guid))
             {
-                userId = this.User
-                    .FindFirstValue(ClaimTypes.NameIdentifier);
+                return guid;
             }
 
-            return userId;
+            return null;
         }
     }
 }

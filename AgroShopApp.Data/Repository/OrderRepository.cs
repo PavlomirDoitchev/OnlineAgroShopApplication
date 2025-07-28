@@ -16,7 +16,7 @@ namespace AgroShopApp.Data.Repository
         {
         }
 
-        public async Task<IEnumerable<Order>> GetAllByUserAsync(string userId)
+        public async Task<IEnumerable<Order>> GetAllByUserAsync(Guid userId)
         {
             return await DbSet
                 .Include(o => o.Items)

@@ -28,7 +28,7 @@ namespace AgroShopApp.Services.Core
         }
 
         public async Task<PaginatedProductListViewModel> GetPaginatedAsync(int page, int pageSize, int? categoryId = null,
-            string? searchTerm = null, string? userId = null)
+            string? searchTerm = null, Guid? userId = null)
         {
             var products = await _productRepository.GetAllWithCategoryAsync();
             var filtered = products.Where(p => p.IsAvailable && !p.IsDeleted);
@@ -39,13 +39,13 @@ namespace AgroShopApp.Services.Core
             if (!string.IsNullOrWhiteSpace(searchTerm))
                 filtered = filtered.Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm));
 
-            var favorites = string.IsNullOrEmpty(userId)
-                ? new List<Guid>()
-                : (await _favoriteRepository.GetUserFavoritesAsync(userId)).Select(f => f.ProductId).ToList();
+            var favorites = userId.HasValue
+    ? (await _favoriteRepository.GetUserFavoritesAsync(userId.Value)).Select(f => f.ProductId).ToList()
+    : new List<Guid>();
 
-            var cart = string.IsNullOrEmpty(userId)
-                ? null
-                : await _cartRepository.GetOrCreateCartAsync(userId);
+            var cart = userId.HasValue
+                ? await _cartRepository.GetOrCreateCartAsync(userId.Value)
+                : null;
 
             int total = filtered.Count();
             var paged = filtered
@@ -94,7 +94,7 @@ namespace AgroShopApp.Services.Core
             });
         }
 
-        public async Task<AllProductsViewModel?> GetDetailsAsync(Guid id, string? userId)
+        public async Task<AllProductsViewModel?> GetDetailsAsync(Guid id, Guid? userId)
         {
             var product = await _productRepository.GetWithCategoryByIdAsync(id);
 
@@ -103,7 +103,7 @@ namespace AgroShopApp.Services.Core
                 return null;
             }
 
-            var isFavorite = !string.IsNullOrEmpty(userId) && await _favoriteRepository.ExistsAsync(userId, product.Id);
+            var isFavorite = !userId.HasValue && await _favoriteRepository.ExistsAsync(userId.Value, product.Id);
 
             return new AllProductsViewModel
             {

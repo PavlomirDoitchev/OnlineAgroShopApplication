@@ -10,8 +10,8 @@ namespace AgroShopApp.Services.Core.Contracts
 {
     public interface IOrderService
     {
-        Task PlaceOrderAsync(string userId);
-        Task<PaginatedOrderListViewModel> GetPaginatedUserOrdersAsync(string userId, int page, int pageSize);
-        Task<OrderDetailsViewModel?> GetDetailsAsync(Guid orderId, string userId);
+        Task PlaceOrderAsync(Guid userId);
+        Task<PaginatedOrderListViewModel> GetPaginatedUserOrdersAsync(Guid userId, int page, int pageSize);
+        Task<OrderDetailsViewModel?> GetDetailsAsync(Guid orderId, Guid userId);
     }
 }

@@ -7,8 +7,8 @@ namespace AgroShopApp.Data.Models
     public class Favorite
     {
         [Comment("User who favorited the product")]
-        public string UserId { get; set; } = null!;
-        public virtual IdentityUser User { get; set; } = null!;
+        public Guid UserId { get; set; }
+        public virtual ApplicationUser User { get; set; } = null!;
 
         [Comment("Favorited product ID")]
         public Guid ProductId { get; set; }

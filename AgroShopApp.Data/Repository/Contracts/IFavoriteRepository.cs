@@ -2,9 +2,9 @@
 
 namespace AgroShopApp.Data.Repository.Contracts
 {
-    public interface IFavoriteRepository : IAsyncRepository<Favorite, (string UserId, Guid ProductId)>
+    public interface IFavoriteRepository : IAsyncRepository<Favorite, (Guid UserId, Guid ProductId)>
     {
-        Task<IEnumerable<Favorite>> GetUserFavoritesAsync(string userId);
-        Task<bool> ExistsAsync(string userId, Guid productId);
+        Task<IEnumerable<Favorite>> GetUserFavoritesAsync(Guid userId);
+        Task<bool> ExistsAsync(Guid userId, Guid productId);
     }
 }

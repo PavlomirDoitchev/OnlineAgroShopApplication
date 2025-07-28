@@ -20,7 +20,7 @@ namespace AgroShopApp.Services.Core
             _productRepo = productRepo;
         }
 
-        public async Task PlaceOrderAsync(string userId)
+        public async Task PlaceOrderAsync(Guid userId)
         {
             var cart = await _cartRepo.GetWithItemsAsync(userId);
 
@@ -61,7 +61,7 @@ namespace AgroShopApp.Services.Core
             cart.Items.Clear();
             await _cartRepo.SaveChangesAsync();
         }
-        public async Task<PaginatedOrderListViewModel> GetPaginatedUserOrdersAsync(string userId, int page, int pageSize)
+        public async Task<PaginatedOrderListViewModel> GetPaginatedUserOrdersAsync(Guid userId, int page, int pageSize)
         {
             var allOrders = await _orderRepo.GetAllByUserAsync(userId);
 
@@ -84,7 +84,7 @@ namespace AgroShopApp.Services.Core
                 TotalPages = (int)Math.Ceiling(total / (double)pageSize)
             };
         }
-        public async Task<OrderDetailsViewModel?> GetDetailsAsync(Guid orderId, string userId)
+        public async Task<OrderDetailsViewModel?> GetDetailsAsync(Guid orderId, Guid userId)
         {
             var order = await _orderRepo.GetWithItemsAsync(orderId);
 

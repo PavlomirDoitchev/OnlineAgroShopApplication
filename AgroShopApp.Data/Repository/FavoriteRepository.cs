@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgroShopApp.Data.Repository
 {
-    public class FavoriteRepository : BaseRepository<Favorite, (string, Guid)>, IFavoriteRepository
+    public class FavoriteRepository : BaseRepository<Favorite, (Guid, Guid)>, IFavoriteRepository
     {
         public FavoriteRepository(AgroShopDbContext dbContext)
             : base(dbContext)
         {
         }
 
-        public async Task<IEnumerable<Favorite>> GetUserFavoritesAsync(string userId)
+        public async Task<IEnumerable<Favorite>> GetUserFavoritesAsync(Guid userId)
         {
             return await DbSet
                 .Where(f => f.UserId == userId && !f.Product.IsDeleted)
@@ -20,7 +20,7 @@ namespace AgroShopApp.Data.Repository
                 .ToListAsync();
         }
 
-        public async Task<bool> ExistsAsync(string userId, Guid productId)
+        public async Task<bool> ExistsAsync(Guid userId, Guid productId)
         {
             return await DbSet.AnyAsync(f => f.UserId == userId && f.ProductId == productId);
         }

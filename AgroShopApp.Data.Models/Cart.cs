@@ -10,8 +10,8 @@ namespace AgroShopApp.Data.Models
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Comment("User who owns the cart")]
-        public string UserId { get; set; } = null!;
-        public virtual IdentityUser User { get; set; } = null!;
+        public Guid UserId { get; set; }
+        public virtual ApplicationUser User { get; set; } = null!;
 
         [Comment("Products added to the cart")]
         public virtual ICollection<CartItem> Items { get; set; } = new HashSet<CartItem>();

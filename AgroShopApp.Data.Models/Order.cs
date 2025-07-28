@@ -11,8 +11,8 @@ namespace AgroShopApp.Data.Models
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Comment("User who placed the order")]
-        public string UserId { get; set; } = null!;
-        public virtual IdentityUser User { get; set; } = null!;
+        public Guid UserId { get; set; }
+        public virtual ApplicationUser User { get; set; } = null!;
 
         [Comment("Date and time when the order was placed")]
         public DateTime OrderedOn { get; set; } = DateTime.Now;
