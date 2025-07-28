@@ -103,7 +103,7 @@ namespace AgroShopApp.Services.Core
                 return null;
             }
 
-            var isFavorite = !userId.HasValue && await _favoriteRepository.ExistsAsync(userId.Value, product.Id);
+            var isFavorite = userId.HasValue && await _favoriteRepository.ExistsAsync(userId.Value, product.Id);
 
             return new AllProductsViewModel
             {
