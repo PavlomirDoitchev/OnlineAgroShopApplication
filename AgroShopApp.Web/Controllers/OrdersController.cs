@@ -15,7 +15,7 @@ namespace AgroShopApp.Web.Controllers
         public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
             var userId = GetUserId()!;
-            var result = await _orderService.GetPaginatedUserOrdersAsync(userId, page, pageSize);
+            var result = await _orderService.GetPaginatedUserOrdersAsync(userId.Value, page, pageSize);
 
             return View(result);
         }
@@ -23,7 +23,7 @@ namespace AgroShopApp.Web.Controllers
         public async Task<IActionResult> Details(Guid id)
         {
             var userId = GetUserId()!;
-            var order = await _orderService.GetDetailsAsync(id, userId);
+            var order = await _orderService.GetDetailsAsync(id, userId.Value);
             if (order == null)
             {
                 return NotFound();

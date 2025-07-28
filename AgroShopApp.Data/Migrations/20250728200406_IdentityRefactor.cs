@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgroShopApp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class SwitchingToUserGuid : Migration
+    public partial class IdentityRefactor : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -65,31 +65,6 @@ namespace AgroShopApp.Data.Migrations
                     table.PrimaryKey("PK_Categories", x => x.Id);
                 },
                 comment: "Product category in the catalog");
-
-            migrationBuilder.CreateTable(
-                name: "IdentityUser",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityUser", x => x.Id);
-                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
@@ -198,6 +173,47 @@ namespace AgroShopApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Carts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Cart identifier"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "User who owns the cart")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Carts_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                },
+                comment: "User's Cart in the system");
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Order identifier"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "User who placed the order"),
+                    OrderedOn = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Date and time when the order was placed"),
+                    Status = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Current status of the order"),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false, comment: "Total amount of the order at the time of purchase")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                },
+                comment: "Submitted order with snapshot data");
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -226,73 +242,6 @@ namespace AgroShopApp.Data.Migrations
                 comment: "Product available for purchase");
 
             migrationBuilder.CreateTable(
-                name: "Carts",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Cart identifier"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User who owns the cart")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Carts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Carts_IdentityUser_UserId",
-                        column: x => x.UserId,
-                        principalTable: "IdentityUser",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                },
-                comment: "User's Cart in the system");
-
-            migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Order identifier"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User who placed the order"),
-                    OrderedOn = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Date and time when the order was placed"),
-                    Status = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Current status of the order"),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false, comment: "Total amount of the order at the time of purchase")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_IdentityUser_UserId",
-                        column: x => x.UserId,
-                        principalTable: "IdentityUser",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                },
-                comment: "Submitted order with snapshot data");
-
-            migrationBuilder.CreateTable(
-                name: "Favorites",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false, comment: "User who favorited the product"),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Favorited product ID"),
-                    AddedOn = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Timestamp when product was added to favorites")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Favorites", x => new { x.UserId, x.ProductId });
-                    table.ForeignKey(
-                        name: "FK_Favorites_IdentityUser_UserId",
-                        column: x => x.UserId,
-                        principalTable: "IdentityUser",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Favorites_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                },
-                comment: "User-product favorites");
-
-            migrationBuilder.CreateTable(
                 name: "CartItems",
                 columns: table => new
                 {
@@ -317,6 +266,32 @@ namespace AgroShopApp.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 },
                 comment: "Product-to-cart mapping with quantity");
+
+            migrationBuilder.CreateTable(
+                name: "Favorites",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "User who favorited the product"),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Favorited product ID"),
+                    AddedOn = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Timestamp when product was added to favorites")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Favorites", x => new { x.UserId, x.ProductId });
+                    table.ForeignKey(
+                        name: "FK_Favorites_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Favorites_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                },
+                comment: "User-product favorites");
 
             migrationBuilder.CreateTable(
                 name: "OrderItems",
@@ -360,12 +335,12 @@ namespace AgroShopApp.Data.Migrations
                 columns: new[] { "Id", "AddedOn", "CategoryId", "DeletedOn", "Description", "ImageUrl", "IsAvailable", "Name", "Price", "StockQuantity" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2025, 7, 14, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6716), 1, null, "Rich, juicy tomatoes perfect for home gardening. Non-GMO and high germination rate.", "/images/seeds-tomato.jpg", true, "Heirloom Tomato Seeds", 3.49m, 100 },
-                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2025, 7, 18, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6726), 1, null, "Fast-growing leafy greens ideal for spring gardens.", "/images/seeds-lettuce.jpg", true, "Organic Lettuce Seeds", 2.99m, 80 },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2025, 7, 8, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6730), 2, null, "Boost your plant health with organic nutrients. Safe for vegetables and flowers.", "/images/fertilizer-organic.jpg", true, "All-Natural Fertilizer 5kg", 12.95m, 50 },
-                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2025, 7, 23, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6733), 2, null, "Concentrated growth enhancer for root development and yield.", "/images/fertilizer-liquid.jpg", true, "Liquid Plant Booster", 8.49m, 65 },
-                    { new Guid("55555555-5555-5555-5555-555555555555"), new DateTime(2025, 7, 21, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6736), 3, null, "Protect your crops from pests without harmful chemicals.", "/images/pesticide-eco.jpg", true, "Eco-Friendly Insect Repellent", 5.75m, 70 },
-                    { new Guid("66666666-6666-6666-6666-666666666666"), new DateTime(2025, 7, 26, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6749), 3, null, "Effective natural solution against leaf-eating insects.", "/images/pesticide-neem.jpg", true, "Neem Oil Pesticide 1L", 9.99m, 45 }
+                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2025, 7, 14, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7450), 1, null, "Rich, juicy tomatoes perfect for home gardening. Non-GMO and high germination rate.", "/images/seeds-tomato.jpg", true, "Heirloom Tomato Seeds", 3.49m, 100 },
+                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2025, 7, 18, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7459), 1, null, "Fast-growing leafy greens ideal for spring gardens.", "/images/seeds-lettuce.jpg", true, "Organic Lettuce Seeds", 2.99m, 80 },
+                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2025, 7, 8, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7462), 2, null, "Boost your plant health with organic nutrients. Safe for vegetables and flowers.", "/images/fertilizer-organic.jpg", true, "All-Natural Fertilizer 5kg", 12.95m, 50 },
+                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2025, 7, 23, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7465), 2, null, "Concentrated growth enhancer for root development and yield.", "/images/fertilizer-liquid.jpg", true, "Liquid Plant Booster", 8.49m, 65 },
+                    { new Guid("55555555-5555-5555-5555-555555555555"), new DateTime(2025, 7, 21, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7467), 3, null, "Protect your crops from pests without harmful chemicals.", "/images/pesticide-eco.jpg", true, "Eco-Friendly Insect Repellent", 5.75m, 70 },
+                    { new Guid("66666666-6666-6666-6666-666666666666"), new DateTime(2025, 7, 26, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7470), 3, null, "Effective natural solution against leaf-eating insects.", "/images/pesticide-neem.jpg", true, "Neem Oil Pesticide 1L", 9.99m, 45 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -469,9 +444,6 @@ namespace AgroShopApp.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Carts");
 
             migrationBuilder.DropTable(
@@ -481,7 +453,7 @@ namespace AgroShopApp.Data.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "IdentityUser");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Categories");

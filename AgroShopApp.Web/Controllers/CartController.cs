@@ -19,7 +19,7 @@ namespace AgroShopApp.Web.Controllers
         public async Task<IActionResult> Add(Guid productId, string? returnUrl = null)
         {
             var userId = this.GetUserId();
-            await _cartService.AddToCartAsync(userId!, productId);
+            await _cartService.AddToCartAsync(userId.Value, productId);
 
             TempData["Message"] = "Product added to cart.";
             return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
@@ -28,14 +28,14 @@ namespace AgroShopApp.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = GetUserId()!;
-            var cartItems = await _cartService.GetCartItemsAsync(userId);
+            var cartItems = await _cartService.GetCartItemsAsync(userId.Value);
             return View(cartItems);
         }
         [HttpPost]
         public async Task<IActionResult> Decrease(Guid productId)
         {
             var userId = GetUserId()!;
-            await _cartService.DecreaseQuantityAsync(userId, productId);
+            await _cartService.DecreaseQuantityAsync(userId.Value, productId);
 
             TempData["Message"] = "Product quantity updated.";
             return RedirectToAction("Index");
@@ -47,7 +47,7 @@ namespace AgroShopApp.Web.Controllers
             var userId = GetUserId()!;
             try
             {
-                await _cartService.AddToCartAsync(userId, productId);
+                await _cartService.AddToCartAsync(userId.Value, productId);
                 TempData["Message"] = "Product quantity updated.";
             }
             catch (InvalidOperationException ex)
@@ -72,11 +72,11 @@ namespace AgroShopApp.Web.Controllers
             if (model.Quantity > stock)
                 model.Quantity = stock;
 
-            await _cartService.SetQuantityAsync(userId, model.ProductId, model.Quantity);
+            await _cartService.SetQuantityAsync(userId.Value, model.ProductId, model.Quantity);
 
             var price = await _cartService.GetProductPriceAsync(model.ProductId);
             var itemTotal = price * model.Quantity;
-            var grandTotal = await _cartService.GetCartTotalAsync(userId);
+            var grandTotal = await _cartService.GetCartTotalAsync(userId.Value);
 
             return Ok(new
             {
@@ -89,7 +89,7 @@ namespace AgroShopApp.Web.Controllers
         public async Task<IActionResult> Remove(Guid productId)
         {
             var userId = GetUserId()!;
-            await _cartService.RemoveFromCartAsync(userId, productId);
+            await _cartService.RemoveFromCartAsync(userId.Value, productId);
 
             TempData["Message"] = "Item removed from cart.";
             return RedirectToAction("Index");
@@ -98,7 +98,7 @@ namespace AgroShopApp.Web.Controllers
         public async Task<IActionResult> Confirm()
         {
             var userId = GetUserId()!;
-            var items = await _cartService.GetCartItemsAsync(userId);
+            var items = await _cartService.GetCartItemsAsync(userId.Value);
 
             if (!items.Any())
             {
@@ -122,7 +122,7 @@ namespace AgroShopApp.Web.Controllers
             var userId = GetUserId()!;
             try
             {
-                await _orderService.PlaceOrderAsync(userId);
+                await _orderService.PlaceOrderAsync(userId.Value);
                 TempData["Message"] = "Order placed successfully!";
             }
             catch (InvalidOperationException ex)

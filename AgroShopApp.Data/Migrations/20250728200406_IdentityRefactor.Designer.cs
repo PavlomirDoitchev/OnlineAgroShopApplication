@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgroShopApp.Data.Migrations
 {
     [DbContext(typeof(AgroShopDbContext))]
-    [Migration("20250728174513_SwitchingToUserGuid")]
-    partial class SwitchingToUserGuid
+    [Migration("20250728200406_IdentityRefactor")]
+    partial class IdentityRefactor
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,9 +98,8 @@ namespace AgroShopApp.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasComment("Cart identifier");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("User who owns the cart");
 
                     b.HasKey("Id");
@@ -179,8 +178,8 @@ namespace AgroShopApp.Data.Migrations
 
             modelBuilder.Entity("AgroShopApp.Data.Models.Favorite", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("User who favorited the product");
 
                     b.Property<Guid>("ProductId")
@@ -222,9 +221,8 @@ namespace AgroShopApp.Data.Migrations
                         .HasColumnType("decimal(18,2)")
                         .HasComment("Total amount of the order at the time of purchase");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("User who placed the order");
 
                     b.HasKey("Id");
@@ -336,7 +334,7 @@ namespace AgroShopApp.Data.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            AddedOn = new DateTime(2025, 7, 14, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6716),
+                            AddedOn = new DateTime(2025, 7, 14, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7450),
                             CategoryId = 1,
                             Description = "Rich, juicy tomatoes perfect for home gardening. Non-GMO and high germination rate.",
                             ImageUrl = "/images/seeds-tomato.jpg",
@@ -349,7 +347,7 @@ namespace AgroShopApp.Data.Migrations
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            AddedOn = new DateTime(2025, 7, 18, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6726),
+                            AddedOn = new DateTime(2025, 7, 18, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7459),
                             CategoryId = 1,
                             Description = "Fast-growing leafy greens ideal for spring gardens.",
                             ImageUrl = "/images/seeds-lettuce.jpg",
@@ -362,7 +360,7 @@ namespace AgroShopApp.Data.Migrations
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            AddedOn = new DateTime(2025, 7, 8, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6730),
+                            AddedOn = new DateTime(2025, 7, 8, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7462),
                             CategoryId = 2,
                             Description = "Boost your plant health with organic nutrients. Safe for vegetables and flowers.",
                             ImageUrl = "/images/fertilizer-organic.jpg",
@@ -375,7 +373,7 @@ namespace AgroShopApp.Data.Migrations
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            AddedOn = new DateTime(2025, 7, 23, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6733),
+                            AddedOn = new DateTime(2025, 7, 23, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7465),
                             CategoryId = 2,
                             Description = "Concentrated growth enhancer for root development and yield.",
                             ImageUrl = "/images/fertilizer-liquid.jpg",
@@ -388,7 +386,7 @@ namespace AgroShopApp.Data.Migrations
                         new
                         {
                             Id = new Guid("55555555-5555-5555-5555-555555555555"),
-                            AddedOn = new DateTime(2025, 7, 21, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6736),
+                            AddedOn = new DateTime(2025, 7, 21, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7467),
                             CategoryId = 3,
                             Description = "Protect your crops from pests without harmful chemicals.",
                             ImageUrl = "/images/pesticide-eco.jpg",
@@ -401,7 +399,7 @@ namespace AgroShopApp.Data.Migrations
                         new
                         {
                             Id = new Guid("66666666-6666-6666-6666-666666666666"),
-                            AddedOn = new DateTime(2025, 7, 26, 17, 45, 12, 858, DateTimeKind.Utc).AddTicks(6749),
+                            AddedOn = new DateTime(2025, 7, 26, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7470),
                             CategoryId = 3,
                             Description = "Effective natural solution against leaf-eating insects.",
                             ImageUrl = "/images/pesticide-neem.jpg",
@@ -463,58 +461,6 @@ namespace AgroShopApp.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -598,7 +544,7 @@ namespace AgroShopApp.Data.Migrations
 
             modelBuilder.Entity("AgroShopApp.Data.Models.Cart", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                    b.HasOne("AgroShopApp.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -634,7 +580,7 @@ namespace AgroShopApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                    b.HasOne("AgroShopApp.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -647,7 +593,7 @@ namespace AgroShopApp.Data.Migrations
 
             modelBuilder.Entity("AgroShopApp.Data.Models.Order", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                    b.HasOne("AgroShopApp.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
