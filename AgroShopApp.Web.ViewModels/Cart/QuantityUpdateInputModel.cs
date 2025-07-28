@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AgroShopApp.Web.ViewModels.Cart
 {
-    public class QuantityUpdateViewModel
+    public class QuantityUpdateInputModel
     {
         public Guid ProductId { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Quantity must be a positive number.")]

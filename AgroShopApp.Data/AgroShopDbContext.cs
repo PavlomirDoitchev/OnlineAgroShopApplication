@@ -1,17 +1,18 @@
 ﻿namespace AgroShopApp.Data
 {
     using AgroShopApp.Data.Models;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System.Reflection;
 
-    public class AgroShopDbContext : IdentityDbContext
+    public class AgroShopDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public AgroShopDbContext(DbContextOptions<AgroShopDbContext> options)
             : base(options)
         {
-
         }
+
         public virtual DbSet<Favorite> Favorites { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;

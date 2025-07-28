@@ -58,7 +58,7 @@ namespace AgroShopApp.Web.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateQuantity([FromBody] QuantityUpdateViewModel? model)
+        public async Task<IActionResult> UpdateQuantity([FromBody] QuantityUpdateInputModel? model)
         {
             if (model == null)
                 return BadRequest("Invalid input.");

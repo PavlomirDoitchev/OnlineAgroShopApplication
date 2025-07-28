@@ -11,37 +11,46 @@ namespace AspNetCoreArchTemplate.Web
     using Microsoft.EntityFrameworkCore;
     using AgroShopApp.Web.Infrastructure.Extensions;
     using Microsoft.AspNetCore.Mvc;
+    using AgroShopApp.Data.Models;
+    using AgroShopApp.Data.Configuration;
 
     public class Program
     {
         public static void Main(string[] args)
         {
             WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
-            
-            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            
+
             builder.Services
                 .AddDbContext<AgroShopDbContext>(options =>
                 {
                     options.UseSqlServer(connectionString);
                 });
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            builder.Services
-                .AddDefaultIdentity<IdentityUser>(options =>
-                {
-                    options.SignIn.RequireConfirmedEmail = false;
-                    options.SignIn.RequireConfirmedAccount = false;
-                    options.SignIn.RequireConfirmedPhoneNumber = false;
 
-                    options.Password.RequiredLength = 3;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequiredUniqueChars = 0;
-                })
-                .AddEntityFrameworkStores<AgroShopDbContext>();
+
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+
+            builder.Services
+                    .AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+               {
+                   options.SignIn.RequireConfirmedEmail = false;
+                   options.SignIn.RequireConfirmedAccount = false;
+                   options.SignIn.RequireConfirmedPhoneNumber = false;
+
+                   options.Password.RequiredLength = 3;
+                   options.Password.RequireNonAlphanumeric = false;
+                   options.Password.RequireDigit = false;
+                   options.Password.RequireLowercase = false;
+                   options.Password.RequireUppercase = false;
+                   options.Password.RequiredUniqueChars = 0;
+               })
+                 .AddEntityFrameworkStores<AgroShopDbContext>()
+                 .AddRoles<IdentityRole<Guid>>()
+                 .AddSignInManager<SignInManager<ApplicationUser>>()
+                 .AddUserManager<UserManager<ApplicationUser>>();
 
             builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
             builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
@@ -67,7 +76,12 @@ namespace AspNetCoreArchTemplate.Web
             });
 
             WebApplication app = builder.Build();
-            
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                DatabaseSeeder.SeedRoles(services);
+            }
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
@@ -86,6 +100,10 @@ namespace AspNetCoreArchTemplate.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",
