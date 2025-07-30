@@ -96,7 +96,7 @@ namespace AgroShopApp.Services.Core
             });
         }
 
-        public async Task<AllProductsViewModel?> GetDetailsAsync(Guid id, Guid? userId)
+        public async Task<AllProductsViewModel?> GetDetailsAsync(Guid id, Guid? userId = null)
         {
             var product = await _productRepository.GetWithCategoryByIdAsync(id);
 

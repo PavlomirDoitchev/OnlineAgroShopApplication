@@ -58,7 +58,7 @@
                                     <i class="bi bi-house"></i> Contact Us
                                 </a>
                             </li> *@
-                            <li class="nav-item">
+                            @* <li class="nav-item">
                                 <a class="nav-link text-light" asp-controller="Product" asp-action="Create">
                                     <i class="bi bi-plus-circle"></i> Add Product
                                 </a>
@@ -67,14 +67,39 @@
                                 <a class="nav-link text-warning" asp-controller="Product" asp-action="Deleted">
                                     <i class="bi bi-trash"></i> Deleted Products
                                 </a>
-                            </li>
-                            @if (User.IsInRole("Administrator"))
+                            </li> *@
+                            @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-warning" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
                                         <i class="bi bi-shield-lock"></i> Admin
                                     </a>
                                 </li>
+                                 <li class="nav-item">
+                                <a class="nav-link text-success" asp-area="Admin" asp-controller="Product" asp-action="Create">
+                                       <i class="bi bi-plus-circle"></i> Add Product
+                                   </a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link text-warning" asp-area="Admin" asp-controller="Product" asp-action="Deleted">
+                                       <i class="bi bi-trash"></i> Deleted Products
+                                   </a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link text-light" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                                       <i class="bi bi-boxes"></i> Manage Products
+                                   </a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link text-light" asp-area="Admin" asp-controller="Orders" asp-action="Index">
+                                       <i class="bi bi-clipboard-data"></i> Orders
+                                   </a>
+                               </li>
+                               <li class="nav-item">
+                                   <a class="nav-link text-light" asp-area="Admin" asp-controller="Users" asp-action="Index">
+                                       <i class="bi bi-people"></i> Users
+                                   </a>
+                               </li>
                             }
                         }
                     </ul>

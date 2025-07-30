@@ -1,13 +1,15 @@
 ﻿@using AgroShopApp.Web.ViewModels.Product
-@model ProductFormViewModel
+@model EditProductViewModel
 
 @{
-    ViewData["Title"] = "Add Product";
+    ViewData["Title"] = "Edit Product";
 }
 
-<h2 class="text-center text-light mb-4">Add New Product</h2>
+<h2 class="text-center text-light mb-4">Edit Product</h2>
 
-<form asp-action="Create" method="post" class="bg-dark p-4 rounded shadow-lg text-light">
+<form asp-area="Admin" asp-controller="Product" asp-action="Edit" method="post" class="bg-dark p-4 rounded shadow-lg text-light">
+    <input type="hidden" asp-for="Id" />
+
     <div class="mb-3">
         <label asp-for="Name" class="form-label"></label>
         <input asp-for="Name" class="form-control" />
@@ -44,8 +46,8 @@
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-success rounded-pill">Add Product</button>
-    <a asp-action="Index" class="btn btn-outline-light ms-3">Cancel</a>
+    <button type="submit" class="btn btn-success rounded-pill">Save Changes</button>
+    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="btn btn-outline-light ms-3">Cancel</a>
 </form>
 
 @section Scripts {

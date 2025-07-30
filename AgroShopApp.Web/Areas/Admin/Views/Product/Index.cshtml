@@ -1,0 +1,82 @@
+﻿@using AgroShopApp.Web.ViewModels.Product
+@model PaginatedProductListViewModel
+
+@{
+    ViewData["Title"] = "Manage Products";
+}
+
+<h2 class="text-center text-light mb-4">Manage Products</h2>
+
+<!-- Search Form -->
+<form method="get" class="d-flex justify-content-center mb-4">
+    <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
+    <input type="text" name="searchTerm" value="@Model.CurrentSearch" placeholder="Search products..."
+           class="form-control w-50 me-2" />
+    <button type="submit" class="btn btn-outline-light">Search</button>
+</form>
+
+<!-- Category Filters -->
+<div class="d-flex flex-wrap justify-content-center mb-4 gap-2">
+    <a asp-action="Index"
+       class="btn @(Model.SelectedCategoryId == null ? "btn-light text-dark fw-semibold" : "btn-outline-light")"
+       asp-route-categoryId=""
+       asp-route-searchTerm="@Model.CurrentSearch">
+        All
+    </a>
+
+    @foreach (var cat in Model.Categories)
+    {
+        <a asp-action="Index"
+           class="btn @(Model.SelectedCategoryId == cat.Id ? "btn-light text-dark fw-semibold" : "btn-outline-light")"
+           asp-route-categoryId="@cat.Id"
+           asp-route-searchTerm="@Model.CurrentSearch">
+            @cat.Name
+        </a>
+    }
+</div>
+
+<!-- Product Grid -->
+<div id="productGrid">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+        @foreach (var product in Model.Products)
+        {
+            <div class="col">
+                <div class="card agro-popular-card h-100 shadow-sm">
+                    <img src="@product.ImageUrl" class="product-img" alt="@product.Name" />
+                    <div class="card-body">
+                        <h5 class="card-title text-success">@product.Name</h5>
+                        <p class="card-text text-muted">@product.Description</p>
+                        <p class="fw-bold">@product.Price.ToString("C")</p>
+                        <span class="badge bg-secondary">@product.Category</span>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-light btn-sm rounded-pill">
+                            <i class="bi bi-info-circle"></i> Details
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning btn-sm rounded-pill">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="text-center">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <a asp-action="Index"
+                   asp-route-page="@i"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-categoryId="@Model.SelectedCategoryId"
+                   asp-route-searchTerm="@Model.CurrentSearch"
+                   class="btn @(i == Model.CurrentPage ? "btn-primary fw-bold" : "btn-outline-light") mx-1">
+                    @i
+                </a>
+            }
+        </nav>
+    }
+</div>
