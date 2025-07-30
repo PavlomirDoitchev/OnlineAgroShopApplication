@@ -33,5 +33,23 @@ namespace AgroShopApp.Data.Repository
                 .ThenInclude(i => i.Product)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
+        public async Task<IEnumerable<Order>> GetAllWithUserAsync()
+        {
+            return await DbSet
+                .Include(o => o.User)
+                .Include(o => o.Items)
+                    .ThenInclude(i => i.Product)
+                .OrderByDescending(o => o.OrderedOn)
+                .ToListAsync();
+        }
+
+        public async Task<Order?> GetWithItemsAndUserAsync(Guid orderId)
+        {
+            return await DbSet
+                .Include(o => o.User)
+                .Include(o => o.Items)
+                    .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+        }
     }
 }

@@ -1,0 +1,80 @@
+﻿@using AgroShopApp.Web.ViewModels
+@model IEnumerable<AdminOrderListItemViewModel>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+    var filter = ViewBag.Filter as OrderFilterInputModel ?? new OrderFilterInputModel();
+}
+
+<h2 class="text-center text-light mb-4">Orders</h2>
+
+<form asp-action="Index" method="get" class="row g-3 mb-4 bg-dark text-light p-3 rounded shadow-sm">
+    <div class="col-md-3">
+        <label class="form-label">Email</label>
+        <input name="Email" value="@filter.Email" class="form-control" />
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">Status</label>
+        <select name="Status" class="form-select">
+            <option value="">All</option>
+            <option value="Pending" selected="@("Pending" == filter.Status)">Pending</option>
+            <option value="Completed" selected="@("Completed" == filter.Status)">Completed</option>
+            <option value="Cancelled" selected="@("Cancelled" == filter.Status)">Cancelled</option>
+        </select>
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">From</label>
+        <input name="FromDate" type="date" class="form-control" value="@(filter.FromDate?.ToString("yyyy-MM-dd"))" />
+    </div>
+
+    <div class="col-md-2">
+        <label class="form-label">To</label>
+        <input name="ToDate" type="date" class="form-control" value="@(filter.ToDate?.ToString("yyyy-MM-dd"))" />
+    </div>
+
+    <div class="col-md-3 d-flex align-items-end justify-content-end">
+        <button type="submit" class="btn btn-outline-light me-2">Filter</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info text-center text-light">No orders found.</div>
+}
+else
+{
+    <div class="table-responsive bg-dark text-light rounded shadow-sm p-3">
+        <table class="table table-hover text-light">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>User Email</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.Id.ToString().Substring(0, 8)...</td>
+                        <td>@order.Email</td>
+                        <td>@order.OrderedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@order.Status</td>
+                        <td>@order.TotalAmount.ToString("C")</td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-outline-info rounded-pill">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

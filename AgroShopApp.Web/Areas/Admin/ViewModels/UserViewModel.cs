@@ -1,4 +1,4 @@
-﻿namespace AgroShopApp.Web.Areas.Admin.ViewModels
+﻿namespace AgroShopApp.Web.ViewModels
 {
     public class UserViewModel
     {

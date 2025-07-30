@@ -11,5 +11,7 @@ namespace AgroShopApp.Data.Repository.Contracts
     {
         Task<IEnumerable<Order>> GetAllByUserAsync(Guid userId);
         Task<Order?> GetWithItemsAsync(Guid orderId);
+        Task<IEnumerable<Order>> GetAllWithUserAsync();
+        Task<Order?> GetWithItemsAndUserAsync(Guid orderId);
     }
 }

@@ -30,78 +30,77 @@
                 </button>
                 <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Product" asp-action="Index">
-                                <i class="bi bi-basket"></i> Products
-                            </a>
-                        </li>
-
-                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        @if (!User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Cart" asp-action="Index">
-                                    <i class="bi bi-cart3"></i> Cart
+                                <a class="nav-link text-light" asp-area="" asp-controller="Product" asp-action="Index">
+                                    <i class="bi bi-basket"></i> Products
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Orders" asp-action="Index">
-                                    <i class="bi bi-bag-check"></i> My Orders
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Favorites" asp-action="Index">
-                                    <i class="bi bi-heart"></i> Favorites
-                                </a>
-                            </li>
-                            @* <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Home" asp-action="ContactUs">
-                                    <i class="bi bi-house"></i> Contact Us
-                                </a>
-                            </li> *@
-                            @* <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Product" asp-action="Create">
-                                    <i class="bi bi-plus-circle"></i> Add Product
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning" asp-controller="Product" asp-action="Deleted">
-                                    <i class="bi bi-trash"></i> Deleted Products
-                                </a>
-                            </li> *@
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-warning" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
-                                        <i class="bi bi-shield-lock"></i> Admin
-                                    </a>
-                                </li>
-                                 <li class="nav-item">
-                                <a class="nav-link text-success" asp-area="Admin" asp-controller="Product" asp-action="Create">
-                                       <i class="bi bi-plus-circle"></i> Add Product
-                                   </a>
-                               </li>
-                               <li class="nav-item">
-                                   <a class="nav-link text-warning" asp-area="Admin" asp-controller="Product" asp-action="Deleted">
-                                       <i class="bi bi-trash"></i> Deleted Products
-                                   </a>
-                               </li>
-                               <li class="nav-item">
-                                   <a class="nav-link text-light" asp-area="Admin" asp-controller="Product" asp-action="Index">
-                                       <i class="bi bi-boxes"></i> Manage Products
-                                   </a>
-                               </li>
-                               <li class="nav-item">
-                                   <a class="nav-link text-light" asp-area="Admin" asp-controller="Orders" asp-action="Index">
-                                       <i class="bi bi-clipboard-data"></i> Orders
-                                   </a>
-                               </li>
-                               <li class="nav-item">
-                                   <a class="nav-link text-light" asp-area="Admin" asp-controller="Users" asp-action="Index">
-                                       <i class="bi bi-people"></i> Users
-                                   </a>
-                               </li>
-                            }
                         }
+
+                 @if (User?.Identity?.IsAuthenticated ?? false)
+                     {
+                         @if (!User.IsInRole("Admin"))
+                         {
+                             <li class="nav-item">
+                                 <a class="nav-link text-light" asp-controller="Cart" asp-action="Index">
+                                     <i class="bi bi-cart3"></i> Cart
+                                 </a>
+                             </li>
+                             <li class="nav-item">
+                                 <a class="nav-link text-light" asp-controller="Orders" asp-action="Index">
+                                     <i class="bi bi-bag-check"></i> My Orders
+                                 </a>
+                             </li>
+                             <li class="nav-item">
+                                 <a class="nav-link text-light" asp-controller="Favorites" asp-action="Index">
+                                     <i class="bi bi-heart"></i> Favorites
+                                 </a>
+                             </li>
+                         }
+                     
+                         @if (User.IsInRole("Admin"))
+                         {
+                             <li class="nav-item">
+                                 <a class="nav-link text-warning" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                     <i class="bi bi-shield-lock"></i> Admin
+                                 </a>
+                             </li>
+                             <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light" href="#" id="adminProductsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-boxes"></i> Products
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="adminProductsDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                                            <i class="bi bi-gear"></i> Manage
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Create">
+                                            <i class="bi bi-plus-circle"></i> Add
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Deleted">
+                                            <i class="bi bi-trash"></i> Deleted
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                             <li class="nav-item">
+                                 <a class="nav-link text-light" asp-area="Admin" asp-controller="Orders" asp-action="Index">
+                                     <i class="bi bi-clipboard-data"></i> Orders
+                                 </a>
+                             </li>
+                             <li class="nav-item">
+                                 <a class="nav-link text-light" asp-area="Admin" asp-controller="Users" asp-action="Index">
+                                     <i class="bi bi-people"></i> Users
+                                 </a>
+                             </li>
+                         }
+                     }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

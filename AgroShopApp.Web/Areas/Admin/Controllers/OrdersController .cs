@@ -1,0 +1,40 @@
+﻿using AgroShopApp.Services.Core.Contracts;
+using AgroShopApp.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace AgroShopApp.Web.Areas.Admin.Controllers
+{
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
+    public class OrdersController : Controller
+    {
+        private readonly IOrderService _orderService;
+
+        public OrdersController(IOrderService orderService)
+        {
+            _orderService = orderService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index(OrderFilterInputModel filter)
+        {
+            var orders = await _orderService.GetFilteredOrdersAsync(filter);
+            ViewBag.Filter = filter; 
+            return View(orders);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var order = await _orderService.GetOrderDetailsAsync(id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+    }
+}

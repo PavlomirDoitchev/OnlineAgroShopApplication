@@ -2,6 +2,8 @@
 using AgroShopApp.Data.Repository.Contracts;
 using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.ViewModels.Order;
+using AgroShopApp.Web.ViewModels;
+using Microsoft.EntityFrameworkCore;
 namespace AgroShopApp.Services.Core
 {
     public class OrderService : IOrderService
@@ -94,6 +96,63 @@ namespace AgroShopApp.Services.Core
             return new OrderDetailsViewModel
             {
                 Id = order.Id,
+                OrderedOn = order.OrderedOn,
+                Status = order.Status,
+                TotalAmount = order.TotalAmount,
+                Items = order.Items.Select(i => new OrderItemViewModel
+                {
+                    ProductName = i.Product.Name,
+                    Quantity = i.Quantity,
+                    UnitPrice = i.UnitPrice
+                }).ToList()
+            };
+        }
+        public async Task<IEnumerable<AdminOrderListItemViewModel>> GetFilteredOrdersAsync(OrderFilterInputModel filter)
+        {
+            var allOrders = await _orderRepo.GetAllWithUserAsync();
+
+            var filtered = allOrders.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter.Email))
+                filtered = filtered.Where(o => o.User.Email.Contains(filter.Email));
+
+            if (!string.IsNullOrWhiteSpace(filter.Status))
+                filtered = filtered.Where(o => o.Status == filter.Status);
+
+            if (filter.FromDate.HasValue)
+                filtered = filtered.Where(o => o.OrderedOn >= filter.FromDate.Value);
+
+            if (filter.ToDate.HasValue)
+                filtered = filtered.Where(o => o.OrderedOn <= filter.ToDate.Value);
+
+            return filtered
+                .Select(o => new AdminOrderListItemViewModel
+                {
+                    Id = o.Id,
+                    Email = o.User.Email,
+                    OrderedOn = o.OrderedOn,
+                    Status = o.Status,
+                    TotalAmount = o.TotalAmount
+                })
+                .ToList();
+        }
+
+        public async Task<AdminOrderDetailsViewModel?> GetOrderDetailsAsync(Guid orderId)
+        {
+            var order = await _orderRepo
+                .GetAllAttached()
+                .Include(o => o.User)
+                .Include(o => o.Items)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null)
+                return null;
+
+            return new AdminOrderDetailsViewModel
+            {
+                Id = order.Id,
+                Email = order.User.Email,
                 OrderedOn = order.OrderedOn,
                 Status = order.Status,
                 TotalAmount = order.TotalAmount,

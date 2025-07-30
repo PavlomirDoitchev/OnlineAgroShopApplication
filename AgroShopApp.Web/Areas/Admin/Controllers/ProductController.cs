@@ -30,7 +30,6 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpGet]
-        //[Route("Product/Details/{id:guid}")]
         public async Task<IActionResult> Details(Guid id)
         {
 

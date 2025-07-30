@@ -17,6 +17,10 @@ namespace AgroShopApp.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(int page = 1, int pageSize = 9, int? categoryId = null, string? searchTerm = null)
         {
+            if (User?.IsInRole("Admin") == true)
+            {
+                return RedirectToAction("Index", "Product", new { area = "Admin" });
+            }
             var userId = GetUserId();
             var model = await _productService.GetPaginatedAsync(page, pageSize, categoryId, searchTerm, userId);
 
@@ -28,7 +32,6 @@ namespace AgroShopApp.Web.Controllers
             return View(model);
         }
         [HttpGet]
-        //[Route("Product/Details/{id:guid}")]
         [AllowAnonymous]
         public async Task<IActionResult> Details(Guid id)
         {
