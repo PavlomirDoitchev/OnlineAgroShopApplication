@@ -98,6 +98,19 @@ namespace AspNetCoreArchTemplate.Web
             app.UseRouting();
 
             app.UseAuthentication();
+            app.Use(async (context, next) =>
+            {
+                if (context.User.Identity?.IsAuthenticated == true && context.Request.Path == "/")
+                {
+                    if (context.User.IsInRole("Admin"))
+                    {
+                        context.Response.Redirect("/Admin/Home/Index");
+                        return;
+                    }
+                }
+
+                await next();
+            });
             app.UseAuthorization();
 
             app.MapControllerRoute(
