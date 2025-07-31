@@ -164,6 +164,45 @@ namespace AgroShopApp.Services.Core
                 }).ToList()
             };
         }
+        public async Task<PaginatedAdminOrderListViewModel> GetPaginatedFilteredOrdersAsync(OrderFilterInputModel filter, int page, int pageSize)
+        {
+            var allOrders = await _orderRepo.GetAllWithUserAsync();
+            var query = allOrders.AsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(filter.Email))
+                query = query.Where(o => o.User.Email.Contains(filter.Email));
+
+            if (!string.IsNullOrWhiteSpace(filter.Status))
+                query = query.Where(o => o.Status == filter.Status);
+
+            if (filter.FromDate.HasValue)
+                query = query.Where(o => o.OrderedOn >= filter.FromDate.Value);
+
+            if (filter.ToDate.HasValue)
+                query = query.Where(o => o.OrderedOn <= filter.ToDate.Value);
+
+            var totalOrders = query.Count();
+            var orders = query
+                .OrderByDescending(o => o.OrderedOn)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(o => new AdminOrderListItemViewModel
+                {
+                    Id = o.Id,
+                    Email = o.User.Email,
+                    OrderedOn = o.OrderedOn,
+                    Status = o.Status,
+                    TotalAmount = o.TotalAmount
+                })
+                .ToList();
+
+            return new PaginatedAdminOrderListViewModel
+            {
+                Orders = orders,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalOrders / (double)pageSize),
+                Filter = filter
+            };
+        }
     }
 }

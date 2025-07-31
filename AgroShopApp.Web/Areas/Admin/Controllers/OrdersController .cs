@@ -16,12 +16,18 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             _orderService = orderService;
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> Index(OrderFilterInputModel filter)
+        //{
+        //    var orders = await _orderService.GetFilteredOrdersAsync(filter);
+        //    ViewBag.Filter = filter; 
+        //    return View(orders);
+        //}
         [HttpGet]
-        public async Task<IActionResult> Index(OrderFilterInputModel filter)
+        public async Task<IActionResult> Index(OrderFilterInputModel filter, int page = 1, int pageSize = 10)
         {
-            var orders = await _orderService.GetFilteredOrdersAsync(filter);
-            ViewBag.Filter = filter; 
-            return View(orders);
+            var viewModel = await _orderService.GetPaginatedFilteredOrdersAsync(filter, page, pageSize);
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -36,5 +42,6 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
 
             return View(order);
         }
+
     }
 }

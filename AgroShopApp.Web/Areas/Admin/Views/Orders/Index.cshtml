@@ -1,9 +1,9 @@
 ﻿@using AgroShopApp.Web.ViewModels
-@model IEnumerable<AdminOrderListItemViewModel>
+@model PaginatedAdminOrderListViewModel
 
 @{
     ViewData["Title"] = "Manage Orders";
-    var filter = ViewBag.Filter as OrderFilterInputModel ?? new OrderFilterInputModel();
+    var filter = Model.Filter;
 }
 
 <h2 class="text-center text-light mb-4">Orders</h2>
@@ -40,14 +40,14 @@
     </div>
 </form>
 
-@if (!Model.Any())
+@if (!Model.Orders.Any())
 {
     <div class="alert alert-info text-center text-light">No orders found.</div>
 }
 else
 {
     <div class="table-responsive bg-dark text-light rounded shadow-sm p-3">
-        <table class="table table-hover text-light">
+        <table class="table table text-light">
             <thead>
                 <tr>
                     <th>Order ID</th>
@@ -59,9 +59,9 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var order in Model)
+                @foreach (var order in Model.Orders)
                 {
-                    <tr>
+                    <tr class="clickable-row" data-href="@Url.Action("Details", new { id = order.Id })">
                         <td>@order.Id.ToString().Substring(0, 8)...</td>
                         <td>@order.Email</td>
                         <td>@order.OrderedOn.ToString("yyyy-MM-dd HH:mm")</td>
@@ -78,3 +78,27 @@ else
         </table>
     </div>
 }
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-4 text-center">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <a asp-action="Index"
+               asp-route-page="@i"
+               asp-route-Email="@Model.Filter.Email"
+               asp-route-Status="@Model.Filter.Status"
+               asp-route-FromDate="@(Model.Filter.FromDate?.ToString("yyyy-MM-dd"))"
+               asp-route-ToDate="@(Model.Filter.ToDate?.ToString("yyyy-MM-dd"))"
+               class="btn @(i == Model.CurrentPage ? "btn-primary fw-bold" : "btn-outline-light") mx-1">
+                @i
+            </a>
+        }
+    </nav>
+}
+@section Scripts {
+    
+        <script src="~/js/clickable-text.js" asp-append-version="true"></script>
+    
+}
+
+

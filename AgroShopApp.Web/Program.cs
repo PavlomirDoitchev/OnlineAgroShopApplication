@@ -54,7 +54,7 @@ namespace AspNetCoreArchTemplate.Web
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
-            builder.Services.AddRazorPages(); 
+            builder.Services.AddRazorPages();
 
             builder.Services.Configure<CookiePolicyOptions>(options =>
             {
@@ -66,7 +66,7 @@ namespace AspNetCoreArchTemplate.Web
             {
                 options.LoginPath = "/Identity/Account/Login";
                 options.LogoutPath = "/Identity/Account/Logout";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.AccessDeniedPath = "/Home/UnauthorizedError";
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Lax;
             });
@@ -121,7 +121,7 @@ namespace AspNetCoreArchTemplate.Web
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapRazorPages(); 
+            app.MapRazorPages();
 
             app.Run();
         }

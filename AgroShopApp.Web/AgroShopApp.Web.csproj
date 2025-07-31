@@ -25,4 +25,8 @@
     <ProjectReference Include="..\AgroShopApp.Web.ViewModels\AgroShopApp.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Error\" />
+  </ItemGroup>
+
 </Project>
