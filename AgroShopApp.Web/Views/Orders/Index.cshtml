@@ -24,7 +24,7 @@ else
         <tbody>
             @foreach (var order in Model.Orders)
             {
-                <tr>
+                <tr class="clickable-row" data-href="@Url.Action("Details", new { id = order.Id })">
                     <td>@order.Id.ToString().Substring(0, 8)...</td>
                     <td>@order.OrderedOn.ToString("g")</td>
                     <td>@order.Status</td>
@@ -49,4 +49,8 @@ else
             </a>
         }
     </div>
+}
+@section Scripts {
+
+    <script src="~/js/clickable-text.js" asp-append-version="true"></script>
 }
