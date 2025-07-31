@@ -2,6 +2,8 @@
 using AgroShopApp.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using AgroShopApp.Web.ViewModels.Cart;
+using AgroShopApp.Web.Areas.Admin.Controllers;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 namespace AgroShopApp.Web.Controllers
 {
     public class CartController : BaseController
@@ -9,12 +11,21 @@ namespace AgroShopApp.Web.Controllers
         private readonly ICartService _cartService;
         private readonly IOrderService _orderService;
 
-        public CartController(ICartService cartService, IOrderService orderService)
+
+        public CartController(ICartService cartService, IOrderService orderService, ICompositeViewEngine viewEngine, ILogger<UsersController> logger)
+            :base(viewEngine, logger)
         {
             _cartService = cartService;
             _orderService = orderService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var userId = GetUserId()!;
+            var cartItems = await _cartService.GetCartItemsAsync(userId.Value);
+            return SafeView("Index", cartItems);
+        }
         [HttpPost]
         public async Task<IActionResult> Add(Guid productId, string? returnUrl = null)
         {
@@ -23,13 +34,6 @@ namespace AgroShopApp.Web.Controllers
 
             TempData["Message"] = "Product added to cart.";
             return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
-        }
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var userId = GetUserId()!;
-            var cartItems = await _cartService.GetCartItemsAsync(userId.Value);
-            return View(cartItems);
         }
         [HttpPost]
         public async Task<IActionResult> Decrease(Guid productId)
@@ -114,8 +118,9 @@ namespace AgroShopApp.Web.Controllers
                 TotalAmount = total
             };
 
-            return View(model);
+            return SafeView("Confirm", model);
         }
+
         [HttpPost]
         public async Task<IActionResult> PlaceOrder()
         {

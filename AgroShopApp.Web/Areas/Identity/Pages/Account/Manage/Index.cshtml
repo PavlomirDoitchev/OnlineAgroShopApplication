@@ -1,0 +1,34 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h2 class="text-light">Manage Your Account</h2>
+
+<div class="bg-dark p-4 rounded shadow-sm text-light mt-4">
+    <form method="post">
+        <div class="form-floating mb-3">
+            <input asp-for="Input.FirstName" class="form-control" />
+            <label asp-for="Input.FirstName"></label>
+            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.LastName" class="form-control" />
+            <label asp-for="Input.LastName"></label>
+            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.Email" class="form-control" disabled />
+            <label asp-for="Input.Email"></label>
+        </div>
+
+        <button type="submit" class="btn btn-success rounded-pill">Update</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

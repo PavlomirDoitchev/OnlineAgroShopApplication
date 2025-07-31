@@ -7,59 +7,51 @@ namespace AspNetCoreArchTemplate.Web.Controllers
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Authorization;
     using AgroShopApp.Web.Controllers;
+    using Microsoft.AspNetCore.Mvc.ViewEngines;
 
     public class HomeController : BaseController
     {
-        //TODO: Finish this implementation
-        //private readonly Dictionary<int, string> HttpStatusCodeViewMap = new Dictionary<int, string>()
-        //{
-        //    {401, "UnauthorizedError"},
-        //    {403, "UnauthorizedError"},
-        //    {404, "NotFoundError"},
-        //    {500, "ServerError"}
-        //};
-        public HomeController(ILogger<HomeController> logger)
-        {
+        public HomeController(ICompositeViewEngine viewEngine, ILogger<HomeController> logger)
+            : base(viewEngine, logger) { }
 
-        }
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Index()
         {
-            //return StatusCode(500);
-            return View();
+            return SafeView("Index");
         }
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Contact()
         {
-            return View();
+            return SafeView("Contact");
         }
+
         public IActionResult Privacy()
         {
-            return View();
+            return SafeView("Privacy");
         }
+
         [HttpGet("/Home/Error")]
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(int? statusCode)
         {
-            switch (statusCode)
+            if (statusCode == 404)
             {
-                //case 401:
-                //case 403:
-                //    return View("UnauthorizedError");
-                case 404:
-                    return View("NotFoundError");
-                default:
-                    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                return SafeView("NotFoundError");
             }
+
+            var model = new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
+            return SafeView("Error", model);
         }
+
         [HttpGet("/Home/UnauthorizedError")]
         [AllowAnonymous]
         public IActionResult UnauthorizedError()
         {
-            return View("UnauthorizedError");
+            return SafeView("UnauthorizedError");
         }
     }
 }

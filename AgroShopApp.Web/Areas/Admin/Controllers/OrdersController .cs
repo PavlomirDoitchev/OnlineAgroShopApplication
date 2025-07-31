@@ -2,16 +2,18 @@
 using AgroShopApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace AgroShopApp.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class OrdersController : Controller
+    public class OrdersController : AdminBaseController
     {
         private readonly IOrderService _orderService;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(IOrderService orderService, ICompositeViewEngine viewEngine, ILogger<OrdersController> logger)
+            : base(viewEngine, logger)
         {
             _orderService = orderService;
         }
@@ -27,33 +29,30 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Index(OrderFilterInputModel filter, int page = 1, int pageSize = 10)
         {
             var viewModel = await _orderService.GetPaginatedFilteredOrdersAsync(filter, page, pageSize);
-            return View(viewModel);
+            return SafeView("Index", viewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
             var order = await _orderService.GetOrderDetailsAsync(id);
-
             if (order == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return SafeView("Details", order);
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(Guid orderId, string status)
         {
             bool updated = await _orderService.UpdateStatusAsync(orderId, status);
 
-            if (!updated)
-            {
-                TempData["Message"] = "Failed to update order status.";
-                return RedirectToAction(nameof(Details), new { id = orderId });
-            }
+            TempData["Message"] = updated
+                ? "Order status updated successfully."
+                : "Failed to update order status.";
 
-            TempData["Message"] = "Order status updated successfully.";
             return RedirectToAction(nameof(Details), new { id = orderId });
         }
     }

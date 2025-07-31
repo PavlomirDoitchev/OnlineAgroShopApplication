@@ -3,16 +3,18 @@ using Microsoft.AspNetCore.Identity;
 using AgroShopApp.Data.Models;
 using AgroShopApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace AgroShopApp.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = "Admin")]
-    public class UsersController : Controller
+    public class UsersController : AdminBaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public UsersController(UserManager<ApplicationUser> userManager)
+        public UsersController(UserManager<ApplicationUser> userManager, ICompositeViewEngine viewEngine, ILogger<UsersController> logger)
+            : base(viewEngine, logger)
         {
             _userManager = userManager;
         }
@@ -28,8 +30,9 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
                 })
                 .ToList();
 
-            return View(users);
+            return SafeView("Index", users);
         }
+
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -43,6 +46,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             TempData["Message"] = "User marked as deleted.";
             return RedirectToAction(nameof(Index));
         }
+
         [HttpPost]
         public async Task<IActionResult> ResetEmail(Guid id, string newEmail)
         {
@@ -56,23 +60,23 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
 
             TempData["Message"] = "Email updated.";
             return RedirectToAction(nameof(Index));
+
+            //public async Task<IActionResult> Details(Guid id)
+            //{
+            //    var user = await _userManager.FindByIdAsync(id.ToString());
+            //    if (user == null)
+            //        return NotFound();
+
+            //    var model = new UserDetailsViewModel
+            //    {
+            //        Id = user.Id,
+            //        Email = user.Email ?? string.Empty,
+            //        Username = user.Username,
+            //    };
+
+            //    return View(model);
+            //}
         }
-        //public async Task<IActionResult> Details(Guid id)
-        //{
-        //    var user = await _userManager.FindByIdAsync(id.ToString());
-        //    if (user == null)
-        //        return NotFound();
-
-        //    var model = new UserDetailsViewModel
-        //    {
-        //        Id = user.Id,
-        //        Email = user.Email ?? string.Empty,
-        //        Username = user.Username,
-        //    };
-
-        //    return View(model);
-        //}
-
     }
 
 }
