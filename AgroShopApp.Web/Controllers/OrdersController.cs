@@ -1,9 +1,11 @@
 ﻿using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.Controllers;
+using AgroShopApp.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 namespace AgroShopApp.Web.Controllers
 {
+    [UserOnly]
     public class OrdersController : BaseController
     {
         private readonly IOrderService _orderService;

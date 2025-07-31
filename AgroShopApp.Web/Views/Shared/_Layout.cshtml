@@ -158,5 +158,11 @@
     <div aria-live="polite" aria-atomic="true" class="position-relative">
     <div id="ajaxToastContainer" class="toast-container position-fixed top-0 end-0 p-3 z-3" style="margin-top: 4.5rem;"></div>
 </div>
+    @* @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-warning text-center">
+            @TempData["Message"]
+        </div>
+    } *@
 </body>
 </html>

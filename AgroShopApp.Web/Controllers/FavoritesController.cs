@@ -1,8 +1,10 @@
 ﻿using AgroShopApp.Services.Core.Contracts;
+using AgroShopApp.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 namespace AgroShopApp.Web.Controllers
 {
+    [UserOnly]
     public class FavoritesController : BaseController
     {
         private readonly IFavoritesService _favoriteService;

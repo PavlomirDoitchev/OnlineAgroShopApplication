@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using AgroShopApp.Web.ViewModels.Cart;
 using AgroShopApp.Web.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using AgroShopApp.Web.Infrastructure.Filters;
 namespace AgroShopApp.Web.Controllers
 {
+    [UserOnly]
     public class CartController : BaseController
     {
         private readonly ICartService _cartService;
