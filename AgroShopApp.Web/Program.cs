@@ -9,6 +9,8 @@ using AgroShopApp.Web.Infrastructure.Extensions;
 using AgroShopApp.Data.Models;
 using AgroShopApp.Data.Configuration;
 using Microsoft.AspNetCore.Mvc;
+using AgroShopApp.Web.Infrastructure.Identity;
+
 
 namespace AspNetCoreArchTemplate.Web
 {
@@ -44,7 +46,7 @@ namespace AspNetCoreArchTemplate.Web
                 .AddRoles<IdentityRole<Guid>>()
                 .AddSignInManager<SignInManager<ApplicationUser>>()
                 .AddUserManager<UserManager<ApplicationUser>>();
-
+            builder.Services.AddScoped<SignInManager<ApplicationUser>, CustomSignInManager>();
             builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
             builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
             builder.Services.AddHttpContextAccessor();
