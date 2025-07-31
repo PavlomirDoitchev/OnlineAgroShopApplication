@@ -11,5 +11,7 @@ namespace AgroShopApp.Services.Core.Contracts
         Task<IEnumerable<AdminOrderListItemViewModel>> GetFilteredOrdersAsync(OrderFilterInputModel filter);
         Task<AdminOrderDetailsViewModel?> GetOrderDetailsAsync(Guid orderId);
         Task<PaginatedAdminOrderListViewModel> GetPaginatedFilteredOrdersAsync(OrderFilterInputModel filter, int page, int pageSize);
+        Task<bool> UpdateStatusAsync(Guid orderId, string newStatus);
+
     }
 }

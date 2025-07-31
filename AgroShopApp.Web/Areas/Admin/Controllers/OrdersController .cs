@@ -42,6 +42,19 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
 
             return View(order);
         }
+        [HttpPost]
+        public async Task<IActionResult> UpdateStatus(Guid orderId, string status)
+        {
+            bool updated = await _orderService.UpdateStatusAsync(orderId, status);
 
+            if (!updated)
+            {
+                TempData["Message"] = "Failed to update order status.";
+                return RedirectToAction(nameof(Details), new { id = orderId });
+            }
+
+            TempData["Message"] = "Order status updated successfully.";
+            return RedirectToAction(nameof(Details), new { id = orderId });
+        }
     }
 }

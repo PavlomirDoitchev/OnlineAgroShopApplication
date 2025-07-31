@@ -204,5 +204,15 @@ namespace AgroShopApp.Services.Core
                 Filter = filter
             };
         }
+        public async Task<bool> UpdateStatusAsync(Guid orderId, string newStatus)
+        {
+            var order = await _orderRepo.GetByIdAsync(orderId);
+            if (order == null)
+                return false;
+
+            order.Status = newStatus;
+            return await _orderRepo.UpdateAsync(order);
+        }
+
     }
 }
