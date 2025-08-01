@@ -21,8 +21,35 @@
         </div>
 
         <div class="form-floating mb-3">
-            <input asp-for="Input.Email" class="form-control" disabled />
+            <input asp-for="Input.Email" class="form-control" />
             <label asp-for="Input.Email"></label>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.ConfirmEmail" class="form-control" />
+            <label asp-for="Input.ConfirmEmail">Confirm Email</label>
+            <span asp-validation-for="Input.ConfirmEmail" class="text-danger"></span>
+        </div>
+        <hr class="text-secondary" />
+        <h4 class="text-light mt-4">Change Password</h4>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.CurrentPassword" class="form-control" type="password" required />
+            <label asp-for="Input.CurrentPassword"></label>
+            <span asp-validation-for="Input.CurrentPassword" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.NewPassword" class="form-control" type="password" />
+            <label asp-for="Input.NewPassword"></label>
+            <span asp-validation-for="Input.NewPassword" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Input.ConfirmPassword" class="form-control" type="password" />
+            <label asp-for="Input.ConfirmPassword"></label>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn btn-success rounded-pill">Update</button>

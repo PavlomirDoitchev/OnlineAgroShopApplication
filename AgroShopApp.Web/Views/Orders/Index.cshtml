@@ -8,6 +8,11 @@
 @if (!Model.Orders.Any())
 {
     <div class="alert alert-info text-center">You have not placed any orders yet.</div>
+    <div class="text-center mt-4">
+        <a asp-controller="Product" asp-action="Index" class="btn btn-primary rounded-pill px-5 py-2 fw-bold">
+            <i class="bi bi-chevron-double-left"></i> Browse Products
+        </a>
+    </div>
 }
 else
 {
@@ -39,7 +44,6 @@ else
         </tbody>
     </table>
 
-    <!-- Pagination -->
     <div class="text-center mt-4">
         @for (int i = 1; i <= Model.TotalPages; i++)
         {

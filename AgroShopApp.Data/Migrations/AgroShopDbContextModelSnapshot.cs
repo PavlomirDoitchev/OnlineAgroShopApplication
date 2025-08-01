@@ -114,7 +114,7 @@ namespace AgroShopApp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Carts", t =>
+                    b.ToTable("Carts", null, t =>
                         {
                             t.HasComment("User's Cart in the system");
                         });
@@ -138,7 +138,7 @@ namespace AgroShopApp.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems", t =>
+                    b.ToTable("CartItems", null, t =>
                         {
                             t.HasComment("Product-to-cart mapping with quantity");
                         });
@@ -161,7 +161,7 @@ namespace AgroShopApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", t =>
+                    b.ToTable("Categories", null, t =>
                         {
                             t.HasComment("Product category in the catalog");
                         });
@@ -202,7 +202,7 @@ namespace AgroShopApp.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Favorites", t =>
+                    b.ToTable("Favorites", null, t =>
                         {
                             t.HasComment("User-product favorites");
                         });
@@ -237,7 +237,7 @@ namespace AgroShopApp.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders", t =>
+                    b.ToTable("Orders", null, t =>
                         {
                             t.HasComment("Submitted order with snapshot data");
                         });
@@ -265,7 +265,7 @@ namespace AgroShopApp.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", t =>
+                    b.ToTable("OrderItems", null, t =>
                         {
                             t.HasComment("Mapping between product and order with quantity and price snapshot");
                         });
@@ -333,7 +333,7 @@ namespace AgroShopApp.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", t =>
+                    b.ToTable("Products", null, t =>
                         {
                             t.HasComment("Product available for purchase");
                         });
