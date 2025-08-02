@@ -18,19 +18,45 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         {
             _userManager = userManager;
         }
-
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index(UserFilterInputModel filter, int page = 1, int pageSize = 10)
         {
-            var users = _userManager.Users
+            var query = _userManager.Users.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filter.Email))
+                query = query.Where(u => u.Email.Contains(filter.Email));
+
+            if (filter.IsDeleted.HasValue)
+                query = query.Where(u => u.IsDeleted == filter.IsDeleted);
+
+            var totalUsers = query.Count();
+            var totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+
+            var users = query
+                .OrderBy(u => u.Email)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .Select(u => new UserViewModel
                 {
                     Id = u.Id,
-                    Email = u.Email ?? string.Empty,
-                    FirstName = u.FirstName
+                    Email = u.Email,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    IsDeleted = u.IsDeleted
                 })
                 .ToList();
 
-            return SafeView("Index", users);
+            var model = new PaginatedUserListViewModel
+            {
+                Users = users,
+                CurrentPage = page,
+                TotalPages = totalPages,
+                PageSize = pageSize
+            };
+
+            ViewBag.Filter = filter;
+
+            return SafeView("Index", model);
         }
 
         [HttpPost]

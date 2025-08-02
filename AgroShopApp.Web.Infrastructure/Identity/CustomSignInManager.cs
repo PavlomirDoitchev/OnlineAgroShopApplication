@@ -25,11 +25,10 @@ namespace AgroShopApp.Web.Infrastructure.Identity
         {
             var user = await UserManager.FindByNameAsync(userName);
             if (user == null || user.IsDeleted)
-            {
                 return SignInResult.Failed;
-            }
 
             return await base.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
         }
+
     }
 }
