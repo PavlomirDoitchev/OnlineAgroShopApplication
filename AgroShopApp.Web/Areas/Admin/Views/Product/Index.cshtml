@@ -7,7 +7,6 @@
 
 <h2 class="text-center text-light mb-4">Manage Products</h2>
 
-<!-- Search Form -->
 <form method="get" class="d-flex justify-content-center mb-4">
     <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
     <input type="text" name="searchTerm" value="@Model.CurrentSearch" placeholder="Search products..."
@@ -15,7 +14,6 @@
     <button type="submit" class="btn btn-outline-light">Search</button>
 </form>
 
-<!-- Category Filters -->
 <div class="d-flex flex-wrap justify-content-center mb-4 gap-2">
     <a asp-action="Index"
        class="btn @(Model.SelectedCategoryId == null ? "btn-light text-dark fw-semibold" : "btn-outline-light")"
@@ -35,48 +33,54 @@
     }
 </div>
 
-<!-- Product Grid -->
-<div id="productGrid">
-    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
-        @foreach (var product in Model.Products)
-        {
-            <div class="col">
-                <div class="card agro-popular-card h-100 shadow-sm">
-                    <img src="@product.ImageUrl" class="product-img" alt="@product.Name" />
-                    <div class="card-body">
-                        <h5 class="card-title text-success">@product.Name</h5>
-                        <p class="card-text text-muted">@product.Description</p>
-                        <p class="fw-bold">@product.Price.ToString("C")</p>
-                        <span class="badge bg-secondary">@product.Category</span>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between">
-                        <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-dark btn-sm rounded-pill">
+<div class="table-responsive bg-dark text-light rounded shadow-sm mb-4">
+    <table class="table table text-light align-middle">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td style="width: 80px;">
+                        <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail rounded" style="width: 60px; height: 60px; object-fit: cover;" />
+                    </td>
+                    <td>@product.Name</td>
+                    <td>@product.Category</td>
+                    <td>@product.Price.ToString("C")</td>
+                    <td class="text-end">
+                        <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-info btn-sm rounded-pill me-1">
                             <i class="bi bi-info-circle"></i> Details
                         </a>
                         <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning btn-sm rounded-pill">
                             <i class="bi bi-pencil-square"></i> Edit
                         </a>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-
-    <!-- Pagination -->
-    @if (Model.TotalPages > 1)
-    {
-        <nav class="text-center">
-            @for (int i = 1; i <= Model.TotalPages; i++)
-            {
-                <a asp-action="Index"
-                   asp-route-page="@i"
-                   asp-route-pageSize="@Model.PageSize"
-                   asp-route-categoryId="@Model.SelectedCategoryId"
-                   asp-route-searchTerm="@Model.CurrentSearch"
-                   class="btn @(i == Model.CurrentPage ? "btn-primary fw-bold" : "btn-outline-light") mx-1">
-                    @i
-                </a>
+                    </td>
+                </tr>
             }
-        </nav>
-    }
+        </tbody>
+    </table>
 </div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="text-center">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <a asp-action="Index"
+               asp-route-page="@i"
+               asp-route-pageSize="@Model.PageSize"
+               asp-route-categoryId="@Model.SelectedCategoryId"
+               asp-route-searchTerm="@Model.CurrentSearch"
+               class="btn @(i == Model.CurrentPage ? "btn-primary fw-bold" : "btn-outline-light") mx-1">
+                @i
+            </a>
+        }
+    </nav>
+}
