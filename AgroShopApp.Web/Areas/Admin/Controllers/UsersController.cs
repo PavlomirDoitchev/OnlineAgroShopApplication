@@ -63,14 +63,32 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null)
-                return NotFound();
+            if (user == null) return NotFound();
+
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Contains("Admin"))
+            {
+                TempData["Message"] = "Cannot delete an admin account.";
+                return RedirectToAction("Index");
+            }
 
             user.IsDeleted = true;
             await _userManager.UpdateAsync(user);
+            TempData["Message"] = "User deleted successfully.";
+            return RedirectToAction("Index");
+        }
 
-            TempData["Message"] = "User marked as deleted.";
-            return RedirectToAction(nameof(Index));
+        [HttpPost]
+        public async Task<IActionResult> Restore(Guid id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null) return NotFound();
+
+            user.IsDeleted = false;
+            await _userManager.UpdateAsync(user);
+
+            TempData["Message"] = "User restored successfully.";
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -87,6 +105,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             TempData["Message"] = "Email updated.";
             return RedirectToAction(nameof(Index));
 
+        }
             //public async Task<IActionResult> Details(Guid id)
             //{
             //    var user = await _userManager.FindByIdAsync(id.ToString());
@@ -102,7 +121,6 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
 
             //    return View(model);
             //}
-        }
     }
 
 }
