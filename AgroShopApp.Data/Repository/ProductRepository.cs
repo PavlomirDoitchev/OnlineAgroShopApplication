@@ -48,5 +48,6 @@ namespace AgroShopApp.Data.Repository
                 .Include(p => p.Category);
 
         }
+       
     }
 }

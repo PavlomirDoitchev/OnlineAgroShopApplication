@@ -207,5 +207,7 @@ namespace AgroShopApp.Data.Repository
                 .FirstOrDefault(pi => pi.PropertyType == typeof(bool) &&
                                                  pi.Name == IsDeletedPropertyName);
         }
+
+        
     }
 }

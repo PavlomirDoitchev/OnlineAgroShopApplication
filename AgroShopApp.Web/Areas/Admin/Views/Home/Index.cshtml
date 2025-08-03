@@ -1,4 +1,107 @@
-﻿@if (Context.Items["UserOnlyBlocked"] != null)
+﻿@using AgroShopApp.Web.ViewModels
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var now = DateTime.Now;
+}
+
+<h2 class="text-light">Welcome back, Admin!</h2>
+<p class="text-muted mb-4">Current time: <strong>@now.ToString("f")</strong></p>
+
+<div class="row text-light mt-4 g-4">
+    <div class="col-md-3">
+        <div class="card bg-dark border-light shadow-sm text-center p-3">
+            <h4 class="text-success">@Model.TotalProducts</h4>
+            <p class="text-muted mb-0">Total Products</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark border-light shadow-sm text-center p-3">
+            <h4 class="text-info">@Model.OrdersToday</h4>
+            <p class="text-muted mb-0">Orders Today</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark border-light shadow-sm text-center p-3">
+            <h4 class="text-warning">@Model.TotalUsers</h4>
+            <p class="text-muted mb-0">Registered Users</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark border-light shadow-sm text-center p-3">
+            <h4 class="text-danger">@Model.OutOfStock</h4>
+            <p class="text-muted mb-0">Out of Stock</p>
+        </div>
+    </div>
+</div>
+<div>
+    <h4> Orders in the Last 7 Days</h4>
+    <canvas id="ordersChart" height="120"></canvas>
+</div>
+<h4 class="text-light mt-5 mb-3">Today's Orders</h4>
+
+@if (Model.TodaysOrders.Any())
 {
-    <div class="alert alert-warning">Admin access to user-only pages is restricted.</div>
+    <div class="table-responsive bg-dark rounded shadow-sm">
+        <table class="table table text-light mb-0">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Email</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.TodaysOrders)
+                {
+                    <tr>
+                        <td>@order.Id.ToString().Substring(0, 8)...</td>
+                        <td>@order.Email</td>
+                        <td>@order.OrderedOn.ToString("HH:mm")</td>
+                        <td>@order.Status</td>
+                        <td>@order.TotalAmount.ToString("C")</td>
+                        <td>
+                            <a asp-area="Admin" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id"
+                               class="btn btn-sm btn-outline-info rounded-pill">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-dark">No orders were placed today.</div>
+}
+
+@section Scripts {
+    <script>
+        const ctx = document.getElementById('ordersChart').getContext('2d');
+        const ordersChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.OrdersLast7Days.Select(d => d.DateLabel))),
+                datasets: [{
+                    label: 'Orders',
+                    data: @Html.Raw(Json.Serialize(Model.OrdersLast7Days.Select(d => d.Count))),
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                    borderColor: 'rgba(40, 167, 69, 1)',
+                    borderWidth: 2,
+                    tension: 0.2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
 }

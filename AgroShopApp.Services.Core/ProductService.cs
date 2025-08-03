@@ -264,5 +264,9 @@ namespace AgroShopApp.Services.Core
                 CurrentSearch = searchTerm
             };
         }
+        public async Task<IEnumerable<Product>> GetAllAsync()
+        {
+            return await _productRepository.GetAllAsync();
+        }
     }
 }

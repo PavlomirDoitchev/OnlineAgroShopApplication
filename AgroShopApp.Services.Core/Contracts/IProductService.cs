@@ -1,4 +1,6 @@
-﻿using AgroShopApp.Web.ViewModels.Product;
+﻿using AgroShopApp.Data.Models;
+using AgroShopApp.Web.ViewModels.Product;
+using System.Threading.Tasks;
 
 namespace AgroShopApp.Services.Core.Contracts
 {
@@ -15,5 +17,6 @@ namespace AgroShopApp.Services.Core.Contracts
         Task<IEnumerable<DeletedProductViewModel>> GetDeletedDetailedAsync();
         Task<bool> IsOutOfStockAsync(Guid productId);
         Task<PaginatedDeletedProductListViewModel> GetDeletedPaginatedAsync(int page, int pageSize, int? categoryId, string? searchTerm);
+        Task<IEnumerable<Product>> GetAllAsync();
     }
 }
