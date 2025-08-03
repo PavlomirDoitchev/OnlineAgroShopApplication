@@ -54,7 +54,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
                 OutOfStock = products.Count(p => p.StockQuantity == 0),
                 TotalUsers = users.Count,
                 OrdersToday = orders.Count(),
-                TodaysOrders = orders.ToList(),
+                TodaysOrders = orders.OrderByDescending(o=>o.OrderedOn).Take(5).ToList(),
                 RevenueLast7Days = orderStats,
                 TopSellingProducts = topProducts
             };

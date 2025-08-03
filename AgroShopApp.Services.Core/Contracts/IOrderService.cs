@@ -1,5 +1,6 @@
 ﻿using AgroShopApp.Web.ViewModels.Order;
 using AgroShopApp.Web.ViewModels;
+using System.Security.Claims;
 
 namespace AgroShopApp.Services.Core.Contracts
 {
@@ -14,6 +15,6 @@ namespace AgroShopApp.Services.Core.Contracts
         Task<bool> UpdateStatusAsync(Guid orderId, string newStatus);
         Task<List<OrderChartPoint>> GetOrderStatsAsync(DateTime from, DateTime to);
         Task<List<ProductSalesPoint>> GetTopSellingProductsAsync(int topN);
-
+        Task<bool> TryCancelOrderAsync(Guid orderId, ClaimsPrincipal user);
     }
 }

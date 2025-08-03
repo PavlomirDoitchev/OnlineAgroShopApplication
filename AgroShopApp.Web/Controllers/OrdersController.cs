@@ -37,5 +37,21 @@ namespace AgroShopApp.Web.Controllers
 
             return SafeView("Details", order);
         }
+        [HttpPost]
+        public async Task<IActionResult> Cancel(Guid id)
+        {
+            var success = await _orderService.TryCancelOrderAsync(id, User);
+
+            if (!success)
+            {
+                TempData["Message"] = "Order could not be cancelled.";
+            }
+            else
+            {
+                TempData["Message"] = "Order cancelled successfully.";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

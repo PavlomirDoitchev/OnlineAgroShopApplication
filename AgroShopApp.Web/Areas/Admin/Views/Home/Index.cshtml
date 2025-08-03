@@ -34,17 +34,7 @@
         </div>
     </div>
 </div>
-<div>
-    <h3 class="text-light mt-5 mb-3">Orders Overview</h3>
-   
-    <canvas id="ordersChart" height="120"></canvas>
-    <h4 class="text-light mt-5 mb-3">Revenue Over Time</h4>
-    <canvas id="revenueChart" height="120"></canvas>
-
-    <h4 class="text-light mt-5 mb-3">Top-Selling Products</h4>
-    <canvas id="bestSellersChart" height="120"></canvas>
-</div>
-<h4 class="text-light mt-5 mb-3">Today's Orders</h4>
+<h4 class="text-light mt-5 mb-3">Recent Orders</h4>
 
 @if (Model.TodaysOrders.Any())
 {
@@ -85,6 +75,17 @@ else
 {
     <div class="alert alert-info text-dark">No orders were placed today.</div>
 }
+
+<div>
+    <h3 class="text-light mt-5 mb-3">Orders Overview</h3>
+   
+    <canvas id="ordersChart" height="120"></canvas>
+    <h4 class="text-light mt-5 mb-3">Revenue Overview</h4>
+    <canvas id="revenueChart" height="120"></canvas>
+
+    <h4 class="text-light mt-5 mb-3">Top-Selling Products</h4>
+    <canvas id="bestSellersChart" height="120"></canvas>
+</div>
 
 @section Scripts {
     <script>
@@ -132,7 +133,6 @@ else
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Revenue in the Last 7 Days',
                         color: '#fff'
                     },
                     legend: { labels: { color: '#fff' } }
@@ -169,7 +169,6 @@ else
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Top-Selling Products',
                         color: '#fff'
                     },
                     legend: { display: false }

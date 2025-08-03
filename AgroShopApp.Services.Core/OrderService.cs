@@ -4,6 +4,8 @@ using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.ViewModels.Order;
 using AgroShopApp.Web.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using AgroShopApp.Data.Repository;
+using System.Security.Claims;
 namespace AgroShopApp.Services.Core
 {
     public class OrderService : IOrderService
@@ -217,6 +219,7 @@ namespace AgroShopApp.Services.Core
         {
             var orders = await _orderRepo
                 .GetAllAttached()
+                  .Where(o => o.Status == "Completed")
                 .Where(o => o.OrderedOn >= from && o.OrderedOn <= to)
                 .ToListAsync();
 
@@ -235,6 +238,7 @@ namespace AgroShopApp.Services.Core
         {
             var orderItems = await _orderRepo
                 .GetAllAttached()
+                .Where(o => o.Status == "Completed")
                 .Include(o => o.Items)
                     .ThenInclude(i => i.Product)
                 .SelectMany(o => o.Items)
@@ -250,6 +254,25 @@ namespace AgroShopApp.Services.Core
                 .OrderByDescending(p => p.QuantitySold)
                 .Take(topN)
                 .ToList();
+        }
+        public async Task<bool> TryCancelOrderAsync(Guid orderId, ClaimsPrincipal user)
+        {
+            var order = await _orderRepo
+                .GetAllAttached()
+                .Include(o => o.User)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null || order.Status != "Pending")
+                return false;
+
+            var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (order.UserId.ToString() != userId && !user.IsInRole("Admin"))
+                return false;
+
+            order.Status = "Cancelled";
+            await _orderRepo.UpdateAsync(order);
+
+            return true;
         }
     }
 }

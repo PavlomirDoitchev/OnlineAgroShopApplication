@@ -38,6 +38,34 @@
         Total Paid: <span class="fw-bold">@Model.TotalAmount.ToString("C")</span>
     </h5>
 </div>
+@if (Model.Status == "Pending")
+{
+    <div class="text-end mt-3">
+        <button class="btn btn-outline-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
+            <i class="bi bi-x-circle"></i> Cancel Order
+        </button>
+    </div>
+
+    <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="cancelOrderModalLabel">Confirm Cancellation</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to cancel this order?
+                </div>
+                <div class="modal-footer border-0">
+                    <form asp-action="Cancel" asp-route-id="@Model.Id" method="post">
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">Yes, Cancel</button>
+                    </form>
+                    <button type="button" class="btn btn-outline-light rounded-pill" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 <div class="mt-3">
     <a asp-action="Index" class="btn btn-outline-light rounded-pill">
