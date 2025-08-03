@@ -29,7 +29,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             _orderService = orderService;
             _userManager = userManager;
         }
-
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
 
@@ -45,14 +45,18 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
                 FromDate = today,
                 ToDate = today.AddDays(1).AddTicks(-1)
             });
+            var orderStats = await _orderService.GetOrderStatsAsync(today.AddDays(-6), today); 
 
+            var topProducts = await _orderService.GetTopSellingProductsAsync(5); 
             var model = new AdminDashboardViewModel
             {
                 TotalProducts = products.Count(),
                 OutOfStock = products.Count(p => p.StockQuantity == 0),
                 TotalUsers = users.Count,
                 OrdersToday = orders.Count(),
-                TodaysOrders = orders.ToList()
+                TodaysOrders = orders.ToList(),
+                RevenueLast7Days = orderStats,
+                TopSellingProducts = topProducts
             };
             var last7Days = Enumerable.Range(0, 7)
                 .Select(offset => DateTime.UtcNow.Date.AddDays(-offset))

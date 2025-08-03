@@ -11,5 +11,7 @@ namespace AgroShopApp.Web.ViewModels
 
         public List<AdminOrderListItemViewModel> TodaysOrders { get; set; } = new();
         public List<OrdersPerDayViewModel> OrdersLast7Days { get; set; } = new();
+        public List<OrderChartPoint> RevenueLast7Days { get; set; } = new();
+        public List<ProductSalesPoint> TopSellingProducts { get; set; } = new();
     }
 }

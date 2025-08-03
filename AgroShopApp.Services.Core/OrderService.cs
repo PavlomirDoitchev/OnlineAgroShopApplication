@@ -213,6 +213,43 @@ namespace AgroShopApp.Services.Core
             order.Status = newStatus;
             return await _orderRepo.UpdateAsync(order);
         }
+        public async Task<List<OrderChartPoint>> GetOrderStatsAsync(DateTime from, DateTime to)
+        {
+            var orders = await _orderRepo
+                .GetAllAttached()
+                .Where(o => o.OrderedOn >= from && o.OrderedOn <= to)
+                .ToListAsync();
 
+            return orders
+                .GroupBy(o => o.OrderedOn.Date)
+                .OrderBy(g => g.Key)
+                .Select(g => new OrderChartPoint
+                {
+                    DateLabel = g.Key.ToString("MMM dd"),
+                    Count = g.Count(),
+                    Revenue = g.Sum(o => o.Items.Sum(i => i.Quantity * i.UnitPrice))
+                })
+                .ToList();
+        }
+        public async Task<List<ProductSalesPoint>> GetTopSellingProductsAsync(int topN)
+        {
+            var orderItems = await _orderRepo
+                .GetAllAttached()
+                .Include(o => o.Items)
+                    .ThenInclude(i => i.Product)
+                .SelectMany(o => o.Items)
+                .ToListAsync();
+
+            return orderItems
+                .GroupBy(i => i.Product.Name)
+                .Select(g => new ProductSalesPoint
+                {
+                    ProductName = g.Key,
+                    QuantitySold = g.Sum(x => x.Quantity)
+                })
+                .OrderByDescending(p => p.QuantitySold)
+                .Take(topN)
+                .ToList();
+        }
     }
 }

@@ -35,8 +35,14 @@
     </div>
 </div>
 <div>
-    <h4> Orders in the Last 7 Days</h4>
+    <h3 class="text-light mt-5 mb-3">Orders Overview</h3>
+   
     <canvas id="ordersChart" height="120"></canvas>
+    <h4 class="text-light mt-5 mb-3">Revenue Over Time</h4>
+    <canvas id="revenueChart" height="120"></canvas>
+
+    <h4 class="text-light mt-5 mb-3">Top-Selling Products</h4>
+    <canvas id="bestSellersChart" height="120"></canvas>
 </div>
 <h4 class="text-light mt-5 mb-3">Today's Orders</h4>
 
@@ -100,6 +106,80 @@ else
                 responsive: true,
                 scales: {
                     y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+    <script>
+      
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.RevenueLast7Days.Select(d => d.DateLabel))),
+                datasets: [{
+                    label: 'Revenue',
+                    data: @Html.Raw(Json.Serialize(Model.RevenueLast7Days.Select(d => d.Revenue))),
+                    backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                    borderColor: 'rgba(255, 193, 7, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Revenue in the Last 7 Days',
+                        color: '#fff'
+                    },
+                    legend: { labels: { color: '#fff' } }
+                },
+                scales: {
+                    x: { ticks: { color: '#ccc' } },
+                    y: {
+                        ticks: {
+                            color: '#ccc',
+                            callback: function (value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        const bestCtx = document.getElementById('bestSellersChart').getContext('2d');
+        const bestSellersChart = new Chart(bestCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.TopSellingProducts.Select(p => p.ProductName))),
+                datasets: [{
+                    label: 'Quantity Sold',
+                    data: @Html.Raw(Json.Serialize(Model.TopSellingProducts.Select(p => p.QuantitySold))),
+                    backgroundColor: 'rgba(13, 202, 240, 0.6)',
+                    borderColor: 'rgba(13, 202, 240, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Top-Selling Products',
+                        color: '#fff'
+                    },
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { ticks: { color: '#ccc' } },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#ccc' }
+                    }
                 }
             }
         });
