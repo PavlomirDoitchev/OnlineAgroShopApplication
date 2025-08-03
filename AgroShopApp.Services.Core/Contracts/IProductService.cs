@@ -14,5 +14,6 @@ namespace AgroShopApp.Services.Core.Contracts
         Task EditAsync(EditProductViewModel model);
         Task<IEnumerable<DeletedProductViewModel>> GetDeletedDetailedAsync();
         Task<bool> IsOutOfStockAsync(Guid productId);
+        Task<PaginatedDeletedProductListViewModel> GetDeletedPaginatedAsync(int page, int pageSize, int? categoryId, string? searchTerm);
     }
 }

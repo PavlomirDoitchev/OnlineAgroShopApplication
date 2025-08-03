@@ -102,9 +102,10 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Deleted()
+        public async Task<IActionResult> Deleted(int page = 1, int pageSize = 9, int? categoryId = null, string? searchTerm = null)
         {
-            var model = await _productService.GetDeletedDetailedAsync();
+            var model = await _productService.GetDeletedPaginatedAsync(page, pageSize, categoryId, searchTerm);
+
             return SafeView("Deleted", model);
         }
 

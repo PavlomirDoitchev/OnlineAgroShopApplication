@@ -9,5 +9,7 @@ namespace AgroShopApp.Data.Repository.Contracts
         Task<Product?> GetWithCategoryByIdAsync(Guid id);
         Task<IEnumerable<Product>> GetDeletedProductsAsync();
         Task<Product?> GetByIdIncludingDeletedAsync(Guid id);
+        IQueryable<Product> GetAllAttached();
+        IQueryable<Product> GetDeletedAttached();
     }
 }

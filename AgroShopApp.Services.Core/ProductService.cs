@@ -226,5 +226,43 @@ namespace AgroShopApp.Services.Core
             var product = await _productRepository.GetByIdAsync(productId);
             return product == null || product.StockQuantity == 0 || product.IsDeleted || !product.IsAvailable;
         }
+        public async Task<PaginatedDeletedProductListViewModel> GetDeletedPaginatedAsync(int page, int pageSize, int? categoryId, string? searchTerm)
+        {
+            var query = _productRepository.GetDeletedAttached();
+
+            if (categoryId.HasValue)
+                query = query.Where(p => p.CategoryId == categoryId);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+                query = query.Where(p => p.Name.Contains(searchTerm));
+
+            var totalCount = await query.CountAsync();
+
+            var products = await query
+                .OrderByDescending(p => p.DeletedOn)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedDeletedProductListViewModel
+            {
+                DeletedProducts = products.Select(p => new DeletedProductViewModel
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    ImageUrl = p.ImageUrl,
+                    Category = p.Category.Name,
+                    DeletedOn = p.DeletedOn
+                }).ToList(),
+
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+                PageSize = pageSize,
+                SelectedCategoryId = categoryId,
+                CurrentSearch = searchTerm
+            };
+        }
     }
 }

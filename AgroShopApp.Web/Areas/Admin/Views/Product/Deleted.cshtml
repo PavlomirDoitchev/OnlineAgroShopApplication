@@ -1,6 +1,6 @@
 ﻿@using AgroShopApp.Web.ViewModels.Product
 @using static AgroShopApp.GCommon.ApplicationConstants
-@model IEnumerable<DeletedProductViewModel>
+@model PaginatedDeletedProductListViewModel
 
 @{
     ViewData["Title"] = "Deleted Products";
@@ -8,7 +8,20 @@
 
 <h2 class="text-light text-center my-4">Deleted Products</h2>
 
-@if (!Model.Any())
+<form method="get" class="row g-3 mb-4 bg-dark text-light p-3 rounded shadow-sm">
+    <div class="col-md-4">
+        <input type="text" name="searchTerm" value="@Model.CurrentSearch" class="form-control" placeholder="Search by product name..." />
+    </div>
+    <div class="col-md-4">
+      
+    </div>
+    <div class="col-md-4 d-flex align-items-center justify-content-end">
+        <button class="btn btn-outline-light me-2" type="submit">Filter</button>
+        <a asp-action="Deleted" class="btn btn-outline-secondary">Reset</a>
+    </div>
+</form>
+
+@if (!Model.DeletedProducts.Any())
 {
     <div class="alert alert-info text-center text-dark">No deleted products found.</div>
 }
@@ -20,31 +33,75 @@ else
                 <tr>
                     <th>Image</th>
                     <th>Name</th>
+                    <th>Category</th>
                     <th>Price</th>
                     <th>Deleted On</th>
                     <th class="text-end">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var product in Model)
+                @foreach (var product in Model.DeletedProducts)
                 {
                     <tr>
                         <td style="width: 80px;">
                             <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail rounded" style="width: 60px; height: 60px; object-fit: cover;" />
                         </td>
                         <td>@product.Name</td>
+                        <td>@product.Category</td>
                         <td>@product.Price.ToString("C")</td>
                         <td class="text-warning">@product.DeletedOn?.ToString(DeletedOnFormat)</td>
                         <td class="text-end">
-                            <form asp-area="Admin" asp-controller="Product" asp-action="Restore" asp-route-id="@product.Id" method="post" class="d-inline">
-                                <button type="submit" class="btn btn-outline-success btn-sm rounded-pill">
-                                    <i class="bi bi-arrow-counterclockwise"></i> Restore
-                                </button>
-                            </form>
+                            <button type="button"
+                                    class="btn btn-outline-success btn-sm rounded-pill"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#restoreModal-@product.Id">
+                                <i class="bi bi-arrow-counterclockwise"></i> Restore
+                            </button>
+
+                            <div class="modal fade" id="restoreModal-@product.Id" tabindex="-1" aria-labelledby="restoreModalLabel-@product.Id" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content bg-dark text-white">
+                                        <div class="modal-header border-0">
+                                            <h5 class="modal-title" id="restoreModalLabel-@product.Id">Confirm Restore</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to restore <strong>@product.Name</strong>?
+                                        </div>
+                                        <div class="modal-footer border-0">
+                                            <form asp-area="Admin"
+                                                  asp-controller="Product"
+                                                  asp-action="Restore"
+                                                  asp-route-id="@product.Id"
+                                                  method="post">
+                                                <button type="submit" class="btn btn-success rounded-pill px-4">Restore</button>
+                                            </form>
+                                            <button type="button" class="btn btn-outline-light rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="text-center mt-4">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <a asp-action="Deleted"
+                   asp-route-page="@i"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-searchTerm="@Model.CurrentSearch"
+                   asp-route-categoryId="@Model.SelectedCategoryId"
+                   class="btn @(i == Model.CurrentPage ? "btn-primary fw-bold" : "btn-outline-light") mx-1">
+                    @i
+                </a>
+            }
+        </nav>
+    }
 }

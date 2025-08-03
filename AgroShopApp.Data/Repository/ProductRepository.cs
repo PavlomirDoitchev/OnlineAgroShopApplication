@@ -40,6 +40,13 @@ namespace AgroShopApp.Data.Repository
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
-        
+        public IQueryable<Product> GetDeletedAttached()
+        {
+            return DbSet
+                .IgnoreQueryFilters()
+                .Where(p => p.IsDeleted)
+                .Include(p => p.Category);
+
+        }
     }
 }
