@@ -106,21 +106,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-            //public async Task<IActionResult> Details(Guid id)
-            //{
-            //    var user = await _userManager.FindByIdAsync(id.ToString());
-            //    if (user == null)
-            //        return NotFound();
-
-            //    var model = new UserDetailsViewModel
-            //    {
-            //        Id = user.Id,
-            //        Email = user.Email ?? string.Empty,
-            //        Username = user.Username,
-            //    };
-
-            //    return View(model);
-            //}
+           
     }
 
 }

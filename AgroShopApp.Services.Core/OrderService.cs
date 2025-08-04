@@ -219,7 +219,7 @@ namespace AgroShopApp.Services.Core
         {
             var orders = await _orderRepo
                 .GetAllAttached()
-                  .Where(o => o.Status == "Completed")
+                .Where(o => o.Status == "Completed")
                 .Where(o => o.OrderedOn >= from && o.OrderedOn <= to)
                 .ToListAsync();
 

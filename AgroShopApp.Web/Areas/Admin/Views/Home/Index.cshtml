@@ -93,6 +93,7 @@ else
         const ordersChart = new Chart(ctx, {
             type: 'line',
             data: {
+                     // Non-user input is used here
                 labels: @Html.Raw(Json.Serialize(Model.OrdersLast7Days.Select(d => d.DateLabel))),
                 datasets: [{
                     label: 'Orders',
@@ -117,6 +118,7 @@ else
         const revenueChart = new Chart(revenueCtx, {
             type: 'line',
             data: {
+                 // Non-user input is used here
                 labels: @Html.Raw(Json.Serialize(Model.RevenueLast7Days.Select(d => d.DateLabel))),
                 datasets: [{
                     label: 'Revenue',
@@ -155,6 +157,7 @@ else
         const bestSellersChart = new Chart(bestCtx, {
             type: 'bar',
             data: {
+                // Non-user input is used here
                 labels: @Html.Raw(Json.Serialize(Model.TopSellingProducts.Select(p => p.ProductName))),
                 datasets: [{
                     label: 'Quantity Sold',
