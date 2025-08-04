@@ -11,7 +11,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
     public class OrdersController : AdminBaseController
     {
         private readonly IOrderService _orderService;
-
+        private static readonly HashSet<string> AllowedStatuses = new() { "Pending", "Completed", "Cancelled" };
         public OrdersController(IOrderService orderService, ICompositeViewEngine viewEngine, ILogger<OrdersController> logger)
             : base(viewEngine, logger)
         {
@@ -47,6 +47,12 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(Guid orderId, string status)
         {
+            if (!AllowedStatuses.Contains(status))
+            {
+                TempData["Message"] = "Invalid status selected.";
+                return RedirectToAction(nameof(Details), new { id = orderId });
+            }
+
             bool updated = await _orderService.UpdateStatusAsync(orderId, status);
 
             TempData["Message"] = updated

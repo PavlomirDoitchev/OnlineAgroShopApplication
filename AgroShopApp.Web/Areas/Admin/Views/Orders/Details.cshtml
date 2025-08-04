@@ -24,6 +24,7 @@
             <dt class="col-sm-3">Change Status</dt>
             <dd class="col-sm-9">
                 <form asp-action="UpdateStatus" method="post" class="d-flex gap-2 align-items-center">
+                    @Html.AntiForgeryToken()
                     <input type="hidden" name="orderId" value="@Model.Id" />
                     <select name="status" class="form-select form-select-sm w-auto bg-dark text-light">
                         <option value="Pending" selected="@(Model.Status == "Pending")">Pending</option>

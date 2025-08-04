@@ -91,21 +91,21 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ResetEmail(Guid id, string newEmail)
-        {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null)
-                return NotFound();
+        //[HttpPost]
+        //public async Task<IActionResult> ResetEmail(Guid id, string newEmail)
+        //{
+        //    var user = await _userManager.FindByIdAsync(id.ToString());
+        //    if (user == null)
+        //        return NotFound();
 
-            user.Email = newEmail;
-            user.NormalizedEmail = newEmail.ToUpper();
-            await _userManager.UpdateAsync(user);
+        //    user.Email = newEmail;
+        //    user.NormalizedEmail = newEmail.ToUpper();
+        //    await _userManager.UpdateAsync(user);
 
-            TempData["Message"] = "Email updated.";
-            return RedirectToAction(nameof(Index));
+        //    TempData["Message"] = "Email updated.";
+        //    return RedirectToAction(nameof(Index));
 
-        }
+        //}
            
     }
 

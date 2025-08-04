@@ -23,7 +23,10 @@ namespace AgroShopApp.Services.Core
             _cartRepo = cartRepo;
             _productRepo = productRepo;
         }
-
+        private static readonly HashSet<string> AllowedStatuses = new()
+        {
+             "Pending", "Completed", "Cancelled"
+        };
         public async Task PlaceOrderAsync(Guid userId)
         {
             var cart = await _cartRepo.GetWithItemsAsync(userId);
@@ -206,8 +209,12 @@ namespace AgroShopApp.Services.Core
                 Filter = filter
             };
         }
+
         public async Task<bool> UpdateStatusAsync(Guid orderId, string newStatus)
         {
+            if (!AllowedStatuses.Contains(newStatus))
+                return false;
+
             var order = await _orderRepo.GetByIdAsync(orderId);
             if (order == null)
                 return false;

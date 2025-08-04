@@ -1,5 +1,9 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
-    const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+    const token = getCsrfToken();
+
+    if (!token) {
+        console.warn("CSRF token not found. POST requests may fail.");
+    }
 
     document.querySelectorAll(".quantity-input").forEach(input => {
         input.addEventListener("change", () => {
@@ -17,6 +21,11 @@
     });
 });
 
+function getCsrfToken() {
+    const tokenInput = document.querySelector("#antiForgeryTokenForm input[name='__RequestVerificationToken']");
+    return tokenInput?.value || null;
+}
+
 async function updateQuantity(productId, quantity, input, token) {
     try {
         const response = await fetch("/Cart/UpdateQuantity", {
@@ -28,13 +37,10 @@ async function updateQuantity(productId, quantity, input, token) {
             body: JSON.stringify({ productId, quantity })
         });
 
-        if (!response.ok) {
-            throw new Error("Failed to update quantity.");
-        }
+        if (!response.ok) throw new Error("Failed to update quantity.");
 
         const data = await response.json();
 
-        // Update input to reflect corrected quantity
         if (input && data.correctedQuantity !== quantity) {
             input.value = data.correctedQuantity;
             showToast(`Quantity capped at available stock (${data.correctedQuantity}).`, "warning");
@@ -42,25 +48,26 @@ async function updateQuantity(productId, quantity, input, token) {
             showToast(`Quantity updated to ${data.correctedQuantity}.`, "success");
         }
 
-        // Update per-item total cell
-        const itemTotalCell = document.querySelector(`.item-total[data-product-id="${productId}"]`);
-        if (itemTotalCell && data.itemTotal != null) {
-            itemTotalCell.textContent = formatCurrency(data.itemTotal);
-        }
-
-        // Update grand total
-        const grandTotalEl = document.getElementById("grandTotal");
-        if (grandTotalEl && data.grandTotal != null) {
-            grandTotalEl.textContent = formatCurrency(data.grandTotal);
-        }
-
+        updateTotals(productId, data);
     } catch (error) {
         showToast(error.message, "danger");
     }
 }
 
+function updateTotals(productId, data) {
+    const itemTotalCell = document.querySelector(`.item-total[data-product-id="${productId}"]`);
+    if (itemTotalCell && data.itemTotal != null) {
+        itemTotalCell.textContent = formatCurrency(data.itemTotal);
+    }
+
+    const grandTotalEl = document.getElementById("grandTotal");
+    if (grandTotalEl && data.grandTotal != null) {
+        grandTotalEl.textContent = formatCurrency(data.grandTotal);
+    }
+}
+
 function showToast(message, type = "success") {
-    const toastContainer = document.getElementById("ajaxToastContainer");
+    const toastContainer = document.getElementById("ajaxToastContainer") || document.body;
 
     const toast = document.createElement("div");
     toast.className = `toast align-items-center text-white border-0 bg-${type} show`;

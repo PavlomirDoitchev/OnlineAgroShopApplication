@@ -61,7 +61,12 @@
                             Are you sure you want to delete <strong>@Model.Name</strong>?
                         </div>
                         <div class="modal-footer border-0">
-                            <form asp-area="Admin" asp-controller="Product" asp-action="Remove" asp-route-id="@Model.Id" method="post">
+                            <form asp-area="Admin"
+                                  asp-controller="Product"
+                                  asp-action="Remove"
+                                  asp-route-id="@Model.Id"
+                                  method="post">
+                                @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-danger rounded-pill px-4">Delete</button>
                             </form>
                             <button type="button" class="btn btn-outline-light rounded-pill" data-bs-dismiss="modal">Cancel</button>

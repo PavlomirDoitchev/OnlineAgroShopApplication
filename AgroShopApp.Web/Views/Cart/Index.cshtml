@@ -1,16 +1,20 @@
 ﻿@using AgroShopApp.Web.ViewModels.Cart
 @model IEnumerable<CartItemViewModel>
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
-@inject IHttpContextAccessor HttpContextAccessor
+
 @{
     ViewData["Title"] = "My Cart";
 }
+
 <h2 class="text-white text-center my-4">My Cart</h2>
+
+<!-- Hidden form to inject anti-forgery token for JavaScript -->
+<form method="post" id="antiForgeryTokenForm" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
 
 @if (!Model.Any())
 {
     <div class="alert alert-info text-center">Your cart seems to be empty.</div>
-
     <div class="text-center mt-4">
         <a asp-controller="Product" asp-action="Index" class="btn btn-primary rounded-pill px-5 py-2 fw-bold">
             <i class="bi bi-chevron-double-left"></i> Browse Products
@@ -23,7 +27,6 @@ else
         <thead class="bg-primary text-white">
             <tr>
                 <th>Product</th>
-                @*  <th>Image</th> *@
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Total</th>
@@ -35,7 +38,6 @@ else
             {
                 <tr>
                     <td>@item.Name</td>
-                    @* <td><img src="@item.ImageUrl" class="img-thumbnail" style="max-height: 40px;" /></td> *@
                     <td>
                         <input type="number"
                                class="form-control form-control-sm quantity-input"
@@ -48,29 +50,6 @@ else
                     <td>@item.Price.ToString("C")</td>
                     <td class="item-total" data-product-id="@item.ProductId">@item.Total.ToString("C")</td>
                     <td>
-                        @*   @if (item.StockQuantity > item.Quantity)
-                {
-                <form asp-action="Increase" asp-route-productId="@item.ProductId" method="post" class="d-inline">
-                @Html.AntiForgeryToken()
-                <button class="btn btn-sm btn-success" title="Increase quantity">
-                <i class="bi bi-plus"></i>
-                </button>
-                </form>
-                }
-                else
-                {
-                <button class="btn btn-sm btn-secondary" disabled title="Maximum stock reached">
-                <i class="bi bi-cart-x"></i>
-                </button>
-                }
-
-                <form asp-action="Decrease" asp-route-productId="@item.ProductId" method="post" class="d-inline">
-                @Html.AntiForgeryToken()
-                <button class="btn btn-sm btn-warning" title="Decrease quantity">
-                <i class="bi bi-dash"></i>
-                </button>
-                </form> *@
-
                         <form asp-action="Remove" asp-route-productId="@item.ProductId" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
                             <button class="btn btn-sm btn-danger" title="Remove from cart">
@@ -82,7 +61,7 @@ else
             }
         </tbody>
     </table>
-  
+
     <div class="d-flex justify-content-end gap-3 mt-4">
         <a asp-controller="Product" asp-action="Index"
            class="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm">
@@ -96,7 +75,9 @@ else
             </button>
         </form>
     </div>
+
     var grandTotal = Model.Sum(i => i.Total);
+
     <div id="cartMessage" class="alert d-none" role="alert"></div>
     <div class="text-end mt-4">
         <h5 class="text-light">
@@ -107,8 +88,5 @@ else
 }
 
 @section Scripts {
-    <script>
-        const token = '@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestToken';
-    </script>
     <script src="~/js/cart-quantity.js" asp-append-version="true"></script>
 }

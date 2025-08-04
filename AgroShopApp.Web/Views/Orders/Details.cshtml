@@ -58,6 +58,7 @@
                 </div>
                 <div class="modal-footer border-0">
                     <form asp-action="Cancel" asp-route-id="@Model.Id" method="post">
+                        @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-danger rounded-pill px-4">Yes, Cancel</button>
                     </form>
                     <button type="button" class="btn btn-outline-light rounded-pill" data-bs-dismiss="modal">No</button>

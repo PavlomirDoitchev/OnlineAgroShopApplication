@@ -8,6 +8,7 @@
 <h2 class="text-center text-light mb-4">Add New Product</h2>
 
 <form asp-area="Admin" asp-controller="Product" asp-action="Create" method="post" class="bg-dark p-4 rounded shadow-lg text-light">
+    @Html.AntiForgeryToken()
     <div class="mb-3">
         <label asp-for="Name" class="form-label"></label>
         <input asp-for="Name" class="form-control" />

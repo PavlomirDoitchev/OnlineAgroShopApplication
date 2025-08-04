@@ -32,6 +32,7 @@
 </div>
 
 <form asp-action="PlaceOrder" method="post" class="text-end mt-3">
+    @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-success px-5 py-2 fw-bold rounded-pill">
         <i class="bi bi-check-circle"></i> Confirm Order
     </button>

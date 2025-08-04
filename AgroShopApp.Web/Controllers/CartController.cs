@@ -47,7 +47,6 @@ namespace AgroShopApp.Web.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Increase(Guid productId)
         {
             var userId = GetUserId()!;

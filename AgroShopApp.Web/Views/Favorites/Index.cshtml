@@ -37,6 +37,7 @@ else
                                 View
                             </a>
                             <form asp-controller="Favorites" asp-action="Remove" asp-route-productId="@product.ProductId" method="post">
+                                @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
                                     <i class="bi bi-trash"></i>
                                 </button>
