@@ -53,6 +53,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductFormViewModel model)
         {
             if (!ModelState.IsValid)
@@ -80,6 +81,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditProductViewModel model)
         {
             if (!ModelState.IsValid)
@@ -94,6 +96,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Remove(Guid id)
         {
             await _productService.RemoveAsync(id);
@@ -110,6 +113,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Restore(Guid id)
         {
             await _productService.RestoreAsync(id);

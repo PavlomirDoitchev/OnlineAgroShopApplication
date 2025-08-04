@@ -50,5 +50,7 @@ namespace AgroShopApp.Web.Controllers
 
             return SafeView("Details", model);
         }
+
+      
     }
 }

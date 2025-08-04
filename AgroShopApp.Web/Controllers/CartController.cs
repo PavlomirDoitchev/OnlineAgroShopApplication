@@ -29,6 +29,7 @@ namespace AgroShopApp.Web.Controllers
             return SafeView("Index", cartItems);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(Guid productId, string? returnUrl = null)
         {
             var userId = this.GetUserId();
@@ -38,6 +39,7 @@ namespace AgroShopApp.Web.Controllers
             return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Decrease(Guid productId)
         {
             var userId = GetUserId()!;
@@ -47,6 +49,7 @@ namespace AgroShopApp.Web.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Increase(Guid productId)
         {
             var userId = GetUserId()!;
@@ -63,6 +66,7 @@ namespace AgroShopApp.Web.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateQuantity([FromBody] QuantityUpdateInputModel? model)
         {
             if (model == null)
@@ -91,6 +95,7 @@ namespace AgroShopApp.Web.Controllers
             });
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Remove(Guid productId)
         {
             var userId = GetUserId()!;
@@ -123,6 +128,7 @@ namespace AgroShopApp.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> PlaceOrder()
         {
             var userId = GetUserId()!;
@@ -139,5 +145,6 @@ namespace AgroShopApp.Web.Controllers
 
             return RedirectToAction("Index", "Orders");
         }
+     
     }
 }

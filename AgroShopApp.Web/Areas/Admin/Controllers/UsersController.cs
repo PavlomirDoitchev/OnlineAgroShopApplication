@@ -60,6 +60,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -79,6 +80,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Restore(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());

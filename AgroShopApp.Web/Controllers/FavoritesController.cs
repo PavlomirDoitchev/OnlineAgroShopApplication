@@ -16,6 +16,7 @@ namespace AgroShopApp.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(Guid productId, string? returnUrl = null)
         {
             var userId = this.GetUserId();
@@ -26,6 +27,7 @@ namespace AgroShopApp.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Remove(Guid productId, string? returnUrl = null)
         {
             var userId = this.GetUserId();

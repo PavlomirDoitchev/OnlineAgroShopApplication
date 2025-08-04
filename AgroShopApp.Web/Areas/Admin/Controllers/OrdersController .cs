@@ -39,6 +39,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateStatus(Guid orderId, string status)
         {
             if (!AllowedStatuses.Contains(status))

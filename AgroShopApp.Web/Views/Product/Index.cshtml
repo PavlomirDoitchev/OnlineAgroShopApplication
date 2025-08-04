@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Products";
 }
-<!-- Search Form -->
 <form id="searchForm" class="d-flex justify-content-center mb-4">
     <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
     <input type="text" name="searchTerm" value="@Model.CurrentSearch" placeholder="Search products..."
@@ -11,7 +10,6 @@
     <button type="submit" class="btn btn-outline-light">Search</button>
 </form>
 
-<!-- Category Filters -->
 <div class="d-flex flex-wrap justify-content-center mb-4 gap-2">
     <a href="#"
        class="btn @(Model.SelectedCategoryId == null ? "btn-light text-dark fw-semibold" : "btn-outline-light") category-filter"

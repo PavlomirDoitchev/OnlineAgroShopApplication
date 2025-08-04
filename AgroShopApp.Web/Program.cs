@@ -1,16 +1,15 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using AgroShopApp.Data;
-using AgroShopApp.Data.Repository.Contracts;
+using AgroShopApp.Data.Configuration;
+using AgroShopApp.Data.Models;
 using AgroShopApp.Data.Repository;
+using AgroShopApp.Data.Repository.Contracts;
 using AgroShopApp.Services.Core;
 using AgroShopApp.Services.Core.Contracts;
 using AgroShopApp.Web.Infrastructure.Extensions;
-using AgroShopApp.Data.Models;
-using AgroShopApp.Data.Configuration;
-using Microsoft.AspNetCore.Mvc;
 using AgroShopApp.Web.Infrastructure.Identity;
-
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreArchTemplate.Web
 {
@@ -18,51 +17,32 @@ namespace AspNetCoreArchTemplate.Web
     {
         public static void Main(string[] args)
         {
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder(args);
 
-            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                                   ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<AgroShopDbContext>(options =>
                 options.UseSqlServer(connectionString));
-
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services
                 .AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
                 {
-                    options.SignIn.RequireConfirmedEmail = false;
                     options.SignIn.RequireConfirmedAccount = false;
-                    options.SignIn.RequireConfirmedPhoneNumber = false;
-
-                    options.Password.RequiredLength = 3;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequiredUniqueChars = 0;
+                    options.Password = new PasswordOptions
+                    {
+                        RequiredLength = 3,
+                        RequireNonAlphanumeric = false,
+                        RequireDigit = false,
+                        RequireLowercase = false,
+                        RequireUppercase = false,
+                        RequiredUniqueChars = 0
+                    };
                 })
                 .AddEntityFrameworkStores<AgroShopDbContext>()
-                .AddRoles<IdentityRole<Guid>>()
-                .AddSignInManager<SignInManager<ApplicationUser>>()
-                .AddUserManager<UserManager<ApplicationUser>>();
+                .AddDefaultTokenProviders();
+
             builder.Services.AddScoped<SignInManager<ApplicationUser>, CustomSignInManager>();
-            builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
-            builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
-            builder.Services.AddHttpContextAccessor();
-
-            builder.Services.AddControllersWithViews(options =>
-            {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            });
-
-            builder.Services.AddRazorPages();
-
-            builder.Services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.Secure = CookieSecurePolicy.Always;
-                options.MinimumSameSitePolicy = SameSiteMode.Lax;
-            });
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
@@ -73,7 +53,23 @@ namespace AspNetCoreArchTemplate.Web
                 options.Cookie.SameSite = SameSiteMode.Lax;
             });
 
-            WebApplication app = builder.Build();
+            builder.Services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.Secure = CookieSecurePolicy.Always;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
+            });
+
+            builder.Services.AddRepositories(typeof(IProductRepository).Assembly);
+            builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
+            builder.Services.AddHttpContextAccessor();
+
+            //builder.Services.AddControllersWithViews(options =>
+            //{
+            //    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            //});
+            builder.Services.AddRazorPages();
+
+            var app = builder.Build();
 
             using (var scope = app.Services.CreateScope())
             {
@@ -96,10 +92,9 @@ namespace AspNetCoreArchTemplate.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthentication();
+
             app.Use(async (context, next) =>
             {
                 if (context.User.Identity?.IsAuthenticated == true && context.Request.Path == "/")
@@ -113,6 +108,7 @@ namespace AspNetCoreArchTemplate.Web
 
                 await next();
             });
+
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -124,7 +120,6 @@ namespace AspNetCoreArchTemplate.Web
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapRazorPages();
-
             app.Run();
         }
     }
