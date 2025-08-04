@@ -18,13 +18,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             _orderService = orderService;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Index(OrderFilterInputModel filter)
-        //{
-        //    var orders = await _orderService.GetFilteredOrdersAsync(filter);
-        //    ViewBag.Filter = filter; 
-        //    return View(orders);
-        //}
+       
         [HttpGet]
         public async Task<IActionResult> Index(OrderFilterInputModel filter, int page = 1, int pageSize = 10)
         {
@@ -57,7 +51,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
 
             TempData["Message"] = updated
                 ? "Order status updated successfully."
-                : "Failed to update order status.";
+                : "Status change not allowed. Completed or cancelled orders cannot be changed.";
 
             return RedirectToAction(nameof(Details), new { id = orderId });
         }

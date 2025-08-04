@@ -209,15 +209,32 @@ namespace AgroShopApp.Services.Core
                 Filter = filter
             };
         }
-
+        
         public async Task<bool> UpdateStatusAsync(Guid orderId, string newStatus)
         {
             if (!AllowedStatuses.Contains(newStatus))
                 return false;
 
-            var order = await _orderRepo.GetByIdAsync(orderId);
+            var order = await _orderRepo
+                .GetAllAttached()
+                .Include(o => o.Items)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
             if (order == null)
                 return false;
+
+            if (order.Status == "Completed" || order.Status == "Cancelled")
+                return false;
+
+
+            if (order.Status == "Pending" && newStatus == "Cancelled")
+            {
+                foreach (var item in order.Items)
+                {
+                    item.Product.StockQuantity += item.Quantity;
+                }
+            }
 
             order.Status = newStatus;
             return await _orderRepo.UpdateAsync(order);
@@ -267,6 +284,8 @@ namespace AgroShopApp.Services.Core
             var order = await _orderRepo
                 .GetAllAttached()
                 .Include(o => o.User)
+                .Include(o => o.Items)
+                .ThenInclude(i => i.Product)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
 
             if (order == null || order.Status != "Pending")
@@ -275,6 +294,12 @@ namespace AgroShopApp.Services.Core
             var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (order.UserId.ToString() != userId && !user.IsInRole("Admin"))
                 return false;
+
+           
+            foreach (var item in order.Items)
+            {
+                item.Product.StockQuantity += item.Quantity;
+            }
 
             order.Status = "Cancelled";
             await _orderRepo.UpdateAsync(order);
