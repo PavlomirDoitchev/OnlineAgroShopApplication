@@ -45,15 +45,15 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
                 FromDate = today,
                 ToDate = today.AddDays(1).AddTicks(-1)
             });
-            var orderStats = await _orderService.GetOrderStatsAsync(today.AddDays(-6), today); 
+            var orderStats = await _orderService.GetOrderStatsAsync(today.AddDays(-6), today.AddDays(1).AddTicks(-1));
 
             var topProducts = await _orderService.GetTopSellingProductsAsync(5); 
             var model = new AdminDashboardViewModel
             {
                 TotalProducts = products.Count(),
                 OutOfStock = products.Count(p => p.StockQuantity == 0),
-                TotalUsers = users.Count,
-                OrdersToday = orders.Count(),
+                LowStock = products.Count(p => p.StockQuantity > 0 && p.StockQuantity <= 10),
+                OrdersToday = orders.Count(o => o.Status != "Cancelled"),
                 TodaysOrders = orders.OrderByDescending(o=>o.OrderedOn).Take(5).ToList(),
                 RevenueLast7Days = orderStats,
                 TopSellingProducts = topProducts
@@ -67,16 +67,18 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
 
             foreach (var day in last7Days)
             {
-                var count = (await _orderService.GetFilteredOrdersAsync(new OrderFilterInputModel
+                var dailyOrders = await _orderService.GetFilteredOrdersAsync(new OrderFilterInputModel
                 {
                     FromDate = day,
                     ToDate = day.AddDays(1).AddTicks(-1)
-                })).Count();
+                });
+
+                var nonCancelledCount = dailyOrders.Count(o => o.Status != "Cancelled");
 
                 ordersPerDay.Add(new OrdersPerDayViewModel
                 {
                     DateLabel = day.ToString("MMM dd"),
-                    Count = count
+                    Count = nonCancelledCount
                 });
             }
 

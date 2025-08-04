@@ -7,6 +7,7 @@
 
 <h2 class="text-center text-light mb-4">Manage Products</h2>
 
+<!-- Search Bar -->
 <form method="get" class="d-flex justify-content-center mb-4">
     <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
     <input type="text" name="searchTerm" value="@Model.CurrentSearch" placeholder="Search products..."
@@ -14,9 +15,10 @@
     <button type="submit" class="btn btn-outline-light">Search</button>
 </form>
 
+<!-- Category Filter -->
 <div class="d-flex flex-wrap justify-content-center mb-4 gap-2">
     <a asp-action="Index"
-       class="btn @(Model.SelectedCategoryId == null ? "btn-light text-dark fw-semibold" : "btn-outline-light")"
+       class="btn @(Model.SelectedCategoryId == null ? "btn-outline-light border-white fw-bold" : "btn-outline-secondary text-white")"
        asp-route-categoryId=""
        asp-route-searchTerm="@Model.CurrentSearch">
         All
@@ -25,7 +27,7 @@
     @foreach (var cat in Model.Categories)
     {
         <a asp-action="Index"
-           class="btn @(Model.SelectedCategoryId == cat.Id ? "btn-light text-dark fw-semibold" : "btn-outline-light")"
+           class="btn @(Model.SelectedCategoryId == cat.Id ? "btn-outline-light border-white fw-bold" : "btn-outline-secondary text-white")"
            asp-route-categoryId="@cat.Id"
            asp-route-searchTerm="@Model.CurrentSearch">
             @cat.Name
@@ -33,13 +35,15 @@
     }
 </div>
 
+<!-- Product Table -->
 <div class="table-responsive bg-dark text-light rounded shadow-sm mb-4">
-    <table class="table table text-light align-middle">
+    <table class="table table align-middle text-light">
         <thead>
             <tr>
                 <th>Image</th>
                 <th>Name</th>
                 <th>Category</th>
+                <th>Stock</th>
                 <th>Price</th>
                 <th class="text-end">Actions</th>
             </tr>
@@ -49,18 +53,65 @@
             {
                 <tr>
                     <td style="width: 80px;">
-                        <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail rounded" style="width: 60px; height: 60px; object-fit: cover;" />
+                        <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail rounded"
+                             style="width: 60px; height: 60px; object-fit: cover;" />
                     </td>
                     <td>@product.Name</td>
                     <td>@product.Category</td>
+                    <td>
+                        @if (product.StockQuantity == 0)
+                        {
+                            <span class="badge bg-danger">Out</span>
+                        }
+                        else if (product.StockQuantity <= 10)
+                        {
+                            <span class="badge bg-warning text-dark">Low (@product.StockQuantity)</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">@product.StockQuantity</span>
+                        }
+                    </td>
                     <td>@product.Price.ToString("C")</td>
                     <td class="text-end">
                         <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-info btn-sm rounded-pill me-1">
                             <i class="bi bi-info-circle"></i> Details
                         </a>
-                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning btn-sm rounded-pill">
+                        <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning btn-sm rounded-pill me-1">
                             <i class="bi bi-pencil-square"></i> Edit
                         </a>
+                        <!-- Delete Button triggers Modal -->
+                        <button type="button"
+                                class="btn btn-danger btn-sm rounded-pill"
+                                data-bs-toggle="modal"
+                                data-bs-target="#confirmDeleteModal-@product.Id">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+
+                        <!-- Delete Confirmation Modal -->
+                        <div class="modal fade" id="confirmDeleteModal-@product.Id" tabindex="-1"
+                             aria-labelledby="confirmDeleteModalLabel-@product.Id" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content bg-dark text-white">
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title" id="confirmDeleteModalLabel-@product.Id">Confirm Deletion</h5>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete <strong>@product.Name</strong>?
+                                    </div>
+                                    <div class="modal-footer border-0">
+                                        <form asp-action="Remove"
+                                              asp-route-id="@product.Id"
+                                              method="post">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-danger rounded-pill px-4">Delete</button>
+                                        </form>
+                                        <button type="button" class="btn btn-outline-light rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }
@@ -68,6 +119,7 @@
     </table>
 </div>
 
+<!-- Pagination -->
 @if (Model.TotalPages > 1)
 {
     <nav class="text-center">
