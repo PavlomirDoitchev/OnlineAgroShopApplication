@@ -1,4 +1,5 @@
 ﻿@using AgroShopApp.Web.ViewModels.Cart
+@using static AgroShopApp.GCommon.ApplicationConstants
 @model IEnumerable<CartItemViewModel>
 
 @{
@@ -47,8 +48,8 @@ else
                                max="@item.StockQuantity"
                                style="width: 80px;" />
                     </td>
-                    <td>@item.Price.ToString("C")</td>
-                    <td class="item-total" data-product-id="@item.ProductId">@item.Total.ToString("C")</td>
+                    <td>@ToCurrency(item.Price)</td>
+                    <td class="item-total" data-product-id="@item.ProductId">@ToCurrency(item.Total)</td>
                     <td>
                         <form asp-action="Remove" asp-route-productId="@item.ProductId" method="post" class="d-inline">
                             @Html.AntiForgeryToken()
@@ -82,7 +83,7 @@ else
     <div class="text-end mt-4">
         <h5 class="text-light">
             <i class="bi bi-cash-coin"></i> Total:
-            <span id="grandTotal" class="fw-bold">@grandTotal.ToString("C")</span>
+            <span id="grandTotal" class="fw-bold">@ToCurrency(grandTotal)</span>
         </h5>
     </div>
 }

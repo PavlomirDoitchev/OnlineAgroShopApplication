@@ -1,4 +1,5 @@
 ﻿@using AgroShopApp.Web.ViewModels
+@using static AgroShopApp.GCommon.ApplicationConstants
 @model PaginatedAdminOrderListViewModel
 
 @{
@@ -26,12 +27,12 @@
 
     <div class="col-md-2">
         <label class="form-label">From</label>
-        <input name="FromDate" type="date" class="form-control" value="@(filter.FromDate?.ToString("yyyy-MM-dd"))" />
+        <input name="FromDate" type="date" class="form-control" value="@(filter.FromDate?.ToString(AppDateFormat))" />
     </div>
 
     <div class="col-md-2">
         <label class="form-label">To</label>
-        <input name="ToDate" type="date" class="form-control" value="@(filter.ToDate?.ToString("yyyy-MM-dd"))" />
+        <input name="ToDate" type="date" class="form-control" value="@(filter.ToDate?.ToString(AppDateFormat))" />
     </div>
 
     <div class="col-md-3 d-flex align-items-end justify-content-end">
@@ -64,9 +65,9 @@ else
                     <tr class="clickable-row" data-href="@Url.Action("Details", new { id = order.Id })">
                         <td>@order.Id.ToString().Substring(0, 8)...</td>
                         <td>@order.Email</td>
-                        <td>@order.OrderedOn.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@order.OrderedOn.ToString(AppDateFormatHHMM)</td>
                         <td>@order.Status</td>
-                        <td>@order.TotalAmount.ToString("C")</td>
+                        <td>@ToCurrency(order.TotalAmount)</td>
                         <td>
                             <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-outline-info rounded-pill">
                                 <i class="bi bi-eye"></i> View
@@ -80,19 +81,69 @@ else
 }
 @if (Model.TotalPages > 1)
 {
+    var prevPage = Model.CurrentPage - 1;
+    var nextPage = Model.CurrentPage + 1;
+    var startPage = Math.Max(1, Model.CurrentPage - 1);
+    var endPage = Math.Min(Model.TotalPages, startPage + 2);
+
+    if (endPage - startPage < 2 && startPage > 1)
+    {
+        startPage = Math.Max(1, endPage - 2);
+    }
+
     <nav class="mt-4 text-center">
-        @for (int i = 1; i <= Model.TotalPages; i++)
+        <a asp-action="Index"
+           asp-route-page="1"
+           asp-route-Email="@Model.Filter.Email"
+           asp-route-Status="@Model.Filter.Status"
+           asp-route-FromDate="@(Model.Filter.FromDate?.ToString(AppDateFormat))"
+           asp-route-ToDate="@(Model.Filter.ToDate?.ToString(AppDateFormat))"
+           class="btn btn-outline-light mx-1 @(Model.CurrentPage == 1 ? "disabled" : "")">
+            First
+        </a>
+
+        <a asp-action="Index"
+           asp-route-page="@prevPage"
+           asp-route-Email="@Model.Filter.Email"
+           asp-route-Status="@Model.Filter.Status"
+           asp-route-FromDate="@(Model.Filter.FromDate?.ToString(AppDateFormat))"
+           asp-route-ToDate="@(Model.Filter.ToDate?.ToString(AppDateFormat))"
+           class="btn btn-outline-light mx-1 @(Model.CurrentPage == 1 ? "disabled" : "")">
+            &laquo;
+        </a>
+
+        @for (int i = startPage; i <= endPage; i++)
         {
             <a asp-action="Index"
                asp-route-page="@i"
                asp-route-Email="@Model.Filter.Email"
                asp-route-Status="@Model.Filter.Status"
-               asp-route-FromDate="@(Model.Filter.FromDate?.ToString("yyyy-MM-dd"))"
-               asp-route-ToDate="@(Model.Filter.ToDate?.ToString("yyyy-MM-dd"))"
+               asp-route-FromDate="@(Model.Filter.FromDate?.ToString(AppDateFormat))"
+               asp-route-ToDate="@(Model.Filter.ToDate?.ToString(AppDateFormat))"
                class="btn @(i == Model.CurrentPage ? "btn-primary fw-bold" : "btn-outline-light") mx-1">
                 @i
             </a>
         }
+
+        <a asp-action="Index"
+           asp-route-page="@nextPage"
+           asp-route-Email="@Model.Filter.Email"
+           asp-route-Status="@Model.Filter.Status"
+           asp-route-FromDate="@(Model.Filter.FromDate?.ToString(AppDateFormat))"
+           asp-route-ToDate="@(Model.Filter.ToDate?.ToString(AppDateFormat))"
+           class="btn btn-outline-light mx-1 @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+            &raquo;
+        </a>
+
+        <a asp-action="Index"
+           asp-route-page="@Model.TotalPages"
+           asp-route-Email="@Model.Filter.Email"
+           asp-route-Status="@Model.Filter.Status"
+           asp-route-FromDate="@(Model.Filter.FromDate?.ToString(AppDateFormat))"
+           asp-route-ToDate="@(Model.Filter.ToDate?.ToString(AppDateFormat))"
+           class="btn btn-outline-light mx-1 @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+            Last
+        </a>
     </nav>
 }
 @section Scripts {

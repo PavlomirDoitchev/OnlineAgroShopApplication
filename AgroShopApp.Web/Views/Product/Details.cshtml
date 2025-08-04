@@ -1,4 +1,5 @@
 ﻿@using AgroShopApp.Web.ViewModels.Product
+@using static AgroShopApp.GCommon.ApplicationConstants
 @model AllProductsViewModel
 
 @{
@@ -13,7 +14,7 @@
         <div class="col-md-6">
             <h2 class="text-success">@Model.Name</h2>
             <p class="text-white">@Model.Description</p>
-            <p class="fs-5 fw-bold">Price: @Model.Price.ToString("C")</p>
+            <p class="fs-5 fw-bold">Price: @ToCurrency(Model.Price)</p>
 
             <p class="fw-semibold">
                 @if (Model.StockQuantity == 0)

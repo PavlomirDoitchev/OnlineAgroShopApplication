@@ -7,7 +7,6 @@
 
 <h2 class="text-center text-light mb-4">Manage Products</h2>
 
-<!-- Search Bar -->
 <form method="get" class="d-flex justify-content-center mb-4">
     <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
     <input type="text" name="searchTerm" value="@Model.CurrentSearch" placeholder="Search products..."
@@ -15,7 +14,6 @@
     <button type="submit" class="btn btn-outline-light">Search</button>
 </form>
 
-<!-- Category Filter -->
 <div class="d-flex flex-wrap justify-content-center mb-4 gap-2">
     <a asp-action="Index"
        class="btn @(Model.SelectedCategoryId == null ? "btn-outline-light border-white fw-bold" : "btn-outline-secondary text-white")"
@@ -35,7 +33,6 @@
     }
 </div>
 
-<!-- Product Table -->
 <div class="table-responsive bg-dark text-light rounded shadow-sm mb-4">
     <table class="table table align-middle text-light">
         <thead>

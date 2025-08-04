@@ -1,4 +1,5 @@
 ﻿@using AgroShopApp.Web.ViewModels.Cart
+@using static AgroShopApp.GCommon.ApplicationConstants
 @model ConfirmOrderViewModel
 @{
     ViewData["Title"] = "Confirm Order";
@@ -20,15 +21,15 @@
             <tr>
                 <td>@item.Name</td>
                 <td>@item.Quantity</td>
-                <td>@item.Price.ToString("C")</td>
-                <td>@item.Total.ToString("C")</td>
+                <td>@ToCurrency(item.Price)</td>
+                <td>@ToCurrency(item.Total)</td>
             </tr>
         }
     </tbody>
 </table>
 
 <div class="text-end mt-4">
-    <h5 class="text-light">Total: <span class="fw-bold">@Model.TotalAmount.ToString("C")</span></h5>
+    <h5 class="text-light">Total: <span class="fw-bold">@ToCurrency(Model.TotalAmount)</span></h5>
 </div>
 
 <form asp-action="PlaceOrder" method="post" class="text-end mt-3">

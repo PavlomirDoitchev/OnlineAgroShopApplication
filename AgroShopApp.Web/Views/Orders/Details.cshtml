@@ -1,4 +1,5 @@
 ﻿@using AgroShopApp.Web.ViewModels.Order
+@using static AgroShopApp.GCommon.ApplicationConstants  
 @model OrderDetailsViewModel
 @{
     ViewData["Title"] = "Order Details " + Model.Id;
@@ -7,7 +8,7 @@
 
 <div class="text-light mb-4">
     <p><strong>Order ID:</strong> @Model.Id</p>
-    <p><strong>Date:</strong> @Model.OrderedOn.ToString("f")</p>
+    <p><strong>Date:</strong> @Model.OrderedOn.ToString(AppDateFormat)</p>
     <p><strong>Status:</strong> @Model.Status</p>
 </div>
 
@@ -26,8 +27,8 @@
             <tr>
                 <td>@item.ProductName</td>
                 <td>@item.Quantity</td>
-                <td>@item.UnitPrice.ToString("C")</td>
-                <td>@item.Total.ToString("C")</td>
+                <td>@ToCurrency(item.UnitPrice)</td>
+                <td>@ToCurrency(item.Total)</td>
             </tr>
         }
     </tbody>
@@ -35,7 +36,7 @@
 
 <div class="text-end mt-4">
     <h5 class="text-light">
-        Total Paid: <span class="fw-bold">@Model.TotalAmount.ToString("C")</span>
+        Total Paid: <span class="fw-bold">@ToCurrency(Model.TotalAmount)</span>
     </h5>
 </div>
 @if (Model.Status == "Pending")

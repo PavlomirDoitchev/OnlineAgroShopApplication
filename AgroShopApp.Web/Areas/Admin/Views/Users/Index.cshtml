@@ -121,19 +121,69 @@ else
 
     @if (Model.TotalPages > 1)
     {
-        <nav class="mt-4 d-flex justify-content-center">
-            @for (int i = 1; i <= Model.TotalPages; i++)
+        @if (Model.TotalPages > 1)
+        {
+            var prevPage = Model.CurrentPage - 1;
+            var nextPage = Model.CurrentPage + 1;
+            var startPage = Math.Max(1, Model.CurrentPage - 1);
+            var endPage = Math.Min(Model.TotalPages, startPage + 2);
+
+            if (endPage - startPage < 2 && startPage > 1)
             {
+                startPage = Math.Max(1, endPage - 2);
+            }
+
+            <nav class="mt-4 d-flex justify-content-center flex-wrap">
                 <a asp-action="Index"
-                   asp-route-page="@i"
+                   asp-route-page="1"
                    asp-route-pageSize="@Model.PageSize"
                    asp-route-Email="@filter.Email"
                    asp-route-IsDeleted="@filter.IsDeleted"
-                   class="btn @(i == Model.CurrentPage ? "btn-primary" : "btn-outline-light") mx-1">
-                    @i
+                   class="btn btn-outline-light mx-1 @(Model.CurrentPage == 1 ? "disabled" : "")">
+                    First
                 </a>
-            }
-        </nav>
+
+                <a asp-action="Index"
+                   asp-route-page="@prevPage"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-Email="@filter.Email"
+                   asp-route-IsDeleted="@filter.IsDeleted"
+                   class="btn btn-outline-light mx-1 @(Model.CurrentPage == 1 ? "disabled" : "")">
+                    &laquo;
+                </a>
+
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <a asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-pageSize="@Model.PageSize"
+                       asp-route-Email="@filter.Email"
+                       asp-route-IsDeleted="@filter.IsDeleted"
+                       class="btn @(i == Model.CurrentPage ? "btn-primary fw-bold" : "btn-outline-light") mx-1">
+                        @i
+                    </a>
+                }
+
+                <a asp-action="Index"
+                   asp-route-page="@nextPage"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-Email="@filter.Email"
+                   asp-route-IsDeleted="@filter.IsDeleted"
+                   class="btn btn-outline-light mx-1 @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                    &raquo;
+                </a>
+
+                <a asp-action="Index"
+                   asp-route-page="@Model.TotalPages"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-Email="@filter.Email"
+                   asp-route-IsDeleted="@filter.IsDeleted"
+                   class="btn btn-outline-light mx-1 @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                    Last
+                </a>
+            </nav>
+        }
+
     }
 }
 
