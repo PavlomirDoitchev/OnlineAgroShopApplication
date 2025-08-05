@@ -27,6 +27,12 @@ namespace AgroShopApp.Services.Core
         {
              "Pending", "Completed", "Cancelled"
         };
+        /// <summary>
+        /// Place an order based on the user's cart. No Address is required.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task PlaceOrderAsync(Guid userId)
         {
             var cart = await _cartRepo.GetWithItemsAsync(userId);
@@ -88,7 +94,16 @@ namespace AgroShopApp.Services.Core
                     UnitPrice = i.Product.Price
                 }).ToList()
             };
+            foreach (var item in cart.Items)
+            {
+                var product = await _productRepo.GetByIdAsync(item.ProductId);
 
+                if (product == null || product.StockQuantity < item.Quantity)
+                    throw new InvalidOperationException($"Not enough stock for '{item.Product?.Name}'.");
+
+                product.StockQuantity -= item.Quantity;
+                order.TotalAmount = order.Items.Sum(i => i.Quantity * i.UnitPrice);
+            }
             await _orderRepo.AddAsync(order);
             cart.Items.Clear();
             await _cartRepo.SaveChangesAsync();
@@ -236,7 +251,7 @@ namespace AgroShopApp.Services.Core
                 Filter = filter
             };
         }
-        
+
         public async Task<bool> UpdateStatusAsync(Guid orderId, string newStatus)
         {
             if (!AllowedStatuses.Contains(newStatus))
@@ -322,7 +337,7 @@ namespace AgroShopApp.Services.Core
             if (order.UserId.ToString() != userId && !user.IsInRole("Admin"))
                 return false;
 
-           
+
             foreach (var item in order.Items)
             {
                 item.Product.StockQuantity += item.Quantity;
