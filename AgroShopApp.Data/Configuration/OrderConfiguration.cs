@@ -28,6 +28,10 @@ namespace AgroShopApp.Data.Configuration
             entity
                 .Property(o => o.TotalAmount)
                 .HasColumnType("decimal(18,2)");
+            entity
+                .Property(o => o.DeliveryAddress)
+                .IsRequired()
+                .HasMaxLength(300);
         }
     }
 }

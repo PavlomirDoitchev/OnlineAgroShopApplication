@@ -8,8 +8,9 @@
 
 <div class="text-light mb-4">
     <p><strong>Order ID:</strong> @Model.Id</p>
-    <p><strong>Date:</strong> @Model.OrderedOn.ToString(AppDateFormat)</p>
+    <p><strong>Date:</strong> @Model.OrderedOn.ToString(AppDateFormatHHMM)</p>
     <p><strong>Status:</strong> @Model.Status</p>
+    <p><strong>Delivery Address:</strong> @Model.DeliveryAddress</p>
 </div>
 
 <table class="table table-dark table-striped">

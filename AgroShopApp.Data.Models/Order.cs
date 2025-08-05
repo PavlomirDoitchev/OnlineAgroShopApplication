@@ -25,5 +25,9 @@ namespace AgroShopApp.Data.Models
 
         [Comment("Total amount of the order at the time of purchase")]
         public decimal TotalAmount { get; set; }
+
+        [Comment("Delivery address for the order")]
+        [MaxLength(300)]
+        public string DeliveryAddress { get; set; } = null!;
     }
 }

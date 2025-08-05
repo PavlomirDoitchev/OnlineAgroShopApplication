@@ -30,14 +30,18 @@ public static class DatabaseSeeder
 
         string adminEmail = "admin@example.com";
         string adminPassword = "Admin@123";
-
+        string adminFirstName = "Admin";
+        string adminLastName = "User";
         var adminUser = userManager.FindByEmailAsync(adminEmail).GetAwaiter().GetResult();
         if (adminUser == null)
         {
             adminUser = new ApplicationUser
             {
                 UserName = adminEmail,
-                Email = adminEmail
+                Email = adminEmail,
+                FirstName = adminFirstName,
+                LastName = adminLastName,
+                IsDeleted = false
             };
             var createUserResult = userManager.CreateAsync(adminUser, adminPassword).GetAwaiter().GetResult();
             if (!createUserResult.Succeeded)

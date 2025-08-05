@@ -70,7 +70,7 @@ namespace AgroShopApp.Data.Configuration
             Price = 3.49m,
             StockQuantity = 100,
             ImageUrl = "/images/seeds-tomato.jpg",
-            AddedOn = DateTime.UtcNow.AddDays(-14),
+            AddedOn = DateTime.Now.AddDays(-14),
             CategoryId = 1
         },
         new Product
@@ -81,7 +81,7 @@ namespace AgroShopApp.Data.Configuration
             Price = 2.99m,
             StockQuantity = 80,
             ImageUrl = "/images/seeds-lettuce.jpg",
-            AddedOn = DateTime.UtcNow.AddDays(-10),
+            AddedOn = DateTime.Now.AddDays(-10),
             CategoryId = 1
         },
         new Product
@@ -92,7 +92,7 @@ namespace AgroShopApp.Data.Configuration
             Price = 12.95m,
             StockQuantity = 50,
             ImageUrl = "/images/fertilizer-organic.jpg",
-            AddedOn = DateTime.UtcNow.AddDays(-20),
+            AddedOn = DateTime.Now.AddDays(-20),
             CategoryId = 2
         },
         new Product
@@ -103,7 +103,7 @@ namespace AgroShopApp.Data.Configuration
             Price = 8.49m,
             StockQuantity = 65,
             ImageUrl = "/images/fertilizer-liquid.jpg",
-            AddedOn = DateTime.UtcNow.AddDays(-5),
+            AddedOn = DateTime.Now.AddDays(-5),
             CategoryId = 2
         },
         new Product
@@ -114,7 +114,7 @@ namespace AgroShopApp.Data.Configuration
             Price = 5.75m,
             StockQuantity = 70,
             ImageUrl = "/images/pesticide-eco.jpg",
-            AddedOn = DateTime.UtcNow.AddDays(-7),
+            AddedOn = DateTime.Now.AddDays(-7),
             CategoryId = 3
         },
         new Product
@@ -125,7 +125,7 @@ namespace AgroShopApp.Data.Configuration
             Price = 9.99m,
             StockQuantity = 45,
             ImageUrl = "/images/pesticide-neem.jpg",
-            AddedOn = DateTime.UtcNow.AddDays(-2),
+            AddedOn = DateTime.Now.AddDays(-2),
             CategoryId = 3
         }
     };

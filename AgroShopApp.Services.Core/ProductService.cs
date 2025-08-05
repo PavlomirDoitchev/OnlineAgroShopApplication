@@ -135,7 +135,7 @@ namespace AgroShopApp.Services.Core
                 CategoryId = model.CategoryId,
                 IsAvailable = true,
                 IsDeleted = false,
-                AddedOn = DateTime.UtcNow
+                AddedOn = DateTime.Now
             };
 
             await _productRepository.AddAsync(product);
@@ -148,7 +148,7 @@ namespace AgroShopApp.Services.Core
             if (product != null && !product.IsDeleted)
             {
                 product.IsDeleted = true;
-                product.DeletedOn = DateTime.UtcNow;
+                product.DeletedOn = DateTime.Now;
 
                 await _productRepository.UpdateAsync(product);
             }
@@ -267,6 +267,12 @@ namespace AgroShopApp.Services.Core
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             return await _productRepository.GetAllAsync();
+        }
+        
+
+        private class NominatimResult
+        {
+            public string DisplayName { get; set; } = string.Empty;
         }
     }
 }

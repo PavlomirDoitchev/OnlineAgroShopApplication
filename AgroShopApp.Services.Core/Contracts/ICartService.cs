@@ -12,5 +12,6 @@ namespace AgroShopApp.Services.Core.Contracts
         Task<int> GetStockForProductAsync(Guid productId);
         Task<decimal> GetCartTotalAsync(Guid userId);
         Task<decimal> GetProductPriceAsync(Guid productId);
+
     }
 }

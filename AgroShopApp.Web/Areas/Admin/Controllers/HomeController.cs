@@ -38,7 +38,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             int outOfStock = products.Count(p => p.StockQuantity == 0);
             var users = _userManager.Users.Where(u => !u.IsDeleted).ToList();
 
-            var today = DateTime.UtcNow.Date;
+            var today = DateTime.Now.Date;
 
             var orders = await _orderService.GetFilteredOrdersAsync(new OrderFilterInputModel
             {
@@ -59,7 +59,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
                 TopSellingProducts = topProducts
             };
             var last7Days = Enumerable.Range(0, 7)
-                .Select(offset => DateTime.UtcNow.Date.AddDays(-offset))
+                .Select(offset => DateTime.Now.Date.AddDays(-offset))
                 .OrderBy(d => d)
                 .ToList();
 

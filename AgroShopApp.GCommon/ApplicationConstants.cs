@@ -5,7 +5,6 @@
         public const string HoursFormat = "HH:mm";
         public const string AppDateFormat = "yyyy-MM-dd";
         public const string AppDateFormatHHMM = "yyyy-MM-dd HH:mm";
-        public const string NoImageUrl = "no-image.jpg";
         public const string IsDeletedPropertyName = "IsDeleted";
         public const string PriceSqlType = "decimal(18, 6)";
         public const string AccessDeniedPath = "/Home/AccessDenied";

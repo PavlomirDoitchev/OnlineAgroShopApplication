@@ -7,6 +7,7 @@ namespace AgroShopApp.Services.Core.Contracts
     public interface IOrderService
     {
         Task PlaceOrderAsync(Guid userId);
+        Task PlaceOrderAsync(Guid userId, string deliveryAddress);
         Task<PaginatedOrderListViewModel> GetPaginatedUserOrdersAsync(Guid userId, int page, int pageSize);
         Task<OrderDetailsViewModel?> GetDetailsAsync(Guid orderId, Guid userId);
         Task<IEnumerable<AdminOrderListItemViewModel>> GetFilteredOrdersAsync(OrderFilterInputModel filter);

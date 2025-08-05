@@ -126,15 +126,14 @@ namespace AgroShopApp.Web.Controllers
 
             return SafeView("Confirm", model);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PlaceOrder()
+        public async Task<IActionResult> PlaceOrder(ConfirmOrderViewModel model)
         {
             var userId = GetUserId()!;
             try
             {
-                await _orderService.PlaceOrderAsync(userId.Value);
+                await _orderService.PlaceOrderAsync(userId.Value, model.DeliveryAddress);
                 TempData["Message"] = "Order placed successfully!";
             }
             catch (InvalidOperationException ex)
@@ -145,6 +144,6 @@ namespace AgroShopApp.Web.Controllers
 
             return RedirectToAction("Index", "Orders");
         }
-     
+
     }
 }

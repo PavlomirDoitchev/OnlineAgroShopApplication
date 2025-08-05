@@ -37,7 +37,7 @@ namespace AgroShopApp.Services.Core
             var order = new Order
             {
                 UserId = userId,
-                OrderedOn = DateTime.UtcNow,
+                OrderedOn = DateTime.Now,
                 Status = "Pending",
                 TotalAmount = 0
             };
@@ -65,6 +65,31 @@ namespace AgroShopApp.Services.Core
 
             await _orderRepo.AddAsync(order);
 
+            cart.Items.Clear();
+            await _cartRepo.SaveChangesAsync();
+        }
+        public async Task PlaceOrderAsync(Guid userId, string deliveryAddress)
+        {
+            var cart = await _cartRepo.GetWithItemsAsync(userId);
+
+            if (!cart.Items.Any())
+                throw new InvalidOperationException("Cart is empty.");
+
+            var order = new Order
+            {
+                UserId = userId,
+                OrderedOn = DateTime.Now,
+                TotalAmount = cart.Items.Sum(i => i.Product.Price * i.Quantity),
+                DeliveryAddress = deliveryAddress,
+                Items = cart.Items.Select(i => new OrderItem
+                {
+                    ProductId = i.ProductId,
+                    Quantity = i.Quantity,
+                    UnitPrice = i.Product.Price
+                }).ToList()
+            };
+
+            await _orderRepo.AddAsync(order);
             cart.Items.Clear();
             await _cartRepo.SaveChangesAsync();
         }
@@ -102,6 +127,7 @@ namespace AgroShopApp.Services.Core
             {
                 Id = order.Id,
                 OrderedOn = order.OrderedOn,
+                DeliveryAddress = order.DeliveryAddress,
                 Status = order.Status,
                 TotalAmount = order.TotalAmount,
                 Items = order.Items.Select(i => new OrderItemViewModel
@@ -159,6 +185,7 @@ namespace AgroShopApp.Services.Core
                 Id = order.Id,
                 Email = order.User.Email,
                 OrderedOn = order.OrderedOn,
+                DeliveryAddress = order.DeliveryAddress,
                 Status = order.Status,
                 TotalAmount = order.TotalAmount,
                 Items = order.Items.Select(i => new OrderItemViewModel
