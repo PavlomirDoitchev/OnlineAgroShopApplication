@@ -3,15 +3,17 @@ using AgroShopApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-
+using static AgroShopApp.GCommon.ApplicationConstants.TempDataMessages;
+using static AgroShopApp.GCommon.ApplicationConstants.OrderStatuses;
+using static AgroShopApp.GCommon.UserRoles;
 namespace AgroShopApp.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area(AppAdmin)]
+    [Authorize(Roles = AppAdmin)]
     public class OrdersController : AdminBaseController
     {
         private readonly IOrderService _orderService;
-        private static readonly HashSet<string> AllowedStatuses = new() { "Pending", "Completed", "Cancelled" };
+        private static readonly HashSet<string> AllowedStatuses = new() { Pending, Completed, Cancelled };
         public OrdersController(IOrderService orderService, ICompositeViewEngine viewEngine, ILogger<OrdersController> logger)
             : base(viewEngine, logger)
         {
@@ -44,15 +46,15 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         {
             if (!AllowedStatuses.Contains(status))
             {
-                TempData["Message"] = "Invalid status selected.";
+                TempData["Message"] = OrderInvalidStatus;
                 return RedirectToAction(nameof(Details), new { id = orderId });
             }
 
             bool updated = await _orderService.UpdateStatusAsync(orderId, status);
 
             TempData["Message"] = updated
-                ? "Order status updated successfully."
-                : "Status change not allowed. Completed or cancelled orders cannot be changed.";
+                ? OrderStatusUpdated
+                : OrderStatusChangeNotAllowed;
 
             return RedirectToAction(nameof(Details), new { id = orderId });
         }

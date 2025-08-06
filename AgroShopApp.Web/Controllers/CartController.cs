@@ -5,6 +5,7 @@ using AgroShopApp.Web.ViewModels.Cart;
 using AgroShopApp.Web.Areas.Admin.Controllers;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using AgroShopApp.Web.Infrastructure.Filters;
+using static AgroShopApp.GCommon.ApplicationConstants.TempDataMessages;
 namespace AgroShopApp.Web.Controllers
 {
     [UserOnly]
@@ -35,7 +36,7 @@ namespace AgroShopApp.Web.Controllers
             var userId = this.GetUserId();
             await _cartService.AddToCartAsync(userId.Value, productId);
 
-            TempData["Message"] = "Product added to cart.";
+            TempData["Message"] = ProductAddedToCart;
             return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
         }
         [HttpPost]
@@ -45,7 +46,7 @@ namespace AgroShopApp.Web.Controllers
             var userId = GetUserId()!;
             await _cartService.DecreaseQuantityAsync(userId.Value, productId);
 
-            TempData["Message"] = "Product quantity updated.";
+            TempData["Message"] = ProductQuantityUpdated;
             return RedirectToAction("Index");
         }
         [HttpPost]
@@ -56,7 +57,7 @@ namespace AgroShopApp.Web.Controllers
             try
             {
                 await _cartService.AddToCartAsync(userId.Value, productId);
-                TempData["Message"] = "Product quantity updated.";
+                TempData["Message"] = ProductQuantityUpdated;
             }
             catch (InvalidOperationException ex)
             {
@@ -101,7 +102,7 @@ namespace AgroShopApp.Web.Controllers
             var userId = GetUserId()!;
             await _cartService.RemoveFromCartAsync(userId.Value, productId);
 
-            TempData["Message"] = "Item removed from cart.";
+            TempData["Message"] = ProductRemovedFromCart;
             return RedirectToAction("Index");
         }
         [HttpGet]
@@ -112,7 +113,7 @@ namespace AgroShopApp.Web.Controllers
 
             if (!items.Any())
             {
-                TempData["Message"] = "Your cart is empty.";
+                TempData["Message"] = CartIsEmpty;
                 return RedirectToAction("Index");
             }
 
@@ -134,7 +135,7 @@ namespace AgroShopApp.Web.Controllers
             try
             {
                 await _orderService.PlaceOrderAsync(userId.Value, model.DeliveryAddress);
-                TempData["Message"] = "Order placed successfully!";
+                TempData["Message"] = OrderPlaced;
             }
             catch (InvalidOperationException ex)
             {

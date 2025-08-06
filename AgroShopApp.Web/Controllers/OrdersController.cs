@@ -3,6 +3,7 @@ using AgroShopApp.Web.Controllers;
 using AgroShopApp.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using static AgroShopApp.GCommon.ApplicationConstants.TempDataMessages;
 namespace AgroShopApp.Web.Controllers
 {
     [UserOnly]
@@ -45,11 +46,11 @@ namespace AgroShopApp.Web.Controllers
 
             if (!success)
             {
-                TempData["Message"] = "Order could not be cancelled.";
+                TempData["Message"] = OrderCouldNotBeCancelled;
             }
             else
             {
-                TempData["Message"] = "Order cancelled successfully.";
+                TempData["Message"] = OrderCancelled;
             }
 
             return RedirectToAction(nameof(Index));

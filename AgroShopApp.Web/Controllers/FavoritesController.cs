@@ -2,6 +2,7 @@
 using AgroShopApp.Web.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
+using static AgroShopApp.GCommon.ApplicationConstants.TempDataMessages;
 namespace AgroShopApp.Web.Controllers
 {
     [UserOnly]
@@ -22,7 +23,7 @@ namespace AgroShopApp.Web.Controllers
             var userId = this.GetUserId();
             await _favoriteService.AddToFavoritesAsync(userId.Value, productId);
 
-            TempData["Message"] = "Product added to favorites.";
+            TempData["Message"] = ProductAddedToFavorites;
             return Redirect(returnUrl ?? Url.Action("Index", "Product")!);
         }
 
@@ -33,7 +34,7 @@ namespace AgroShopApp.Web.Controllers
             var userId = this.GetUserId();
             await _favoriteService.RemoveFromFavoritesAsync(userId.Value, productId);
 
-            TempData["Message"] = "Product removed from favorites.";
+            TempData["Message"] = ProductRemovedFromFavorites;
             return RedirectToAction("Index", "Favorites");
         }
 

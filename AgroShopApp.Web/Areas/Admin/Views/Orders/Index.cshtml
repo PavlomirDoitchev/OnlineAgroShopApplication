@@ -1,5 +1,6 @@
 ﻿@using AgroShopApp.Web.ViewModels
 @using static AgroShopApp.GCommon.ApplicationConstants
+@using static AgroShopApp.GCommon.ApplicationConstants.OrderStatuses
 @model PaginatedAdminOrderListViewModel
 
 @{
@@ -19,9 +20,9 @@
         <label class="form-label">Status</label>
         <select name="Status" class="form-select">
             <option value="">All</option>
-            <option value="Pending" selected="@("Pending" == filter.Status)">Pending</option>
-            <option value="Completed" selected="@("Completed" == filter.Status)">Completed</option>
-            <option value="Cancelled" selected="@("Cancelled" == filter.Status)">Cancelled</option>
+            <option value="Pending" selected="@(Pending == filter.Status)">Pending</option>
+            <option value="Completed" selected="@(Completed == filter.Status)">Completed</option>
+            <option value="Cancelled" selected="@(Cancelled == filter.Status)">Cancelled</option>
         </select>
     </div>
 

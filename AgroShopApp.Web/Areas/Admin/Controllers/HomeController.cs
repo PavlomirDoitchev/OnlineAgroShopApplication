@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using AgroShopApp.Data.Models;
-
-
+using static AgroShopApp.GCommon.UserRoles;
+using static AgroShopApp.GCommon.ApplicationConstants.OrderStatuses;
+using static AgroShopApp.GCommon.ApplicationConstants;
 namespace AgroShopApp.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area(AppAdmin)]
+    [Authorize(Roles = AppAdmin)]
     public class HomeController : AdminBaseController
     {
         private readonly IProductService _productService;
@@ -53,7 +54,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
                 TotalProducts = products.Count(),
                 OutOfStock = products.Count(p => p.StockQuantity == 0),
                 LowStock = products.Count(p => p.StockQuantity > 0 && p.StockQuantity <= 10),
-                OrdersToday = orders.Count(o => o.Status != "Cancelled"),
+                OrdersToday = orders.Count(o => o.Status != Cancelled),
                 TodaysOrders = orders.OrderByDescending(o=>o.OrderedOn).Take(5).ToList(),
                 RevenueLast7Days = orderStats,
                 TopSellingProducts = topProducts
@@ -73,11 +74,11 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
                     ToDate = day.AddDays(1).AddTicks(-1)
                 });
 
-                var nonCancelledCount = dailyOrders.Count(o => o.Status != "Cancelled");
+                var nonCancelledCount = dailyOrders.Count(o => o.Status != Cancelled);
 
                 ordersPerDay.Add(new OrdersPerDayViewModel
                 {
-                    DateLabel = day.ToString("MMM dd"),
+                    DateLabel = day.ToString(MonthDayFormat),
                     Count = nonCancelledCount
                 });
             }

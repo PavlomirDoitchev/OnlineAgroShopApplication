@@ -4,11 +4,12 @@ using AgroShopApp.Data.Models;
 using AgroShopApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-
+using static AgroShopApp.GCommon.ApplicationConstants.TempDataMessages;
+using static AgroShopApp.GCommon.UserRoles;
 namespace AgroShopApp.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area(AppAdmin)]
+    [Authorize(Roles = AppAdmin)]
     public class UsersController : AdminBaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -67,15 +68,15 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             if (user == null) return NotFound();
 
             var roles = await _userManager.GetRolesAsync(user);
-            if (roles.Contains("Admin"))
+            if (roles.Contains(AppAdmin))
             {
-                TempData["Message"] = "Cannot delete an admin account.";
+                TempData["Message"] = CannotDeleteAdmin;
                 return RedirectToAction("Index");
             }
 
             user.IsDeleted = true;
             await _userManager.UpdateAsync(user);
-            TempData["Message"] = "User deleted successfully.";
+            TempData["Message"] = UserDeleted;
             return RedirectToAction("Index");
         }
 
@@ -89,7 +90,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             user.IsDeleted = false;
             await _userManager.UpdateAsync(user);
 
-            TempData["Message"] = "User restored successfully.";
+            TempData["Message"] = UserRestored;
             return RedirectToAction("Index");
         }
 

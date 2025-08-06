@@ -3,11 +3,12 @@ using AgroShopApp.Web.ViewModels.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-
+using static AgroShopApp.GCommon.ApplicationConstants.TempDataMessages;
+using static AgroShopApp.GCommon.UserRoles;
 namespace AgroShopApp.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area(AppAdmin)]
+    [Authorize(Roles = AppAdmin)]
     public class ProductController : AdminBaseController
     {
         private readonly IProductService _productService;
@@ -63,7 +64,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             }
 
             await _productService.CreateAsync(model);
-            TempData["Message"] = "Product added successfully!";
+            TempData["Message"] = ProductCreated;
             return RedirectToAction(nameof(Index));
         }
 
@@ -91,7 +92,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
             }
 
             await _productService.EditAsync(model);
-            TempData["Message"] = "Product updated successfully!";
+            TempData["Message"] = ProductUpdated;
             return RedirectToAction(nameof(Index));
         }
 
@@ -100,7 +101,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Remove(Guid id)
         {
             await _productService.RemoveAsync(id);
-            TempData["Message"] = "Product removed successfully!";
+            TempData["Message"] = ProductDeleted;
             return RedirectToAction(nameof(Index));
         }
 
@@ -117,7 +118,7 @@ namespace AgroShopApp.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Restore(Guid id)
         {
             await _productService.RestoreAsync(id);
-            TempData["Message"] = "Product restored successfully.";
+            TempData["Message"] = ProductRestored;
             return RedirectToAction(nameof(Deleted));
         }
     }

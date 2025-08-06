@@ -1,5 +1,6 @@
 ﻿@using AgroShopApp.Web.ViewModels.Cart
 @using static AgroShopApp.GCommon.ApplicationConstants
+@using static AgroShopApp.GCommon.AvailableCities
 @model ConfirmOrderViewModel
 
 @{
@@ -41,7 +42,7 @@
         <select class="form-select @(ViewData.ModelState["SelectedCity"]?.Errors.Any() == true ? "is-invalid" : "")"
                 id="SelectedCity" name="SelectedCity" required>
             <option value="">Select city...</option>
-            @foreach (var city in new[] { "Sofia", "Plovdiv", "Varna", "Burgas", "Ruse", "Stara Zagora", "Pleven", "Sliven", "Dobrich", "Shumen" })
+            @foreach (var city in Cities)
             {
                 if (Model.SelectedCity == city)
                 {

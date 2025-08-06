@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.Extensions.Logging;
-
+using static AgroShopApp.GCommon.UserRoles;
 namespace AgroShopApp.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area(AppAdmin)]
+    [Authorize(Roles = AppAdmin)]
     public abstract class AdminBaseController : Controller
     {
         private readonly ICompositeViewEngine _viewEngine;
