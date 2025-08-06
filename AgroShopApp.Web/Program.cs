@@ -76,6 +76,8 @@ namespace AspNetCoreArchTemplate.Web
                 var services = scope.ServiceProvider;
                 DatabaseSeeder.SeedRoles(services);
                 DatabaseSeeder.AssignAdminRole(services);
+                DatabaseSeeder.SeedRegularUsers(services);
+                DatabaseSeeder.SeedOrders(services);
             }
 
             if (app.Environment.IsDevelopment())

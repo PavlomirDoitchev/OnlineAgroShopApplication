@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgroShopApp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityRefactor : Migration
+    public partial class SeedingData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,9 @@ namespace AgroShopApp.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -199,7 +202,8 @@ namespace AgroShopApp.Data.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "User who placed the order"),
                     OrderedOn = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Date and time when the order was placed"),
                     Status = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Current status of the order"),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false, comment: "Total amount of the order at the time of purchase")
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false, comment: "Total amount of the order at the time of purchase"),
+                    DeliveryAddress = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false, comment: "Delivery address for the order")
                 },
                 constraints: table =>
                 {
@@ -335,12 +339,36 @@ namespace AgroShopApp.Data.Migrations
                 columns: new[] { "Id", "AddedOn", "CategoryId", "DeletedOn", "Description", "ImageUrl", "IsAvailable", "Name", "Price", "StockQuantity" },
                 values: new object[,]
                 {
-                    { new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2025, 7, 14, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7450), 1, null, "Rich, juicy tomatoes perfect for home gardening. Non-GMO and high germination rate.", "/images/seeds-tomato.jpg", true, "Heirloom Tomato Seeds", 3.49m, 100 },
-                    { new Guid("22222222-2222-2222-2222-222222222222"), new DateTime(2025, 7, 18, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7459), 1, null, "Fast-growing leafy greens ideal for spring gardens.", "/images/seeds-lettuce.jpg", true, "Organic Lettuce Seeds", 2.99m, 80 },
-                    { new Guid("33333333-3333-3333-3333-333333333333"), new DateTime(2025, 7, 8, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7462), 2, null, "Boost your plant health with organic nutrients. Safe for vegetables and flowers.", "/images/fertilizer-organic.jpg", true, "All-Natural Fertilizer 5kg", 12.95m, 50 },
-                    { new Guid("44444444-4444-4444-4444-444444444444"), new DateTime(2025, 7, 23, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7465), 2, null, "Concentrated growth enhancer for root development and yield.", "/images/fertilizer-liquid.jpg", true, "Liquid Plant Booster", 8.49m, 65 },
-                    { new Guid("55555555-5555-5555-5555-555555555555"), new DateTime(2025, 7, 21, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7467), 3, null, "Protect your crops from pests without harmful chemicals.", "/images/pesticide-eco.jpg", true, "Eco-Friendly Insect Repellent", 5.75m, 70 },
-                    { new Guid("66666666-6666-6666-6666-666666666666"), new DateTime(2025, 7, 26, 20, 4, 6, 448, DateTimeKind.Utc).AddTicks(7470), 3, null, "Effective natural solution against leaf-eating insects.", "/images/pesticide-neem.jpg", true, "Neem Oil Pesticide 1L", 9.99m, 45 }
+                    { new Guid("10000000-0000-0000-0000-000000000001"), new DateTime(2025, 7, 23, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7790), 1, null, "Rich, juicy tomatoes perfect for home gardening. Non-GMO and high germination rate.", "/images/seeds-tomato.jpg", true, "Heirloom Tomato Seeds", 3.49m, 100 },
+                    { new Guid("10000000-0000-0000-0000-000000000002"), new DateTime(2025, 7, 27, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7854), 1, null, "Fast-growing leafy greens ideal for spring gardens.", "/images/seeds-lettuce.jpg", true, "Organic Lettuce Seeds", 2.99m, 80 },
+                    { new Guid("10000000-0000-0000-0000-000000000003"), new DateTime(2025, 7, 30, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7859), 1, null, "Crunchy cucumbers, suitable for pickling or fresh eating.", "/images/seeds-cucumber.jpg", true, "Cucumber Seeds", 2.59m, 70 },
+                    { new Guid("10000000-0000-0000-0000-000000000004"), new DateTime(2025, 7, 25, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7863), 1, null, "Sweet and crisp carrots with fast growth cycle.", "/images/seeds-carrot.jpg", true, "Carrot Seeds", 1.99m, 90 },
+                    { new Guid("10000000-0000-0000-0000-000000000005"), new DateTime(2025, 7, 29, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7866), 1, null, "Cold-hardy and packed with nutrition.", "/images/seeds-spinach.jpg", true, "Spinach Seeds", 2.49m, 60 },
+                    { new Guid("10000000-0000-0000-0000-000000000006"), new DateTime(2025, 7, 28, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7872), 1, null, "Hot and sweet varieties perfect for salsa.", "/images/seeds-pepper.jpg", true, "Pepper Seeds", 3.99m, 75 },
+                    { new Guid("10000000-0000-0000-0000-000000000007"), new DateTime(2025, 7, 31, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7881), 1, null, "Aromatic herbs for cooking and companion planting.", "/images/seeds-basil.jpg", true, "Basil Seeds", 1.89m, 100 },
+                    { new Guid("10000000-0000-0000-0000-000000000008"), new DateTime(2025, 8, 1, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7884), 1, null, "High-yielding summer squash variety.", "/images/seeds-zucchini.jpg", true, "Zucchini Seeds", 2.39m, 55 },
+                    { new Guid("10000000-0000-0000-0000-000000000009"), new DateTime(2025, 7, 26, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7888), 1, null, "Large pumpkins ideal for decoration and pie.", "/images/seeds-pumpkin.jpg", true, "Pumpkin Seeds", 3.25m, 40 },
+                    { new Guid("10000000-0000-0000-0000-000000000010"), new DateTime(2025, 8, 2, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7894), 1, null, "Fast-growing root vegetable for spring or fall.", "/images/seeds-radish.jpg", true, "Radish Seeds", 1.79m, 85 },
+                    { new Guid("20000000-0000-0000-0000-000000000001"), new DateTime(2025, 7, 17, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7897), 2, null, "All-natural fertilizer for vegetables and flowers.", "/images/fertilizer-organic.jpg", true, "Organic Fertilizer 5kg", 12.95m, 50 },
+                    { new Guid("20000000-0000-0000-0000-000000000002"), new DateTime(2025, 8, 1, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7931), 2, null, "Concentrated enhancer for better root development.", "/images/fertilizer-liquid.jpg", true, "Liquid Plant Booster", 8.49m, 65 },
+                    { new Guid("20000000-0000-0000-0000-000000000003"), new DateTime(2025, 7, 24, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7936), 2, null, "Rich compost to improve soil structure.", "/images/fertilizer-compost.jpg", true, "Compost Mix", 6.99m, 70 },
+                    { new Guid("20000000-0000-0000-0000-000000000004"), new DateTime(2025, 7, 27, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7940), 2, null, "Natural soil amendment high in nutrients.", "/images/fertilizer-worm.jpg", true, "Worm Castings", 9.49m, 45 },
+                    { new Guid("20000000-0000-0000-0000-000000000005"), new DateTime(2025, 7, 29, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7945), 2, null, "Promotes strong root growth and blooms.", "/images/fertilizer-bone.jpg", true, "Bone Meal Fertilizer", 5.95m, 60 },
+                    { new Guid("20000000-0000-0000-0000-000000000006"), new DateTime(2025, 7, 31, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7949), 2, null, "Liquid organic fertilizer for leafy greens.", "/images/fertilizer-fish.jpg", true, "Fish Emulsion", 7.25m, 40 },
+                    { new Guid("20000000-0000-0000-0000-000000000007"), new DateTime(2025, 7, 28, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7953), 2, null, "Boosts plant resistance and nutrient uptake.", "/images/fertilizer-seaweed.jpg", true, "Seaweed Extract", 6.75m, 55 },
+                    { new Guid("20000000-0000-0000-0000-000000000008"), new DateTime(2025, 8, 2, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7958), 2, null, "Feeds plants for up to 3 months.", "/images/fertilizer-pellets.jpg", true, "Slow Release Pellets", 10.00m, 50 },
+                    { new Guid("20000000-0000-0000-0000-000000000009"), new DateTime(2025, 8, 3, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7962), 2, null, "Fast-acting nitrogen formula for leafy growth.", "/images/fertilizer-nitrogen.jpg", true, "Nitrogen Boost", 4.95m, 65 },
+                    { new Guid("20000000-0000-0000-0000-000000000010"), new DateTime(2025, 8, 4, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7966), 2, null, "Balanced nutrients for all plants.", "/images/fertilizer-allpurpose.jpg", true, "All-Purpose Fertilizer", 6.49m, 85 },
+                    { new Guid("30000000-0000-0000-0000-000000000001"), new DateTime(2025, 7, 30, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7970), 3, null, "Protect your crops from pests without chemicals.", "/images/pesticide-eco.jpg", true, "Eco-Friendly Insect Repellent", 5.75m, 70 },
+                    { new Guid("30000000-0000-0000-0000-000000000002"), new DateTime(2025, 8, 4, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7976), 3, null, "Effective against mites, aphids, and fungi.", "/images/pesticide-neem.jpg", true, "Neem Oil Spray", 9.99m, 45 },
+                    { new Guid("30000000-0000-0000-0000-000000000003"), new DateTime(2025, 8, 3, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7981), 3, null, "Natural garlic-based spray for flying insects.", "/images/pesticide-garlic.jpg", true, "Garlic Pest Repellent", 4.99m, 60 },
+                    { new Guid("30000000-0000-0000-0000-000000000004"), new DateTime(2025, 7, 31, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7986), 3, null, "Kills soft-bodied insects on contact.", "/images/pesticide-soap.jpg", true, "Insecticidal Soap", 6.50m, 50 },
+                    { new Guid("30000000-0000-0000-0000-000000000005"), new DateTime(2025, 7, 29, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7990), 3, null, "Fast knockdown effect for garden pests.", "/images/pesticide-pyrethrin.jpg", true, "Pyrethrin Spray", 8.75m, 55 },
+                    { new Guid("30000000-0000-0000-0000-000000000006"), new DateTime(2025, 8, 1, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7994), 3, null, "Effective for snails and slugs in vegetable beds.", "/images/pesticide-slug.jpg", true, "Slugo Bait", 5.25m, 40 },
+                    { new Guid("30000000-0000-0000-0000-000000000007"), new DateTime(2025, 8, 2, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7998), 3, null, "Bacillus thuringiensis for caterpillar management.", "/images/pesticide-bt.jpg", true, "BT Caterpillar Control", 7.85m, 45 },
+                    { new Guid("30000000-0000-0000-0000-000000000008"), new DateTime(2025, 7, 31, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(8001), 3, null, "Diatomaceous earth for crawling insects.", "/images/pesticide-de.jpg", true, "DE Powder", 6.10m, 35 },
+                    { new Guid("30000000-0000-0000-0000-000000000009"), new DateTime(2025, 7, 28, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(8004), 3, null, "Repels rodents and bugs naturally.", "/images/pesticide-chili.jpg", true, "Chili Pepper Spray", 3.99m, 50 },
+                    { new Guid("30000000-0000-0000-0000-000000000010"), new DateTime(2025, 7, 27, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(8007), 3, null, "Fungicide and mite control for vegetables.", "/images/pesticide-sulfur.jpg", true, "Sulfur Dust", 4.25m, 60 }
                 });
 
             migrationBuilder.CreateIndex(

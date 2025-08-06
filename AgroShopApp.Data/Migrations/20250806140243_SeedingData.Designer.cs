@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgroShopApp.Data.Migrations
 {
     [DbContext(typeof(AgroShopDbContext))]
-    [Migration("20250731213338_ExtendedApplicationUser")]
-    partial class ExtendedApplicationUser
+    [Migration("20250806140243_SeedingData")]
+    partial class SeedingData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -218,6 +218,12 @@ namespace AgroShopApp.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasComment("Order identifier");
 
+                    b.Property<string>("DeliveryAddress")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)")
+                        .HasComment("Delivery address for the order");
+
                     b.Property<DateTime>("OrderedOn")
                         .HasColumnType("datetime2")
                         .HasComment("Date and time when the order was placed");
@@ -344,8 +350,8 @@ namespace AgroShopApp.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            AddedOn = new DateTime(2025, 7, 17, 21, 33, 37, 681, DateTimeKind.Utc).AddTicks(4295),
+                            Id = new Guid("10000000-0000-0000-0000-000000000001"),
+                            AddedOn = new DateTime(2025, 7, 23, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7790),
                             CategoryId = 1,
                             Description = "Rich, juicy tomatoes perfect for home gardening. Non-GMO and high germination rate.",
                             ImageUrl = "/images/seeds-tomato.jpg",
@@ -357,8 +363,8 @@ namespace AgroShopApp.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            AddedOn = new DateTime(2025, 7, 21, 21, 33, 37, 681, DateTimeKind.Utc).AddTicks(4306),
+                            Id = new Guid("10000000-0000-0000-0000-000000000002"),
+                            AddedOn = new DateTime(2025, 7, 27, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7854),
                             CategoryId = 1,
                             Description = "Fast-growing leafy greens ideal for spring gardens.",
                             ImageUrl = "/images/seeds-lettuce.jpg",
@@ -370,23 +376,127 @@ namespace AgroShopApp.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            AddedOn = new DateTime(2025, 7, 11, 21, 33, 37, 681, DateTimeKind.Utc).AddTicks(4310),
+                            Id = new Guid("10000000-0000-0000-0000-000000000003"),
+                            AddedOn = new DateTime(2025, 7, 30, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7859),
+                            CategoryId = 1,
+                            Description = "Crunchy cucumbers, suitable for pickling or fresh eating.",
+                            ImageUrl = "/images/seeds-cucumber.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Cucumber Seeds",
+                            Price = 2.59m,
+                            StockQuantity = 70
+                        },
+                        new
+                        {
+                            Id = new Guid("10000000-0000-0000-0000-000000000004"),
+                            AddedOn = new DateTime(2025, 7, 25, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7863),
+                            CategoryId = 1,
+                            Description = "Sweet and crisp carrots with fast growth cycle.",
+                            ImageUrl = "/images/seeds-carrot.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Carrot Seeds",
+                            Price = 1.99m,
+                            StockQuantity = 90
+                        },
+                        new
+                        {
+                            Id = new Guid("10000000-0000-0000-0000-000000000005"),
+                            AddedOn = new DateTime(2025, 7, 29, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7866),
+                            CategoryId = 1,
+                            Description = "Cold-hardy and packed with nutrition.",
+                            ImageUrl = "/images/seeds-spinach.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Spinach Seeds",
+                            Price = 2.49m,
+                            StockQuantity = 60
+                        },
+                        new
+                        {
+                            Id = new Guid("10000000-0000-0000-0000-000000000006"),
+                            AddedOn = new DateTime(2025, 7, 28, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7872),
+                            CategoryId = 1,
+                            Description = "Hot and sweet varieties perfect for salsa.",
+                            ImageUrl = "/images/seeds-pepper.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Pepper Seeds",
+                            Price = 3.99m,
+                            StockQuantity = 75
+                        },
+                        new
+                        {
+                            Id = new Guid("10000000-0000-0000-0000-000000000007"),
+                            AddedOn = new DateTime(2025, 7, 31, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7881),
+                            CategoryId = 1,
+                            Description = "Aromatic herbs for cooking and companion planting.",
+                            ImageUrl = "/images/seeds-basil.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Basil Seeds",
+                            Price = 1.89m,
+                            StockQuantity = 100
+                        },
+                        new
+                        {
+                            Id = new Guid("10000000-0000-0000-0000-000000000008"),
+                            AddedOn = new DateTime(2025, 8, 1, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7884),
+                            CategoryId = 1,
+                            Description = "High-yielding summer squash variety.",
+                            ImageUrl = "/images/seeds-zucchini.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Zucchini Seeds",
+                            Price = 2.39m,
+                            StockQuantity = 55
+                        },
+                        new
+                        {
+                            Id = new Guid("10000000-0000-0000-0000-000000000009"),
+                            AddedOn = new DateTime(2025, 7, 26, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7888),
+                            CategoryId = 1,
+                            Description = "Large pumpkins ideal for decoration and pie.",
+                            ImageUrl = "/images/seeds-pumpkin.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Pumpkin Seeds",
+                            Price = 3.25m,
+                            StockQuantity = 40
+                        },
+                        new
+                        {
+                            Id = new Guid("10000000-0000-0000-0000-000000000010"),
+                            AddedOn = new DateTime(2025, 8, 2, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7894),
+                            CategoryId = 1,
+                            Description = "Fast-growing root vegetable for spring or fall.",
+                            ImageUrl = "/images/seeds-radish.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Radish Seeds",
+                            Price = 1.79m,
+                            StockQuantity = 85
+                        },
+                        new
+                        {
+                            Id = new Guid("20000000-0000-0000-0000-000000000001"),
+                            AddedOn = new DateTime(2025, 7, 17, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7897),
                             CategoryId = 2,
-                            Description = "Boost your plant health with organic nutrients. Safe for vegetables and flowers.",
+                            Description = "All-natural fertilizer for vegetables and flowers.",
                             ImageUrl = "/images/fertilizer-organic.jpg",
                             IsAvailable = true,
                             IsDeleted = false,
-                            Name = "All-Natural Fertilizer 5kg",
+                            Name = "Organic Fertilizer 5kg",
                             Price = 12.95m,
                             StockQuantity = 50
                         },
                         new
                         {
-                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            AddedOn = new DateTime(2025, 7, 26, 21, 33, 37, 681, DateTimeKind.Utc).AddTicks(4313),
+                            Id = new Guid("20000000-0000-0000-0000-000000000002"),
+                            AddedOn = new DateTime(2025, 8, 1, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7931),
                             CategoryId = 2,
-                            Description = "Concentrated growth enhancer for root development and yield.",
+                            Description = "Concentrated enhancer for better root development.",
                             ImageUrl = "/images/fertilizer-liquid.jpg",
                             IsAvailable = true,
                             IsDeleted = false,
@@ -396,10 +506,114 @@ namespace AgroShopApp.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("55555555-5555-5555-5555-555555555555"),
-                            AddedOn = new DateTime(2025, 7, 24, 21, 33, 37, 681, DateTimeKind.Utc).AddTicks(4315),
+                            Id = new Guid("20000000-0000-0000-0000-000000000003"),
+                            AddedOn = new DateTime(2025, 7, 24, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7936),
+                            CategoryId = 2,
+                            Description = "Rich compost to improve soil structure.",
+                            ImageUrl = "/images/fertilizer-compost.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Compost Mix",
+                            Price = 6.99m,
+                            StockQuantity = 70
+                        },
+                        new
+                        {
+                            Id = new Guid("20000000-0000-0000-0000-000000000004"),
+                            AddedOn = new DateTime(2025, 7, 27, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7940),
+                            CategoryId = 2,
+                            Description = "Natural soil amendment high in nutrients.",
+                            ImageUrl = "/images/fertilizer-worm.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Worm Castings",
+                            Price = 9.49m,
+                            StockQuantity = 45
+                        },
+                        new
+                        {
+                            Id = new Guid("20000000-0000-0000-0000-000000000005"),
+                            AddedOn = new DateTime(2025, 7, 29, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7945),
+                            CategoryId = 2,
+                            Description = "Promotes strong root growth and blooms.",
+                            ImageUrl = "/images/fertilizer-bone.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Bone Meal Fertilizer",
+                            Price = 5.95m,
+                            StockQuantity = 60
+                        },
+                        new
+                        {
+                            Id = new Guid("20000000-0000-0000-0000-000000000006"),
+                            AddedOn = new DateTime(2025, 7, 31, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7949),
+                            CategoryId = 2,
+                            Description = "Liquid organic fertilizer for leafy greens.",
+                            ImageUrl = "/images/fertilizer-fish.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Fish Emulsion",
+                            Price = 7.25m,
+                            StockQuantity = 40
+                        },
+                        new
+                        {
+                            Id = new Guid("20000000-0000-0000-0000-000000000007"),
+                            AddedOn = new DateTime(2025, 7, 28, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7953),
+                            CategoryId = 2,
+                            Description = "Boosts plant resistance and nutrient uptake.",
+                            ImageUrl = "/images/fertilizer-seaweed.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Seaweed Extract",
+                            Price = 6.75m,
+                            StockQuantity = 55
+                        },
+                        new
+                        {
+                            Id = new Guid("20000000-0000-0000-0000-000000000008"),
+                            AddedOn = new DateTime(2025, 8, 2, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7958),
+                            CategoryId = 2,
+                            Description = "Feeds plants for up to 3 months.",
+                            ImageUrl = "/images/fertilizer-pellets.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Slow Release Pellets",
+                            Price = 10.00m,
+                            StockQuantity = 50
+                        },
+                        new
+                        {
+                            Id = new Guid("20000000-0000-0000-0000-000000000009"),
+                            AddedOn = new DateTime(2025, 8, 3, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7962),
+                            CategoryId = 2,
+                            Description = "Fast-acting nitrogen formula for leafy growth.",
+                            ImageUrl = "/images/fertilizer-nitrogen.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Nitrogen Boost",
+                            Price = 4.95m,
+                            StockQuantity = 65
+                        },
+                        new
+                        {
+                            Id = new Guid("20000000-0000-0000-0000-000000000010"),
+                            AddedOn = new DateTime(2025, 8, 4, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7966),
+                            CategoryId = 2,
+                            Description = "Balanced nutrients for all plants.",
+                            ImageUrl = "/images/fertilizer-allpurpose.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "All-Purpose Fertilizer",
+                            Price = 6.49m,
+                            StockQuantity = 85
+                        },
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000001"),
+                            AddedOn = new DateTime(2025, 7, 30, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7970),
                             CategoryId = 3,
-                            Description = "Protect your crops from pests without harmful chemicals.",
+                            Description = "Protect your crops from pests without chemicals.",
                             ImageUrl = "/images/pesticide-eco.jpg",
                             IsAvailable = true,
                             IsDeleted = false,
@@ -409,16 +623,120 @@ namespace AgroShopApp.Data.Migrations
                         },
                         new
                         {
-                            Id = new Guid("66666666-6666-6666-6666-666666666666"),
-                            AddedOn = new DateTime(2025, 7, 29, 21, 33, 37, 681, DateTimeKind.Utc).AddTicks(4319),
+                            Id = new Guid("30000000-0000-0000-0000-000000000002"),
+                            AddedOn = new DateTime(2025, 8, 4, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7976),
                             CategoryId = 3,
-                            Description = "Effective natural solution against leaf-eating insects.",
+                            Description = "Effective against mites, aphids, and fungi.",
                             ImageUrl = "/images/pesticide-neem.jpg",
                             IsAvailable = true,
                             IsDeleted = false,
-                            Name = "Neem Oil Pesticide 1L",
+                            Name = "Neem Oil Spray",
                             Price = 9.99m,
                             StockQuantity = 45
+                        },
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000003"),
+                            AddedOn = new DateTime(2025, 8, 3, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7981),
+                            CategoryId = 3,
+                            Description = "Natural garlic-based spray for flying insects.",
+                            ImageUrl = "/images/pesticide-garlic.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Garlic Pest Repellent",
+                            Price = 4.99m,
+                            StockQuantity = 60
+                        },
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000004"),
+                            AddedOn = new DateTime(2025, 7, 31, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7986),
+                            CategoryId = 3,
+                            Description = "Kills soft-bodied insects on contact.",
+                            ImageUrl = "/images/pesticide-soap.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Insecticidal Soap",
+                            Price = 6.50m,
+                            StockQuantity = 50
+                        },
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000005"),
+                            AddedOn = new DateTime(2025, 7, 29, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7990),
+                            CategoryId = 3,
+                            Description = "Fast knockdown effect for garden pests.",
+                            ImageUrl = "/images/pesticide-pyrethrin.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Pyrethrin Spray",
+                            Price = 8.75m,
+                            StockQuantity = 55
+                        },
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000006"),
+                            AddedOn = new DateTime(2025, 8, 1, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7994),
+                            CategoryId = 3,
+                            Description = "Effective for snails and slugs in vegetable beds.",
+                            ImageUrl = "/images/pesticide-slug.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Slugo Bait",
+                            Price = 5.25m,
+                            StockQuantity = 40
+                        },
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000007"),
+                            AddedOn = new DateTime(2025, 8, 2, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(7998),
+                            CategoryId = 3,
+                            Description = "Bacillus thuringiensis for caterpillar management.",
+                            ImageUrl = "/images/pesticide-bt.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "BT Caterpillar Control",
+                            Price = 7.85m,
+                            StockQuantity = 45
+                        },
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000008"),
+                            AddedOn = new DateTime(2025, 7, 31, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(8001),
+                            CategoryId = 3,
+                            Description = "Diatomaceous earth for crawling insects.",
+                            ImageUrl = "/images/pesticide-de.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "DE Powder",
+                            Price = 6.10m,
+                            StockQuantity = 35
+                        },
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000009"),
+                            AddedOn = new DateTime(2025, 7, 28, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(8004),
+                            CategoryId = 3,
+                            Description = "Repels rodents and bugs naturally.",
+                            ImageUrl = "/images/pesticide-chili.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Chili Pepper Spray",
+                            Price = 3.99m,
+                            StockQuantity = 50
+                        },
+                        new
+                        {
+                            Id = new Guid("30000000-0000-0000-0000-000000000010"),
+                            AddedOn = new DateTime(2025, 7, 27, 17, 2, 42, 835, DateTimeKind.Local).AddTicks(8007),
+                            CategoryId = 3,
+                            Description = "Fungicide and mite control for vegetables.",
+                            ImageUrl = "/images/pesticide-sulfur.jpg",
+                            IsAvailable = true,
+                            IsDeleted = false,
+                            Name = "Sulfur Dust",
+                            Price = 4.25m,
+                            StockQuantity = 60
                         });
                 });
 

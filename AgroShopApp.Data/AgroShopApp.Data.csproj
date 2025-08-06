@@ -28,6 +28,10 @@
     <ProjectReference Include="..\AgroShopApp.GCommon\AgroShopApp.GCommon.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 
 
 </Project>
