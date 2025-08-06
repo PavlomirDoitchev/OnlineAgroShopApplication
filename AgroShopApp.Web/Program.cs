@@ -63,10 +63,11 @@ namespace AspNetCoreArchTemplate.Web
             builder.Services.AddUserDefinedServices(typeof(IProductService).Assembly);
             builder.Services.AddHttpContextAccessor();
 
-            //builder.Services.AddControllersWithViews(options =>
-            //{
-            //    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            //});
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
@@ -84,7 +85,7 @@ namespace AspNetCoreArchTemplate.Web
             {
                 app.UseMigrationsEndPoint();
             }
-            else
+            else if (app.Environment.IsProduction())
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
@@ -94,6 +95,7 @@ namespace AspNetCoreArchTemplate.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
             app.UseRouting();
             app.UseAuthentication();
 
