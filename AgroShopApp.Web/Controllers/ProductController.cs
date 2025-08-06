@@ -30,7 +30,7 @@ namespace AgroShopApp.Web.Controllers
 
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                return PartialView("_ProductGridPartial", model); // Leave this untouched
+                return PartialView("_ProductGridPartial", model);
             }
 
             return SafeView("Index", model);
