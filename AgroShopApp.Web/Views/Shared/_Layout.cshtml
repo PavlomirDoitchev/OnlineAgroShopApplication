@@ -150,15 +150,9 @@
 </div>
     @if (TempData["Message"] != null)
     {
-        <script>
-                window.onload = function () {
-                    const toastEl = document.getElementById('feedbackToast');
-                    if (toastEl) {
-            const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-            toast.show();
-                    }
-                };
-        </script>
+        @section Scripts {
+        <script src="~/js/toast-feedback.js" asp-append-version="true"></script>
+        }
     }
     <div aria-live="polite" aria-atomic="true" class="position-relative">
     <div id="ajaxToastContainer" class="toast-container position-fixed top-0 end-0 p-3 z-3" style="margin-top: 4.5rem;"></div>

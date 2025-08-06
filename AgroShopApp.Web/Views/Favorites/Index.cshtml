@@ -54,10 +54,6 @@ else
 @section Scripts {
     @if (TempData["Message"] != null)
     {
-        <script>
-            window.onload = function () {
-                alert('@TempData["Message"]');
-            };
-        </script>
+        <script src="~/js/toast-feedback.js" asp-append-version="true"></script>
     }
 }

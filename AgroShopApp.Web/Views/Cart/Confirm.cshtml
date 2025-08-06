@@ -76,22 +76,7 @@
     </div>
 </form>
 @section Scripts {
-    <script>
-        (() => {
-            'use strict';
 
-            const forms = document.querySelectorAll('.needs-validation');
+    <script src="~/js/form-validation.js" asp-append-version="true"></script>
 
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
-    </script>
 }

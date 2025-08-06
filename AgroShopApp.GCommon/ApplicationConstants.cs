@@ -18,8 +18,10 @@
         public static class TempDataMessages
         {
             public const string ProductAddedToCart = "Product added to cart.";
-            public const string ProductQuantityUpdated = "Product quantity updated.";
+            public const string ProductFailedToUpdateQuantity = "Failed to update product quantity.";
             public const string ProductRemovedFromCart = "Product removed from cart.";
+            public const string ProductQuantityUpdated = "Product quantity updated.";
+            public const string ProductQuantityUpdatedTo = "Product quantity updated to ";
             public const string ProductNotFound = "Product not found.";
             public const string ProductAlreadyInCart = "Product is already in your cart.";
             public const string ProductAddedToFavorites = "Product added to favorites.";
@@ -46,6 +48,7 @@
             public const string CannotDeleteAdmin = "Cannot delete an admin account.";
             public const string UserDeleted = "User deleted successfully.";
             public const string UserRestored = "User restored successfully.";
+            public const string AdminAccessDenied = "Access denied: This page is for regular users only.";
 
         }
         public static class OrderStatuses

@@ -89,120 +89,26 @@ else
 </div>
 
 @section Scripts {
-    <script>
-        const ctx = document.getElementById('ordersChart').getContext('2d');
-        const ordersChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                     // Non-user input is used here
+    <script type="module">
+        import { renderDashboardCharts } from '/js/admin/dashboard-charts.js';
+        import { startLiveClock } from '/js/admin/live-clock.js';
+
+        const chartData = {
+            orders: {
                 labels: @Html.Raw(Json.Serialize(Model.OrdersLast7Days.Select(d => d.DateLabel))),
-                datasets: [{
-                    label: 'Orders',
-                    data: @Html.Raw(Json.Serialize(Model.OrdersLast7Days.Select(d => d.Count))),
-                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                    borderColor: 'rgba(40, 167, 69, 1)',
-                    borderWidth: 2,
-                    tension: 0.2
-                }]
+                data: @Html.Raw(Json.Serialize(Model.OrdersLast7Days.Select(d => d.Count)))
             },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true }
-                }
-            }
-        });
-    </script>
-    <script>
-      
-        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-        const revenueChart = new Chart(revenueCtx, {
-            type: 'line',
-            data: {
-                 // Non-user input is used here
+            revenue: {
                 labels: @Html.Raw(Json.Serialize(Model.RevenueLast7Days.Select(d => d.DateLabel))),
-                datasets: [{
-                    label: 'Revenue',
-                    data: @Html.Raw(Json.Serialize(Model.RevenueLast7Days.Select(d => d.Revenue))),
-                    backgroundColor: 'rgba(255, 193, 7, 0.2)',
-                    borderColor: 'rgba(255, 193, 7, 1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.3
-                }]
+                data: @Html.Raw(Json.Serialize(Model.RevenueLast7Days.Select(d => d.Revenue)))
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        color: '#fff'
-                    },
-                    legend: { labels: { color: '#fff' } }
-                },
-                scales: {
-                    x: { ticks: { color: '#ccc' } },
-                    y: {
-                        ticks: {
-                            color: '#ccc',
-                            callback: function (value) {
-                                return '$' + value.toLocaleString();
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        const bestCtx = document.getElementById('bestSellersChart').getContext('2d');
-        const bestSellersChart = new Chart(bestCtx, {
-            type: 'bar',
-            data: {
-                // Non-user input is used here
+            bestSellers: {
                 labels: @Html.Raw(Json.Serialize(Model.TopSellingProducts.Select(p => p.ProductName))),
-                datasets: [{
-                    label: 'Quantity Sold',
-                    data: @Html.Raw(Json.Serialize(Model.TopSellingProducts.Select(p => p.QuantitySold))),
-                    backgroundColor: 'rgba(13, 202, 240, 0.6)',
-                    borderColor: 'rgba(13, 202, 240, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        color: '#fff'
-                    },
-                    legend: { display: false }
-                },
-                scales: {
-                    x: { ticks: { color: '#ccc' } },
-                    y: {
-                        beginAtZero: true,
-                        ticks: { color: '#ccc' }
-                    }
-                }
+                data: @Html.Raw(Json.Serialize(Model.TopSellingProducts.Select(p => p.QuantitySold)))
             }
-        });
-    </script>
-    <script>
-    function updateClock() {
-        const now = new Date();
-        const options = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
         };
-        document.getElementById('clock').textContent = now.toLocaleString('en-US', options);
-    }
 
-    updateClock();
-    setInterval(updateClock, 1000);
-</script>
+        renderDashboardCharts(chartData);
+        startLiveClock(); // updates #clock
+    </script>
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using static AgroShopApp.GCommon.ApplicationConstants.TempDataMessages;
 
 namespace AgroShopApp.Web.Infrastructure.Filters
 {
@@ -18,7 +19,7 @@ namespace AgroShopApp.Web.Infrastructure.Filters
 
                 if (tempData != null)
                 {
-                    tempData["Message"] = "Access denied: This page is for regular users only.";
+                    tempData["Message"] = AdminAccessDenied;
                 }
 
                 context.Result = new RedirectToActionResult("Index", "Home", new { area = "Admin" });
