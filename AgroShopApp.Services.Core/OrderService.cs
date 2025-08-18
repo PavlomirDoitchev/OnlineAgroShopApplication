@@ -306,7 +306,7 @@ namespace AgroShopApp.Services.Core
                 .GetAllAttached()
                 .Where(o => o.Status == "Completed")
                 .Include(o => o.Items)
-                    .ThenInclude(i => i.Product)
+                .ThenInclude(i => i.Product)
                 .SelectMany(o => o.Items)
                 .ToListAsync();
 

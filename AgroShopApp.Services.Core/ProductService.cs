@@ -268,7 +268,8 @@ namespace AgroShopApp.Services.Core
         {
             return await _productRepository.GetAllAsync();
         }
-        
+
+        //TODO: Implement Nominatim geocoding service
 
         private class NominatimResult
         {
