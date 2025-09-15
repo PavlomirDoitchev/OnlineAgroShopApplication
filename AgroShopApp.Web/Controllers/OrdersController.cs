@@ -39,7 +39,7 @@ namespace AgroShopApp.Web.Controllers
             return SafeView("Details", order);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cancel(Guid id)
         {
             var success = await _orderService.TryCancelOrderAsync(id, User);

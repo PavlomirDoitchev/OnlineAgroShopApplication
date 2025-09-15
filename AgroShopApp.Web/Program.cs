@@ -49,13 +49,15 @@ namespace AspNetCoreArchTemplate.Web
                 options.LoginPath = "/Identity/Account/Login";
                 options.LogoutPath = "/Identity/Account/Logout";
                 options.AccessDeniedPath = "/Home/UnauthorizedError";
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                //Cookie settings set to none to allow non-https traffic for testing purposes
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                 options.Cookie.SameSite = SameSiteMode.Lax;
             });
 
             builder.Services.Configure<CookiePolicyOptions>(options =>
             {
-                options.Secure = CookieSecurePolicy.Always;
+                //Cookie policy settings set to none to allow non-https traffic for testing purposes
+                options.Secure = CookieSecurePolicy.None;
                 options.MinimumSameSitePolicy = SameSiteMode.Lax;
             });
 
@@ -65,7 +67,7 @@ namespace AspNetCoreArchTemplate.Web
 
             builder.Services.AddControllersWithViews(options =>
             {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+               options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
             builder.Services.AddRazorPages();
@@ -92,8 +94,8 @@ namespace AspNetCoreArchTemplate.Web
             }
 
             app.UseStatusCodePagesWithReExecute("/Home/Error", "?statusCode={0}");
-
-            app.UseHttpsRedirection();
+            //Commented out for testing purposes
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseRouting();
@@ -124,7 +126,7 @@ namespace AspNetCoreArchTemplate.Web
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapRazorPages();
-            app.Run();
+            app.Run("http://0.0.0.0:5000");
         }
     }
 }
