@@ -27,16 +27,93 @@ namespace AgroShopApp.Services.Core
 
         }
 
+        //public async Task<PaginatedProductListViewModel> GetPaginatedAsync(int page, int pageSize, int? categoryId = null, string? searchTerm = null, Guid? userId = null)
+        //{
+        //    var products = await _productRepository.GetAllWithCategoryAsync();
+        //    var filtered = products.Where(p => p.IsAvailable && !p.IsDeleted);
+
+        //    if (categoryId.HasValue)
+        //        filtered = filtered.Where(p => p.CategoryId == categoryId);
+
+        //    if (!string.IsNullOrWhiteSpace(searchTerm))
+        //        filtered = filtered.Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm));
+
+        //    List<Guid> favorites = new();
+        //    Cart? cart = null;
+
+        //    if (userId is Guid uid)
+        //    {
+        //        favorites = (await _favoriteRepository.GetUserFavoritesAsync(uid))
+        //            .Select(f => f.ProductId)
+        //            .ToList();
+
+        //        cart = await _cartRepository.GetOrCreateCartAsync(uid);
+        //    }
+
+        //    int total = filtered.Count();
+        //    var paged = filtered
+        //        .Skip((page - 1) * pageSize)
+        //        .Take(pageSize)
+        //        .ToList();
+
+        //    var viewModel = new PaginatedProductListViewModel
+        //    {
+        //        CurrentPage = page,
+        //        TotalPages = (int)Math.Ceiling(total / (double)pageSize),
+        //        SelectedCategoryId = categoryId,
+        //        CurrentSearch = searchTerm,
+        //        PageSize = pageSize,
+        //        Categories = (await _categoryRepository.GetAllSortedAsync())
+        //            .Select(c => new ProductCategoryViewModel
+        //            {
+        //                Id = c.Id,
+        //                Name = c.Name
+        //            }).ToList(),
+        //        Products = paged.Select(p => new AllProductsViewModel
+        //        {
+        //            Id = p.Id,
+        //            Name = p.Name,
+        //            Description = p.Description,
+        //            Price = p.Price,
+        //            ImageUrl = p.ImageUrl,
+        //            Category = p.Category.Name,
+        //            IsFavorite = favorites.Contains(p.Id),
+        //            StockQuantity = p.StockQuantity,
+        //            QuantityInCart = cart?.Items.FirstOrDefault(ci => ci.ProductId == p.Id)?.Quantity ?? 0
+        //        }).ToList()
+        //    };
+
+        //    return viewModel;
+        //}
         public async Task<PaginatedProductListViewModel> GetPaginatedAsync(int page, int pageSize, int? categoryId = null, string? searchTerm = null, Guid? userId = null)
         {
-            var products = await _productRepository.GetAllWithCategoryAsync();
-            var filtered = products.Where(p => p.IsAvailable && !p.IsDeleted);
+            var query = _productRepository.QueryWithCategory()
+                .Where(p => p.IsAvailable && !p.IsDeleted);
 
             if (categoryId.HasValue)
-                filtered = filtered.Where(p => p.CategoryId == categoryId);
+                query = query.Where(p => p.CategoryId == categoryId.Value);
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
-                filtered = filtered.Where(p => p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm));
+                query = query.Where(p =>
+                    p.Name.Contains(searchTerm) || p.Description.Contains(searchTerm));
+
+            var total = await query.CountAsync();
+
+            var pagedProducts = await query
+                .OrderBy(p => p.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.Price,
+                    p.ImageUrl,
+                    CategoryName = p.Category.Name,
+                    p.StockQuantity
+                })
+                .ToListAsync();
 
             List<Guid> favorites = new();
             Cart? cart = null;
@@ -50,41 +127,35 @@ namespace AgroShopApp.Services.Core
                 cart = await _cartRepository.GetOrCreateCartAsync(uid);
             }
 
-            int total = filtered.Count();
-            var paged = filtered
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
+            var categories = await _categoryRepository.GetAllSortedAsync();
 
-            var viewModel = new PaginatedProductListViewModel
+            return new PaginatedProductListViewModel
             {
                 CurrentPage = page,
                 TotalPages = (int)Math.Ceiling(total / (double)pageSize),
                 SelectedCategoryId = categoryId,
                 CurrentSearch = searchTerm,
                 PageSize = pageSize,
-                Categories = (await _categoryRepository.GetAllSortedAsync())
-                    .Select(c => new ProductCategoryViewModel
-                    {
-                        Id = c.Id,
-                        Name = c.Name
-                    }).ToList(),
-                Products = paged.Select(p => new AllProductsViewModel
+                Categories = categories.Select(c => new ProductCategoryViewModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                }).ToList(),
+                Products = pagedProducts.Select(p => new AllProductsViewModel
                 {
                     Id = p.Id,
                     Name = p.Name,
                     Description = p.Description,
                     Price = p.Price,
                     ImageUrl = p.ImageUrl,
-                    Category = p.Category.Name,
-                    IsFavorite = favorites.Contains(p.Id),
+                    Category = p.CategoryName,
                     StockQuantity = p.StockQuantity,
+                    IsFavorite = favorites.Contains(p.Id),
                     QuantityInCart = cart?.Items.FirstOrDefault(ci => ci.ProductId == p.Id)?.Quantity ?? 0
                 }).ToList()
             };
-
-            return viewModel;
         }
+
         public async Task<IEnumerable<ProductCategoryViewModel>> GetCategoriesAsync()
         {
             IEnumerable<Category> categories = await _categoryRepository.GetAllSortedAsync();
@@ -98,17 +169,26 @@ namespace AgroShopApp.Services.Core
 
         public async Task<AllProductsViewModel?> GetDetailsAsync(Guid id, Guid? userId = null)
         {
-            var product = await _productRepository.GetWithCategoryByIdAsync(id);
+            var product = await _productRepository.QueryWithCategory()
+           .Where(p => p.Id == id && p.IsAvailable && !p.IsDeleted)
+           .Select(p => new
+           {
+               p.Id,
+               p.Name,
+               p.Description,
+               p.Price,
+               p.ImageUrl,
+               CategoryName = p.Category.Name,
+               p.StockQuantity
+           })
+           .FirstOrDefaultAsync();
 
-            if (product == null || !product.IsAvailable || product.IsDeleted)
+            if (product == null)
                 return null;
 
             bool isFavorite = false;
-
             if (userId is Guid uid)
-            {
                 isFavorite = await _favoriteRepository.ExistsAsync(uid, product.Id);
-            }
 
             return new AllProductsViewModel
             {
@@ -117,7 +197,7 @@ namespace AgroShopApp.Services.Core
                 Description = product.Description,
                 Price = product.Price,
                 ImageUrl = product.ImageUrl,
-                Category = product.Category.Name,
+                Category = product.CategoryName,
                 StockQuantity = product.StockQuantity,
                 IsFavorite = isFavorite
             };

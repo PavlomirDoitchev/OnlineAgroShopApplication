@@ -9,13 +9,18 @@ namespace AgroShopApp.Web.Infrastructure.Extensions
         private static readonly string ServiceTypeSuffix = "Service";
 
         private static readonly string RepositoryTypeSuffix = "Repository";
-
+        /// <summary>
+        /// Adds user-defined services to the service collection by scanning the provided assembly for classes
+        /// </summary>
+        /// <param name="serviceCollection"></param>
+        /// <param name="serviceAssembly"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static IServiceCollection AddUserDefinedServices(this IServiceCollection serviceCollection, Assembly serviceAssembly)
         {
             Type[] serviceClasses = serviceAssembly
                 .GetTypes()
-                .Where(t => !t.IsInterface &&
-                                 t.Name.EndsWith(ServiceTypeSuffix))
+                .Where(t => !t.IsInterface && t.Name.EndsWith(ServiceTypeSuffix))
                 .ToArray();
             foreach (Type serviceClass in serviceClasses)
             {
@@ -32,7 +37,13 @@ namespace AgroShopApp.Web.Infrastructure.Extensions
 
             return serviceCollection;
         }
-
+        /// <summary>
+        /// Adds repositories to the service collection by scanning the provided assembly for classes
+        /// </summary>
+        /// <param name="serviceCollection"></param>
+        /// <param name="repositoryAssembly"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static IServiceCollection AddRepositories(this IServiceCollection serviceCollection,
             Assembly repositoryAssembly)
         {

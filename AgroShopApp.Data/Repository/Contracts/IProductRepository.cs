@@ -1,5 +1,4 @@
 ﻿using AgroShopApp.Data.Models;
-using System.Linq.Expressions;
 
 namespace AgroShopApp.Data.Repository.Contracts
 {
@@ -11,5 +10,7 @@ namespace AgroShopApp.Data.Repository.Contracts
         Task<Product?> GetByIdIncludingDeletedAsync(Guid id);
         IQueryable<Product> GetAllAttached();
         IQueryable<Product> GetDeletedAttached();
+        IQueryable<Product> QueryAllWithCategory(bool includeDeleted);
+        IQueryable<Product> QueryWithCategory();
     }
 }

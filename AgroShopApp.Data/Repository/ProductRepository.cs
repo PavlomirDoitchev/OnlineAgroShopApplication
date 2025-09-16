@@ -19,6 +19,19 @@ namespace AgroShopApp.Data.Repository
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
+        public IQueryable<Product> QueryAllWithCategory(bool includeDeleted = false)
+        {
+            var query = DbSet.Include(p => p.Category);
+            if (includeDeleted)
+                query = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Product, Category>)query.IgnoreQueryFilters();
+            return query;
+        }
+        public IQueryable<Product> QueryWithCategory()
+        {
+            return DbSet
+                .Include(p => p.Category);
+        }
+
         public async Task<IEnumerable<Product>> GetAllWithCategoryAsync()
         {
             return await DbSet
@@ -48,6 +61,5 @@ namespace AgroShopApp.Data.Repository
                 .Include(p => p.Category);
 
         }
-       
     }
 }
